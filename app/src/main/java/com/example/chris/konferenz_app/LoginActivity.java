@@ -102,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                 freischaltcode = "JVH_UNLOCK";
                 */
                 String url = Config.webserviceUrl + "ACC.UNLOCK?email=" + email + "&code=" + freischaltcode;
-                for(int i=0; i<1; i++) {
+
                     JsonObjectRequest ipAddressJsonRequest =
                             new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
@@ -133,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     queue.add(ipAddressJsonRequest);
 
-                }
+
 
 
                 Calendar c = Calendar.getInstance();
