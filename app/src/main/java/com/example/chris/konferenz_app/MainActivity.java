@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
             //load event data
             String url = Config.webserviceUrl + "EVENT.DAILY?token=" + token + "&date=" + date;
+            Log.e("url", url);
             final JsonObjectRequest seminarRequest =
                     new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
