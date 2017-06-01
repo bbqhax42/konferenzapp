@@ -97,48 +97,44 @@ public class LoginActivity extends AppCompatActivity {
                 //Erstellt eine Volley Request Queue
                 RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
 
-
-                //Sendet dem Server den Request fuer den Sessiontoken
-                final SharedPreferences.Editor editor = getSharedPreferences("loginResponse", MODE_PRIVATE).edit();
-
-
                 /*for testing
                 email = "juergen.vonhirschheydt@forum-media.com";
                 freischaltcode = "JVH_UNLOCK";
                 */
                 String url = Config.webserviceUrl + "ACC.UNLOCK?email=" + email + "&code=" + freischaltcode;
-                JsonObjectRequest ipAddressJsonRequest =
-                        new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                for(int i=0; i<1; i++) {
+                    JsonObjectRequest ipAddressJsonRequest =
+                            new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
-                            @Override
-                            public void onResponse(JSONObject jsonObject) {
-                                String s = jsonObject.toString();
-                                Gson gson = new Gson();
+                                @Override
+                                public void onResponse(JSONObject jsonObject) {
+                                    String s = jsonObject.toString();
+                                    Gson gson = new Gson();
 
-                                //session token
-                                LoginResponse loginResponse = gson.fromJson(jsonObject.toString(), LoginResponse.class);
-                                Log.e(loginResponse.getCid(), loginResponse.getToken());
-
-                                //what if the logindetails are wrong(i dont get a proper json object back then)
-
-                                //Speichert den Token fuer die weitere Verwendung in den Sharedpreferences
-                                editor.putString("cid", loginResponse.getCid());
-                                editor.putString("token", loginResponse.getToken());
-                                editor.commit();
+                                    //session token
+                                    LoginResponse loginResponse = gson.fromJson(jsonObject.toString(), LoginResponse.class);
+                                    Log.e("Login Token", loginResponse.getToken());
 
 
-                            }
-                        }, new Response.ErrorListener() {
+                                    //Speichert den Token fuer die weitere Verwendung in der datenbank
+                                    connection.execSQL("UPDATE userinformation SET sessionkey='" + loginResponse.getToken() + "', sessioncid='" + loginResponse.getCid() + "';");
 
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Log.e("Error", error.getMessage());
-                                Log.e("Error", "error"); //parse the returned string here
-                                error_message("Falsche Logindaten");
-                            }
-                        });
 
-                queue.add(ipAddressJsonRequest);
+                                }
+                            }, new Response.ErrorListener() {
+
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.e("Error", error.getMessage());
+                                    Log.e("Error", "error"); //parse the returned string here
+                                    error_message("Falsche Logindaten");
+                                }
+                            });
+
+                    queue.add(ipAddressJsonRequest);
+
+                }
+
 
                 Calendar c = Calendar.getInstance();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

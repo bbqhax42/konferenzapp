@@ -42,9 +42,10 @@ public class MainActivity extends AppCompatActivity {
             Log.e("first login?", s.equalsIgnoreCase("true") + "");
             myDb.deleteAllUselessTablesLUL();
 
+            Cursor res = connection.rawQuery("Select * from userinformation;", null);
+            res.moveToFirst();
 
-            SharedPreferences shared = getSharedPreferences("loginResponse", MODE_PRIVATE);
-            String token = (shared.getString("token", ""));
+            String token = res.getString(8);
             String date = "2017-06-14"; //wow time flew by fast
 
 
