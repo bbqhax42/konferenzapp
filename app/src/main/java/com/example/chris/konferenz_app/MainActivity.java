@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         Log.e("Intent LoginActivity", s);
 
 
-        s = "tRuE";
+        s = "true";
         //we did not login today yet? GREAT!!!!111
         if (s.equalsIgnoreCase("true")) {
             Log.e("first login?", s.equalsIgnoreCase("true") + "");
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
             //load event data
             String url = Config.webserviceUrl + "EVENT.DAILY?token=" + token + "&date=" + date;
-            //Log.e("Event Daily URL", url);
+            Log.e("Event Daily URL", url);
             final JsonObjectRequest seminarRequest =
                     new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
@@ -69,20 +69,16 @@ public class MainActivity extends AppCompatActivity {
 
                             Seminar seminar = gson.fromJson(jsonObject.toString(), Seminar.class);
                             //Log.e("Seminar DB EventAmnt", seminar.getEventAmount() + "");
-
-                            saveEventToDatabase(seminar, connection);
-
-                            List<Event> eventsList = queryEvents(connection);
-
-                            //setupRecyclerview adapter
-
-                            EventsRecyclerAdapter adapter = new EventsRecyclerAdapter(MainActivity.this, eventsList);
-                            recyclerView.setAdapter(adapter);
-
-                            LinearLayoutManager llm = new LinearLayoutManager(MainActivity.this);
-                            llm.setOrientation(LinearLayoutManager.VERTICAL);
-
-                            recyclerView.setLayoutManager(llm);
+                            Log.e("kek", seminar+"");
+                            if(seminar.isempty()){
+                                Log.e("Back to start noob", "seminar is empty!");
+                                Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+                                startActivity(intent);
+                            }
+                            else {
+                                saveEventToDatabase(seminar, connection);
+                                populateView(connection);
+                            }
 
 
                         }
@@ -90,13 +86,30 @@ public class MainActivity extends AppCompatActivity {
 
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Log.e("Error", error.getMessage());
+                            Log.e("Back to start noob", error.getMessage());
                         }
                     });
             queue.add(seminarRequest);
         }
+        else{
+            Log.e("not first login?", s.equalsIgnoreCase("false") + "");
+            populateView(connection);
+        }
 
+    }
 
+    private void populateView(SQLiteDatabase connection) {
+        List<Event> eventsList = queryEvents(connection);
+
+        //setupRecyclerview adapter
+
+        EventsRecyclerAdapter adapter = new EventsRecyclerAdapter(MainActivity.this, eventsList);
+        recyclerView.setAdapter(adapter);
+
+        LinearLayoutManager llm = new LinearLayoutManager(MainActivity.this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+
+        recyclerView.setLayoutManager(llm);
     }
 
     private List<Event> queryEvents(SQLiteDatabase connection) {

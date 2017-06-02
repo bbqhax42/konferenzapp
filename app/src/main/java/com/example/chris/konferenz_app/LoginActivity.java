@@ -115,16 +115,18 @@ public class LoginActivity extends AppCompatActivity {
 
                                 //session token
                                 LoginResponse loginResponse = gson.fromJson(jsonObject.toString(), LoginResponse.class);
+                               if( loginResponse.getCid().trim().equals("") || loginResponse.getToken().trim().equals("")) {
+                                   //error message
+                                   return;
+                               }
+
                                 Log.e("Login Token", loginResponse.getToken());
 
 
                                 //Speichert den Token fuer die weitere Verwendung in der datenbank
                                 connection.execSQL("UPDATE userinformation SET sessionkey='" + loginResponse.getToken() + "', sessioncid='" + loginResponse.getCid() + "';");
 
-
-                                Calendar c = Calendar.getInstance();
-                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                                String strDate = sdf.format(c.getTime());
+                                String strDate = getCurrentDate();
                                 boolean eventUpdate = true;
                                 if (strDate.equalsIgnoreCase(lastLogin)) {
                                     eventUpdate = false;
@@ -140,7 +142,6 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.e("Login SQL UPDATE 2/2", "UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "'");
 
                                 }
-
 
                                 Intent intent = new Intent(getBaseContext(), MainActivity.class);
                                 intent.putExtra("EventUpdate", eventUpdate + ""); //true if not logged in today yet, false if already logged in today
@@ -165,4 +166,12 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
+
+    private String getCurrentDate() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+       return sdf.format(c.getTime());
+    }
+
+
 }

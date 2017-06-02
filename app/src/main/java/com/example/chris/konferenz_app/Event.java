@@ -96,43 +96,43 @@ public class Event {
     }
 
     public String getTitle() {
-        return title;
+        return title == null ? "Kein Titel vorhanden" : title;
     }
 
     public String getDescription() {
-        return description;
+        return description == null ? "Keine zusätzlichen Informationen vorhanden" : description;
     }
 
     public String getAuthor() {
-        return author;
+        return author == null ? "" : author;
     }
 
     public String getStart() {
-        return start;
+        return start == null ? "Unbekannt" : start;
     }
 
     public String getEnd() {
-        return end;
+        return end == null ? "Unbekannt" : end;
     }
 
     public String getStreet() {
-        return street;
+        return street == null ? "" : street;
     }
 
     public String getZip() {
-        return zip;
+        return zip == null ? "" : zip;
     }
 
     public String getCity() {
-        return city;
+        return city == null ? "" : city;
     }
 
     public String getLocation() {
-        return location;
+        return location == null ? "" : location;
     }
 
     public String getUrl() {
-        return url;
+        return url == null ? "" : url;
     }
 
     public int getDocumentAmount() {
