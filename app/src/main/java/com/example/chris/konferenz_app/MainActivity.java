@@ -57,7 +57,7 @@ recyclerView = (RecyclerView)findViewById(R.id.recycler_view);
 
             //load event data
             String url = Config.webserviceUrl + "EVENT.DAILY?token=" + token + "&date=" + date;
-            Log.e("url", url);
+            Log.e("Event Daily URL", url);
             final JsonObjectRequest seminarRequest =
                     new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
@@ -67,7 +67,7 @@ recyclerView = (RecyclerView)findViewById(R.id.recycler_view);
                             Gson gson = new Gson();
 
                             Seminar seminar = gson.fromJson(jsonObject.toString(), Seminar.class);
-                            Log.e("Seminar EventAmnt", seminar.getEventAmount() + "");
+                            //Log.e("Seminar DB EventAmnt", seminar.getEventAmount() + "");
 
 
                           saveEventToDatabase(seminar, connection);
@@ -115,15 +115,27 @@ recyclerView = (RecyclerView)findViewById(R.id.recycler_view);
         while(res.moveToNext()){
             Event event = new Event();
             event.setEvent_id(Integer.parseInt(res.getString(0)));
+            event.setId(res.getString(1));
+            event.setTitle(res.getString(2));
+            event.setDescription(res.getString(3));
+            event.setAuthor(res.getString(4));
+            event.setStart(res.getString(5));
+            event.setEnd(res.getString(6));
+            event.setStreet(res.getString(7));
+            event.setZip(res.getString(8));
+            event.setCity(res.getString(9));
+            event.setLocation(res.getString(10));
+            event.setUrl(res.getString(11));
+            Log.e("List Event ID", event.getEventId()+"");
+
             listOfEvents.add(event);
 
         }
-        Log.e("Error", String.valueOf(listOfEvents.size()));
+        //Log.e("List of Events Size", String.valueOf(listOfEvents.size()));
         return listOfEvents;
     }
 
     private void saveEventToDatabase (Seminar seminar, SQLiteDatabase connection){
-        Log.e("Error", "Seminaro Size " + String.valueOf(seminar.getEventAmount()));
         for (int i = 0; i < seminar.getEventAmount(); i++) {
             Event event = seminar.getEvent(i);
             connection.execSQL("Insert into events (event_id, id, title, description, author, start, end, street, zip, city, location, url) VALUES ('"
@@ -149,13 +161,13 @@ recyclerView = (RecyclerView)findViewById(R.id.recycler_view);
             }
 
 
-            Log.e("Event DocumentAmnt", seminar.getEvent(i).getDocumentAmount() + "");
+            //Log.e("SaveDB DocumentAmnt", seminar.getEvent(i).getDocumentAmount() + "");
         }
 
-        Log.e("Seminar InterestAmnt", seminar.getInterestgroupAmount() + "");
+        //Log.e("SaveDB InterestAmnt", seminar.getInterestgroupAmount() + "");
         for (int i = 0; i < seminar.getInterestgroupAmount(); i++) {
             connection.execSQL("Insert into interests (name) VALUES ('" + seminar.getInterestgroup(i).getName() +"');");
-            Log.e("Seminar Interest", seminar.getInterestgroup(i).getName());
+            //Log.e("Seminar Interest", seminar.getInterestgroup(i).getName());
         }
     }
 }

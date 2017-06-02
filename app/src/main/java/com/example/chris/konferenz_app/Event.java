@@ -10,9 +10,10 @@ import java.util.List;
  * Created by Chris on 21.05.2017.
  */
 public class Event {
-   private  int event_id;
+    private int event_id;
     private String id, title, description, author, start, end, street, zip, city, location, url;
-    List<Document> documents;
+    List<Document> documents = new ArrayList<Document>();
+    ;
 
 
     public Event() {
@@ -66,13 +67,13 @@ public class Event {
         this.url = url;
     }
 
-    public void addDocument(Document document){
-        documents.add(document);
+    public void addDocument(Document document) {
+        if (document != null) documents.add(document);
     }
 
     public Event(int event_id, String id, String title, String description, String author, String start, String end, String street, String zip, String city, String location, String url, List<Document> documents) {
         this.event_id = event_id;
-        this.id=id;
+        this.id = id;
         this.title = title;
         this.description = description;
         this.author = author;
@@ -86,7 +87,7 @@ public class Event {
         this.documents = documents;
     }
 
-    public int getEventId(){
+    public int getEventId() {
         return event_id;
     }
 
@@ -135,12 +136,12 @@ public class Event {
     }
 
     public int getDocumentAmount() {
-        if(documents!=null)
+        if (documents != null)
             return documents.size();
         else return 0;
     }
 
-    public Document getDocument(int i){
+    public Document getDocument(int i) {
         return documents.get(i);
     }
 
