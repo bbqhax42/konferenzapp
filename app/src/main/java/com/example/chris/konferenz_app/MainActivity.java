@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.EventLog;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -23,11 +26,12 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-
+RecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+recyclerView = (RecyclerView)findViewById(R.id.recycler_view);
         DatabaseHelper myDb = new DatabaseHelper(this);
         final SQLiteDatabase connection = myDb.getWritableDatabase();
 
@@ -66,40 +70,26 @@ public class MainActivity extends AppCompatActivity {
                             Log.e("Seminar EventAmnt", seminar.getEventAmount() + "");
 
 
-                            for (int i = 0; i < seminar.getEventAmount(); i++) {
-                                Event event = seminar.getEvent(i);
-                                connection.execSQL("Insert into events (event_id, id, title, description, author, start, end, street, zip, city, location, url) VALUES ('"
-                                        + event.getEventId() + "' , '"
-                                        + event.getId() + "' , '"
-                                        + event.getTitle() + "' , '"
-                                        + event.getDescription() + "' , '"
-                                        + event.getAuthor() + "' , '"
-                                        + event.getStart() + "' , '"
-                                        + event.getEnd() + "' , '"
-                                        + event.getStreet() + "' , '"
-                                        + event.getZip() + "' , '"
-                                        + event.getCity() + "' , '"
-                                        + event.getLocation() + "' , '"
-                                        + event.getUrl() + "');");
+                          saveEventToDatabase(seminar, connection);
 
-                                for (int j = 0; j < event.getDocumentAmount(); j++) {
-                                    Document doc = event.getDocument(j);
-                                    connection.execSQL("Insert into documents (id, title, event_id) VALUES ('"
-                                            + doc.getId() + "' , '"
-                                            + doc.getTitle() + "' , '"
-                                            + event.getEventId() + "');");
-                                }
+                            List<Event> eventsList = queryEvents(connection);
+
+                            //setupRecyclerview adapter
 
 
-                                Log.e("Event DocumentAmnt", seminar.getEvent(i).getDocumentAmount() + "");
-                            }
 
-                            Log.e("Seminar InterestAmnt", seminar.getInterestgroupAmount() + "");
-                            for (int i = 0; i < seminar.getInterestgroupAmount(); i++) {
-                            connection.execSQL("Insert into interests (name) VALUES ('" + seminar.getInterestgroup(i).getName() +"');");
-                                Log.e("Seminar Interest", seminar.getInterestgroup(i).getName());
-                            }
 
+                            //WE SHOULD PASS THIS LIST OF FILES TO THE RECYCLER ADAPTER111!!
+
+
+
+                            EventsRecyclerAdapter adapter = new EventsRecyclerAdapter(MainActivity.this,eventsList);
+                            recyclerView.setAdapter(adapter);
+
+                            LinearLayoutManager llm = new LinearLayoutManager(MainActivity.this);
+                            llm.setOrientation(LinearLayoutManager.VERTICAL);
+
+                            recyclerView.setLayoutManager(llm);
 
                             //i can get all events here and now I need to display them
 
@@ -116,5 +106,56 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    }
+
+    private List<Event> queryEvents(SQLiteDatabase connection) {
+        Cursor res=connection.rawQuery("Select * from events", null);
+
+        List<Event> listOfEvents = new ArrayList<>();
+        while(res.moveToNext()){
+            Event event = new Event();
+            event.setEvent_id(Integer.parseInt(res.getString(0)));
+            listOfEvents.add(event);
+
+        }
+        Log.e("Error", String.valueOf(listOfEvents.size()));
+        return listOfEvents;
+    }
+
+    private void saveEventToDatabase (Seminar seminar, SQLiteDatabase connection){
+        Log.e("Error", "Seminaro Size " + String.valueOf(seminar.getEventAmount()));
+        for (int i = 0; i < seminar.getEventAmount(); i++) {
+            Event event = seminar.getEvent(i);
+            connection.execSQL("Insert into events (event_id, id, title, description, author, start, end, street, zip, city, location, url) VALUES ('"
+                    + event.getEventId() + "' , '"
+                    + event.getId() + "' , '"
+                    + event.getTitle() + "' , '"
+                    + event.getDescription() + "' , '"
+                    + event.getAuthor() + "' , '"
+                    + event.getStart() + "' , '"
+                    + event.getEnd() + "' , '"
+                    + event.getStreet() + "' , '"
+                    + event.getZip() + "' , '"
+                    + event.getCity() + "' , '"
+                    + event.getLocation() + "' , '"
+                    + event.getUrl() + "');");
+
+            for (int j = 0; j < event.getDocumentAmount(); j++) {
+                Document doc = event.getDocument(j);
+                connection.execSQL("Insert into documents (id, title, event_id) VALUES ('"
+                        + doc.getId() + "' , '"
+                        + doc.getTitle() + "' , '"
+                        + event.getEventId() + "');");
+            }
+
+
+            Log.e("Event DocumentAmnt", seminar.getEvent(i).getDocumentAmount() + "");
+        }
+
+        Log.e("Seminar InterestAmnt", seminar.getInterestgroupAmount() + "");
+        for (int i = 0; i < seminar.getInterestgroupAmount(); i++) {
+            connection.execSQL("Insert into interests (name) VALUES ('" + seminar.getInterestgroup(i).getName() +"');");
+            Log.e("Seminar Interest", seminar.getInterestgroup(i).getName());
+        }
     }
 }

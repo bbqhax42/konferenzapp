@@ -39,6 +39,8 @@ public class LoginActivity extends AppCompatActivity {
     Button login_button;
     CheckBox rememberme_checkbox;
     EditText email_textfield, password_textfield;
+    boolean eingeloggt_bleiben;
+    String freischaltcode;
 
 
     //Returns little bubble visible for the user with errormessage
@@ -75,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
             Log.e("Login DB LASTLOGIN", res.getString(7));
         }
 
-        final String lastLogin=res.getString(7);
+        final String lastLogin = res.getString(7);
 
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,8 +85,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 //Daten von den Textfields und Checkboxes laden
                 String email = email_textfield.getText().toString();
-                String freischaltcode = password_textfield.getText().toString();
-                boolean eingeloggt_bleiben = rememberme_checkbox.isChecked();
+                freischaltcode = password_textfield.getText().toString();
+                eingeloggt_bleiben = rememberme_checkbox.isChecked();
 
 
                 //Test auf Fehler der Usereingabe email format a@b.c und freischaltcode nicht leer
@@ -103,62 +105,61 @@ public class LoginActivity extends AppCompatActivity {
                 */
                 String url = Config.webserviceUrl + "ACC.UNLOCK?email=" + email + "&code=" + freischaltcode;
 
-                    JsonObjectRequest ipAddressJsonRequest =
-                            new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                JsonObjectRequest ipAddressJsonRequest =
+                        new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
-                                @Override
-                                public void onResponse(JSONObject jsonObject) {
-                                    String s = jsonObject.toString();
-                                    Gson gson = new Gson();
+                            @Override
+                            public void onResponse(JSONObject jsonObject) {
+                                String s = jsonObject.toString();
+                                Gson gson = new Gson();
 
-                                    //session token
-                                    LoginResponse loginResponse = gson.fromJson(jsonObject.toString(), LoginResponse.class);
-                                    Log.e("Login Token", loginResponse.getToken());
+                                //session token
+                                LoginResponse loginResponse = gson.fromJson(jsonObject.toString(), LoginResponse.class);
+                                Log.e("Login Token", loginResponse.getToken());
 
 
-                                    //Speichert den Token fuer die weitere Verwendung in der datenbank
-                                    connection.execSQL("UPDATE userinformation SET sessionkey='" + loginResponse.getToken() + "', sessioncid='" + loginResponse.getCid() + "';");
+                                //Speichert den Token fuer die weitere Verwendung in der datenbank
+                                connection.execSQL("UPDATE userinformation SET sessionkey='" + loginResponse.getToken() + "', sessioncid='" + loginResponse.getCid() + "';");
 
+
+                                Calendar c = Calendar.getInstance();
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                                String strDate = sdf.format(c.getTime());
+                                boolean eventUpdate = true;
+                                if (strDate.equalsIgnoreCase(lastLogin)) {
+                                    eventUpdate = false;
+                                }
+
+                                //saving current logindate and if user prefers to stay signed in
+                                connection.execSQL("UPDATE userinformation SET stayloggedin=\"" + eingeloggt_bleiben + "\", lastlogin='" + strDate + "';");
+                                Log.e("Login SQL UPDATE 1/2", "UPDATE userinformation SET stayloggedin=" + eingeloggt_bleiben + ", lastlogin='" + strDate + "';");
+
+                                if (eingeloggt_bleiben) {
+                                    //email and password saving in case user wants to
+                                    connection.execSQL("UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "';");
+                                    Log.e("Login SQL UPDATE 2/2", "UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "'");
 
                                 }
-                            }, new Response.ErrorListener() {
-
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    Log.e("Error", error.getMessage());
-                                    Log.e("Error", "error"); //parse the returned string here
-                                    error_message("Falsche Logindaten");
-                                }
-                            });
-
-                    queue.add(ipAddressJsonRequest);
 
 
+                                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                                intent.putExtra("EventUpdate", eventUpdate + ""); //true if not logged in today yet, false if already logged in today
+                                startActivity(intent);
+
+                            }
+                        }, new Response.ErrorListener() {
+
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.e("Error", error.getMessage());
+                                Log.e("Error", "error"); //parse the returned string here
+                                error_message("Falsche Logindaten");
+                            }
+                        });
+
+                queue.add(ipAddressJsonRequest);
 
 
-                Calendar c = Calendar.getInstance();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                String strDate = sdf.format(c.getTime());
-                boolean eventUpdate=true;
-                if(strDate.equalsIgnoreCase(lastLogin)){
-                    eventUpdate=false;
-                }
-
-                //saving current logindate and if user prefers to stay signed in
-                connection.execSQL("UPDATE userinformation SET stayloggedin=\"" + eingeloggt_bleiben + "\", lastlogin='" + strDate + "';");
-                Log.e("Login SQL UPDATE 1/2", "UPDATE userinformation SET stayloggedin=" + eingeloggt_bleiben + ", lastlogin='" + strDate + "';");
-
-                if (eingeloggt_bleiben) {
-                    //email and password saving in case user wants to
-                    connection.execSQL("UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "';");
-                    Log.e("Login SQL UPDATE 2/2", "UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "'");
-
-                }
-
-
-                Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                intent.putExtra("EventUpdate", eventUpdate+""); //true if not logged in today yet, false if already logged in today
-                startActivity(intent);
 
             }
         });

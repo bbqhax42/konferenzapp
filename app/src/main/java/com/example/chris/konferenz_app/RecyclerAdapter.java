@@ -7,15 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Holder> {
     Context context;
-    List<String> wordList;
+    List<Document> wordList;
 
-    public RecyclerAdapter(Context context, List<String> wordList) {
+    public RecyclerAdapter(Context context, List<Document> wordList) {
         this.wordList = wordList;
         this.context = context;
     }
@@ -24,7 +26,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Holder
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         //inflate the xml/ view shell and return it
 
-        View item_list_view = LayoutInflater.from(context).inflate(R.layout.item_list, parent, false);
+        View item_list_view = LayoutInflater.from(context).inflate(R.layout.event_detail_checkbox, parent, false);
 
         return new Holder(item_list_view);
     }
@@ -32,8 +34,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Holder
     @Override
     public void onBindViewHolder(Holder holder, int position) {
         //populates the shell
-        String s = wordList.get(position);
-        holder.checkBox.setText(s);
+        Document s = wordList.get(position);
+        holder.checkBox.setText(s.getTitle());
+
     }
 
     @Override
@@ -48,7 +51,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Holder
         public Holder(View itemView) {
             super(itemView);
 
-            checkBox = (CheckBox) itemView.findViewById(R.id.text);
+            checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
         }
     }
 }
