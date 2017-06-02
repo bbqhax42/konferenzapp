@@ -38,8 +38,7 @@ public class EventActivity extends AppCompatActivity {
         //retrieving the intent of the previous activity (in this case the eventid)
         eventId = getIntent().getIntExtra("EventID", 0);
 
-        Event event =  getData(connection);
-
+        Event event =  getData(connection, eventId);
 
 
         title= (TextView) findViewById(R.id.title);
@@ -93,7 +92,7 @@ public class EventActivity extends AppCompatActivity {
         return listofDocuments;
     }
 
-    private Event getData(SQLiteDatabase connection) {
+    private Event getData(SQLiteDatabase connection, int eventId) {
         Log.e("eventid", "Select * from events where event_id="+eventId+";");
         Cursor result=connection.rawQuery("Select * from events where event_id="+eventId+";", null);
         result.moveToFirst();
