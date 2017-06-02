@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Seminar {
     private String seminar_id;
     private String seminar_title;
-   private String date;
+    private String date;
     private ArrayList<Event> events;
     private ArrayList<Interestgroup> interestgroups;
 
@@ -23,7 +23,7 @@ public class Seminar {
         return events.get(i);
     }
 
-    public int getEventAmount(){
+    public int getEventAmount() {
         return events.size();
     }
 
@@ -31,13 +31,13 @@ public class Seminar {
         return date;
     }
 
-    public int getInterestgroupAmount(){
-        if(interestgroups!=null)
+    public int getInterestgroupAmount() {
+        if (interestgroups != null)
             return interestgroups.size();
         else return 0;
     }
 
-    public Interestgroup getInterestgroup(int i){
+    public Interestgroup getInterestgroup(int i) {
         return interestgroups.get(i);
     }
 }

@@ -18,10 +18,10 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        name= (EditText) findViewById(R.id.name);
-        email= (EditText) findViewById(R.id.email);
-        phone= (EditText) findViewById(R.id.phonenumber);
-        company= (EditText) findViewById(R.id.company);
+        name = (EditText) findViewById(R.id.name);
+        email = (EditText) findViewById(R.id.email);
+        phone = (EditText) findViewById(R.id.phonenumber);
+        company = (EditText) findViewById(R.id.company);
         update = (Button) findViewById(R.id.button);
     }
 }

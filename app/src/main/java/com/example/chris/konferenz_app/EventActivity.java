@@ -38,11 +38,11 @@ public class EventActivity extends AppCompatActivity {
         //retrieving the intent of the previous activity (in this case the eventid)
         eventId = getIntent().getIntExtra("EventID", 0);
 
-        Event event =  getData(connection, eventId);
+        Event event = getData(connection, eventId);
 
 
-        title= (TextView) findViewById(R.id.title);
-        textfield= (TextView) findViewById(R.id.textfield);
+        title = (TextView) findViewById(R.id.title);
+        textfield = (TextView) findViewById(R.id.textfield);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         downloadButton = (Button) findViewById(R.id.button);
 
@@ -56,7 +56,6 @@ public class EventActivity extends AppCompatActivity {
         final LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);
-
 
 
         downloadButton.setOnClickListener(new View.OnClickListener() {
@@ -93,10 +92,10 @@ public class EventActivity extends AppCompatActivity {
     }
 
     private Event getData(SQLiteDatabase connection, int eventId) {
-        Log.e("eventid", "Select * from events where event_id="+eventId+";");
-        Cursor result=connection.rawQuery("Select * from events where event_id="+eventId+";", null);
+        Log.e("eventid", "Select * from events where event_id=" + eventId + ";");
+        Cursor result = connection.rawQuery("Select * from events where event_id=" + eventId + ";", null);
         result.moveToFirst();
-        Event event=new Event();
+        Event event = new Event();
         event.setEvent_id(Integer.parseInt(result.getString(0)));
         event.setId(result.getString(1));
         event.setTitle(result.getString(2));

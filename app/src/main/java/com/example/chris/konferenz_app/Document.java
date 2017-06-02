@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by Chris on 01.06.2017.
  */
 
-public class Document{
+public class Document {
     int id;
     private String title;
 

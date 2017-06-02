@@ -26,12 +26,13 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-RecyclerView recyclerView;
+    RecyclerView recyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-recyclerView = (RecyclerView)findViewById(R.id.recycler_view);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         DatabaseHelper myDb = new DatabaseHelper(this);
         final SQLiteDatabase connection = myDb.getWritableDatabase();
 
@@ -57,7 +58,7 @@ recyclerView = (RecyclerView)findViewById(R.id.recycler_view);
 
             //load event data
             String url = Config.webserviceUrl + "EVENT.DAILY?token=" + token + "&date=" + date;
-            Log.e("Event Daily URL", url);
+            //Log.e("Event Daily URL", url);
             final JsonObjectRequest seminarRequest =
                     new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
@@ -69,21 +70,13 @@ recyclerView = (RecyclerView)findViewById(R.id.recycler_view);
                             Seminar seminar = gson.fromJson(jsonObject.toString(), Seminar.class);
                             //Log.e("Seminar DB EventAmnt", seminar.getEventAmount() + "");
 
-
-                          saveEventToDatabase(seminar, connection);
+                            saveEventToDatabase(seminar, connection);
 
                             List<Event> eventsList = queryEvents(connection);
 
                             //setupRecyclerview adapter
 
-
-
-
-                            //WE SHOULD PASS THIS LIST OF FILES TO THE RECYCLER ADAPTER111!!
-
-
-
-                            EventsRecyclerAdapter adapter = new EventsRecyclerAdapter(MainActivity.this,eventsList);
+                            EventsRecyclerAdapter adapter = new EventsRecyclerAdapter(MainActivity.this, eventsList);
                             recyclerView.setAdapter(adapter);
 
                             LinearLayoutManager llm = new LinearLayoutManager(MainActivity.this);
@@ -91,7 +84,6 @@ recyclerView = (RecyclerView)findViewById(R.id.recycler_view);
 
                             recyclerView.setLayoutManager(llm);
 
-                            //i can get all events here and now I need to display them
 
                         }
                     }, new Response.ErrorListener() {
@@ -105,14 +97,13 @@ recyclerView = (RecyclerView)findViewById(R.id.recycler_view);
         }
 
 
-
     }
 
     private List<Event> queryEvents(SQLiteDatabase connection) {
-        Cursor res=connection.rawQuery("Select * from events", null);
+        Cursor res = connection.rawQuery("Select * from events", null);
 
         List<Event> listOfEvents = new ArrayList<>();
-        while(res.moveToNext()){
+        while (res.moveToNext()) {
             Event event = new Event();
             event.setEvent_id(Integer.parseInt(res.getString(0)));
             event.setId(res.getString(1));
@@ -126,7 +117,7 @@ recyclerView = (RecyclerView)findViewById(R.id.recycler_view);
             event.setCity(res.getString(9));
             event.setLocation(res.getString(10));
             event.setUrl(res.getString(11));
-            Log.e("List Event ID", event.getEventId()+"");
+            //Log.e("List Event ID", event.getEventId() + "");
 
             listOfEvents.add(event);
 
@@ -135,7 +126,7 @@ recyclerView = (RecyclerView)findViewById(R.id.recycler_view);
         return listOfEvents;
     }
 
-    private void saveEventToDatabase (Seminar seminar, SQLiteDatabase connection){
+    private void saveEventToDatabase(Seminar seminar, SQLiteDatabase connection) {
         for (int i = 0; i < seminar.getEventAmount(); i++) {
             Event event = seminar.getEvent(i);
             connection.execSQL("Insert into events (event_id, id, title, description, author, start, end, street, zip, city, location, url) VALUES ('"
@@ -166,7 +157,7 @@ recyclerView = (RecyclerView)findViewById(R.id.recycler_view);
 
         //Log.e("SaveDB InterestAmnt", seminar.getInterestgroupAmount() + "");
         for (int i = 0; i < seminar.getInterestgroupAmount(); i++) {
-            connection.execSQL("Insert into interests (name) VALUES ('" + seminar.getInterestgroup(i).getName() +"');");
+            connection.execSQL("Insert into interests (name) VALUES ('" + seminar.getInterestgroup(i).getName() + "');");
             //Log.e("Seminar Interest", seminar.getInterestgroup(i).getName());
         }
     }

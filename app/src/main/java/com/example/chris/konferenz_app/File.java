@@ -5,7 +5,7 @@ package com.example.chris.konferenz_app;
  * Created by Chris on 21.05.2017.
  */
 
-public class File{
+public class File {
 
     int assEventId;
     String url;

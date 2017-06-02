@@ -49,8 +49,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void deleteAllUselessTablesLUL(){
-        SQLiteDatabase db=this.getWritableDatabase();
+    public void deleteAllUselessTablesLUL() {
+        SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM events");
         db.execSQL("DELETE FROM documents");
     }
