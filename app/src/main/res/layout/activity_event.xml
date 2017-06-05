@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:showDividers="middle"
     android:divider="@drawable/empty_tall_divider"
-    tools:context="com.example.chris.konferenz_app.EventActivity"
-    android:weightSum="1">
+    android:orientation="vertical"
+    android:showDividers="middle"
+    android:weightSum="1"
+    tools:context="com.example.chris.konferenz_app.EventActivity">
 
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:textSize="40sp"
-        android:text="random event"
         android:background="@color/textBackground"
+        android:ems="10"
         android:fontFamily="sans-serif-condensed-light"
-        android:textStyle="bold"
+        android:gravity="center"
+        android:inputType="textPersonName"
+        android:text="random event"
         android:textColor="@color/textColor"
-        android:gravity="center"/>
+        android:textSize="40sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textfield"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="0.12"
         android:ems="10"
         android:fontFamily="sans-serif-condensed-light"
-        android:inputType="textMultiLine"
-        android:text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
         android:gravity="center"
-        android:layout_weight="0.12" />
+        android:inputType="textMultiLine"
+        android:text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet." />
 
 
     <Button
         android:id="@+id/viewmorebutton"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Mehr Details..."
+        android:layout_gravity="left"
         android:fontFamily="sans-serif-condensed-light"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_gravity="left" />
+        android:text="Mehr Details..." />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -54,7 +54,7 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Download selected files"
+        android:layout_gravity="center"
         android:fontFamily="sans-serif-condensed-light"
-        android:layout_gravity="center" />
+        android:text="Download selected files" />
 </LinearLayout>

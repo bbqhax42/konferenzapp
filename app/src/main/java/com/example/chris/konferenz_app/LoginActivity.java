@@ -115,10 +115,10 @@ public class LoginActivity extends AppCompatActivity {
 
                                 //session token
                                 LoginResponse loginResponse = gson.fromJson(jsonObject.toString(), LoginResponse.class);
-                               if( loginResponse.getCid().trim().equals("") || loginResponse.getToken().trim().equals("")) {
-                                   //error message
-                                   return;
-                               }
+                                if (loginResponse.getCid().trim().equals("") || loginResponse.getToken().trim().equals("")) {
+                                    //error message
+                                    return;
+                                }
 
                                 Log.e("Login Token", loginResponse.getToken());
 
@@ -170,7 +170,7 @@ public class LoginActivity extends AppCompatActivity {
     private String getCurrentDate() {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-       return sdf.format(c.getTime());
+        return sdf.format(c.getTime());
     }
 
 

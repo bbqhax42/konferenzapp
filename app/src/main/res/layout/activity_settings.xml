@@ -11,163 +11,170 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textStyle="bold"
+        android:text="Einstellungen"
         android:textSize="32sp"
-        android:text="Einstellungen"  />
+        android:textStyle="bold" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_marginLeft="5dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:orientation="horizontal"
         android:weightSum="1">
+
         <TextView
-            android:textSize="18dp"
             android:layout_width="122dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Name: "  />
+            android:text="Name: "
+            android:textSize="18dp" />
 
         <EditText
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:ems="10"
             android:hint="Max Mustermann"
             android:inputType="textPersonName"
-            android:layout_gravity="center"
             tools:layout_editor_absoluteX="70dp"
             tools:layout_editor_absoluteY="246dp" />
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:orientation="horizontal">
+
         <TextView
-            android:textSize="18dp"
             android:layout_width="122dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Telefonnr: "  />
+            android:text="Telefonnr: "
+            android:textSize="18dp" />
+
         <EditText
             android:id="@+id/phonenumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:ems="10"
             android:hint="+49 123456789"
             android:inputType="phone"
-            android:layout_gravity="center"
             tools:layout_editor_absoluteX="70dp"
             tools:layout_editor_absoluteY="246dp" />
     </LinearLayout>
 
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
-        android:layout_height="wrap_content">
+        android:orientation="horizontal">
+
         <TextView
-            android:textSize="18dp"
             android:layout_width="122dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="e-Mail-Adresse: "  />
+            android:text="e-Mail-Adresse: "
+            android:textSize="18dp" />
+
         <EditText
             android:id="@+id/email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:ems="10"
             android:hint="max@mustermann.de"
             android:inputType="textEmailAddress"
-            android:layout_gravity="center"
             tools:layout_editor_absoluteX="70dp"
             tools:layout_editor_absoluteY="246dp" />
     </LinearLayout>
 
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
-        android:layout_height="wrap_content">
+        android:orientation="horizontal">
+
         <TextView
-            android:textSize="18dp"
             android:layout_width="122dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Firma: "  />
+            android:text="Firma: "
+            android:textSize="18dp" />
+
         <EditText
             android:id="@+id/company"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:ems="10"
             android:hint="Mustermann GmbH"
             android:inputType="textPersonName"
-            android:layout_gravity="center"
             tools:layout_editor_absoluteX="70dp"
             tools:layout_editor_absoluteY="246dp" />
     </LinearLayout>
 
 
-
     <Button
         android:id="@+id/button"
-        android:layout_marginTop="25dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Einstellungen speichern"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:layout_marginTop="25dp"
+        android:text="Einstellungen speichern" />
 
 
     <TextView
-        android:textSize="18dp"
+        android:id="@+id/textview"
         android:layout_width="match_parent"
         android:layout_height="88dp"
-        android:scrollbars = "vertical"
-        android:layout_marginTop="25dp"
         android:layout_gravity="center"
-        android:text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."  />
-
+        android:layout_marginTop="25dp"
+        android:scrollbars="vertical"
+        android:text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+        android:textSize="18dp" />
 
 
     <EditText
         android:id="@+id/interest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:ems="10"
         android:hint="Hier Interesse eingeben..."
         android:inputType="textPersonName"
-        android:layout_gravity="center"
         tools:layout_editor_absoluteX="70dp"
         tools:layout_editor_absoluteY="246dp" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
-        android:layout_height="wrap_content">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/buttondel"
-            android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Interesse hinzufügen"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:text="Interesse hinzufügen" />
+
         <Button
             android:id="@+id/buttonsave"
-            android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Interesse entfernen"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:text="Interesse entfernen" />
 
 
     </LinearLayout>

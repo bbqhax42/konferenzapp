@@ -1,28 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-
-
-
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
 
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:textSize="25sp"
-        android:text="Ihre Events für den heutigen Tag: "
-        android:background="@color/textBackground"
-        android:fontFamily="sans-serif-condensed-light"
-        android:textStyle="bold"
         android:layout_marginBottom="15dp"
+        android:background="@color/textBackground"
+        android:ems="10"
+        android:fontFamily="sans-serif-condensed-light"
+        android:gravity="center"
+        android:inputType="textPersonName"
+        android:text="Ihre Events für den heutigen Tag: "
         android:textColor="@color/textColor"
-        android:gravity="center"/>
+        android:textSize="25sp"
+        android:textStyle="bold" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"

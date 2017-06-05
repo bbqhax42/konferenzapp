@@ -27,8 +27,8 @@ public class Seminar {
         return events.size();
     }
 
-    public boolean isempty(){
-        return events==null || interestgroups==null;
+    public boolean isempty() {
+        return events == null || interestgroups == null;
     }
 
     public String getDate() {

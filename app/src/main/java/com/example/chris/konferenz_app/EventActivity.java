@@ -69,18 +69,18 @@ public class EventActivity extends AppCompatActivity {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);
 
-        viewMoreButton.setOnClickListener(new View.OnClickListener(){
+        viewMoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    String str = "Autor: "+ event.getAuthor()+ "\n"
-                            + "Start: "+ event.getStart()+ "\n"
-                            + "Ende:" + event.getEnd()+ "\n"
-                            + "Strasse: "+ event.getStreet()+ "\n"
-                            + "Ort: " +event.getZip() + " " + event.getCity() + "\n"
-                            + "Zusatzangaben: " + event.getLocation()+ "\n"
-                            + "Website: "+ event.getUrl() ;
+                String str = "Autor: " + event.getAuthor() + "\n"
+                        + "Start: " + event.getStart() + "\n"
+                        + "Ende:" + event.getEnd() + "\n"
+                        + "Strasse: " + event.getStreet() + "\n"
+                        + "Ort: " + event.getZip() + " " + event.getCity() + "\n"
+                        + "Zusatzangaben: " + event.getLocation() + "\n"
+                        + "Website: " + event.getUrl();
 
-                AlertDialog.Builder builder= new AlertDialog.Builder(EventActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(EventActivity.this);
                 builder.setCancelable(true);
                 builder.setTitle("Mehr Informationen zu " + event.getTitle());
                 builder.setMessage(str);
@@ -96,20 +96,20 @@ public class EventActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 ArrayList<String> selectedFiles = new ArrayList<String>();
-                StringBuffer downloadString=new StringBuffer();
+                StringBuffer downloadString = new StringBuffer();
 
                 for (int i = 0; i < adapter.getItemCount(); ++i) {
                     RecyclerAdapter.Holder holder = (RecyclerAdapter.Holder) recyclerView.findViewHolderForAdapterPosition(i);
                     if (holder.checkBox.isChecked()) {
-                        selectedFiles.add(holder.doc.getId()+"");
-                        Log.e("Checked", holder.doc.getId()+"");
+                        selectedFiles.add(holder.doc.getId() + "");
+                        Log.e("Checked", holder.doc.getId() + "");
                     } else {
-                        Log.e("Not Checked",holder.doc.getTitle());
+                        Log.e("Not Checked", holder.doc.getTitle());
                     }
                 }
-                for(int i=0; i < selectedFiles.size(); i++){
+                for (int i = 0; i < selectedFiles.size(); i++) {
                     downloadString.append(selectedFiles.get(i));
-                    if(i+1<selectedFiles.size()) downloadString.append(",");
+                    if (i + 1 < selectedFiles.size()) downloadString.append(",");
                 }
 
                 Cursor res = connection.rawQuery("Select * from userinformation;", null);
@@ -121,7 +121,7 @@ public class EventActivity extends AppCompatActivity {
 
                 String url = Config.webserviceUrl + "DOC.REQUEST?token=" + token + "&doclist=" + downloadString;
 
-                JsonObjectRequest ipAddressJsonRequest =
+                JsonObjectRequest documentRequestRequest =
                         new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
                             @Override
@@ -132,22 +132,23 @@ public class EventActivity extends AppCompatActivity {
                                 //session token
                                 DocumentRequest documentRequest = gson.fromJson(jsonObject.toString(), DocumentRequest.class);
 
-                                StringBuffer documentRequestString = new StringBuffer("Status: "+ documentRequest.getStatus()+ "\n"
-                                        + "Status Info: "+ documentRequest.getStatus_info()+ "\n"
-                                        + "Empfänger:" + documentRequest.getRecipient()+ "\n"
-                                        + "Betreff: "+ documentRequest.getSubject()+ "\n"
+                                StringBuffer documentRequestString = new StringBuffer("Status: " + documentRequest.getStatus() + "\n"
+                                        + "Status Info: " + documentRequest.getStatus_info() + "\n"
+                                        + "Empfänger:" + documentRequest.getRecipient() + "\n"
+                                        + "Betreff: " + documentRequest.getSubject() + "\n"
                                         + "Dokumente: ");
 
 
-                                if(documentRequest.getDocumentAmount()==0){
+                                if (documentRequest.getDocumentAmount() == 0) {
                                     documentRequestString.append("keine");
                                 }
-                                for(int i=0; i < documentRequest.getDocumentAmount(); i++){
+                                for (int i = 0; i < documentRequest.getDocumentAmount(); i++) {
                                     documentRequestString.append(documentRequest.getDocument(i).getTitle());
-                                    if(i+1<documentRequest.getDocumentAmount()) documentRequestString.append(", ");
+                                    if (i + 1 < documentRequest.getDocumentAmount())
+                                        documentRequestString.append(", ");
                                 }
 
-                                AlertDialog.Builder builder= new AlertDialog.Builder(EventActivity.this);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(EventActivity.this);
                                 builder.setCancelable(true);
                                 builder.setTitle("Mehr Informationen zu ihrem Download");
                                 builder.setMessage(documentRequestString.toString());
@@ -163,7 +164,7 @@ public class EventActivity extends AppCompatActivity {
                             }
                         });
 
-                queue.add(ipAddressJsonRequest);
+                queue.add(documentRequestRequest);
 
             }
         });

@@ -36,7 +36,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Holder
         //populates the shell
         Document s = wordList.get(position);
         holder.checkBox.setText(s.getTitle());
-        holder.doc=s;
+        holder.doc = s;
 
     }
 

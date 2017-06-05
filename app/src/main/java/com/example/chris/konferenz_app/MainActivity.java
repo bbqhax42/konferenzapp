@@ -69,13 +69,12 @@ public class MainActivity extends AppCompatActivity {
 
                             Seminar seminar = gson.fromJson(jsonObject.toString(), Seminar.class);
                             //Log.e("Seminar DB EventAmnt", seminar.getEventAmount() + "");
-                            Log.e("kek", seminar+"");
-                            if(seminar.isempty()){
+                            Log.e("kek", seminar + "");
+                            if (seminar.isempty()) {
                                 Log.e("Back to start noob", "seminar is empty!");
                                 Intent intent = new Intent(getBaseContext(), LoginActivity.class);
                                 startActivity(intent);
-                            }
-                            else {
+                            } else {
                                 saveEventToDatabase(seminar, connection);
                                 populateView(connection);
                             }
@@ -90,8 +89,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
             queue.add(seminarRequest);
-        }
-        else{
+        } else {
             Log.e("not first login?", s.equalsIgnoreCase("false") + "");
             populateView(connection);
         }

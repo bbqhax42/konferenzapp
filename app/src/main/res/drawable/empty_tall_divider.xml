@@ -2,7 +2,7 @@
 
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <size
-        android:height="40dp"
-        android:width="0dp"/>
+        android:width="0dp"
+        android:height="40dp" />
 
 </shape>
