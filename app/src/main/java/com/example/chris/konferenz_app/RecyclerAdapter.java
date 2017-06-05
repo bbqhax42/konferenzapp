@@ -36,6 +36,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Holder
         //populates the shell
         Document s = wordList.get(position);
         holder.checkBox.setText(s.getTitle());
+        holder.doc=s;
 
     }
 
@@ -47,6 +48,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Holder
     public static class Holder extends RecyclerView.ViewHolder {
 
         CheckBox checkBox;
+        Document doc;
 
         public Holder(View itemView) {
             super(itemView);

@@ -13,6 +13,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,16 +91,80 @@ public class EventActivity extends AppCompatActivity {
 
         downloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
+
+            //volley request for documents here
             public void onClick(View v) {
+
+                ArrayList<String> selectedFiles = new ArrayList<String>();
+                StringBuffer downloadString=new StringBuffer();
 
                 for (int i = 0; i < adapter.getItemCount(); ++i) {
                     RecyclerAdapter.Holder holder = (RecyclerAdapter.Holder) recyclerView.findViewHolderForAdapterPosition(i);
                     if (holder.checkBox.isChecked()) {
-                        Log.e("Checked", String.valueOf(i));
+                        selectedFiles.add(holder.doc.getId()+"");
+                        Log.e("Checked", holder.doc.getId()+"");
                     } else {
-                        Log.e("Not Checked", String.valueOf(i));
+                        Log.e("Not Checked",holder.doc.getTitle());
                     }
                 }
+                for(int i=0; i < selectedFiles.size(); i++){
+                    downloadString.append(selectedFiles.get(i));
+                    if(i+1<selectedFiles.size()) downloadString.append(",");
+                }
+
+                Cursor res = connection.rawQuery("Select * from userinformation;", null);
+                res.moveToFirst();
+
+                String token = res.getString(8);
+
+                RequestQueue queue = Volley.newRequestQueue(EventActivity.this);
+
+                String url = Config.webserviceUrl + "DOC.REQUEST?token=" + token + "&doclist=" + downloadString;
+
+                JsonObjectRequest ipAddressJsonRequest =
+                        new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                            @Override
+                            public void onResponse(JSONObject jsonObject) {
+                                String s = jsonObject.toString();
+                                Gson gson = new Gson();
+
+                                //session token
+                                DocumentRequest documentRequest = gson.fromJson(jsonObject.toString(), DocumentRequest.class);
+
+                                StringBuffer documentRequestString = new StringBuffer("Status: "+ documentRequest.getStatus()+ "\n"
+                                        + "Status Info: "+ documentRequest.getStatus_info()+ "\n"
+                                        + "Empfänger:" + documentRequest.getRecipient()+ "\n"
+                                        + "Betreff: "+ documentRequest.getSubject()+ "\n"
+                                        + "Dokumente: ");
+
+
+                                if(documentRequest.getDocumentAmount()==0){
+                                    documentRequestString.append("keine");
+                                }
+                                for(int i=0; i < documentRequest.getDocumentAmount(); i++){
+                                    documentRequestString.append(documentRequest.getDocument(i).getTitle());
+                                    if(i+1<documentRequest.getDocumentAmount()) documentRequestString.append(", ");
+                                }
+
+                                AlertDialog.Builder builder= new AlertDialog.Builder(EventActivity.this);
+                                builder.setCancelable(true);
+                                builder.setTitle("Mehr Informationen zu ihrem Download");
+                                builder.setMessage(documentRequestString.toString());
+                                builder.show();
+
+                            }
+                        }, new Response.ErrorListener() {
+
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.e("Error", error.getMessage());
+                                Log.e("Error", "error"); //parse the returned string here
+                            }
+                        });
+
+                queue.add(ipAddressJsonRequest);
+
             }
         });
 
@@ -104,8 +178,8 @@ public class EventActivity extends AppCompatActivity {
         while (documents.moveToNext()) {
             Document doc = new Document(Integer.parseInt(documents.getString(0)), documents.getString(1));
             listofDocuments.add(doc);
-            Log.e("List Document ID", doc.getId() + "");
-            Log.e("List Document Title", doc.getTitle() + "");
+            //Log.e("List Document ID", doc.getId() + "");
+            //Log.e("List Document Title", doc.getTitle() + "");
         }
 
 
