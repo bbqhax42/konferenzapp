@@ -2,6 +2,7 @@ package com.example.chris.konferenz_app;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -31,7 +32,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     EditText name, email, phone, company, addInterestEditText;
     TextView tv;
-    Button update, deleteInterest, addInterest;
+    Button update, deleteInterest, addInterest, chatButton, settingsButton, homeButton;
     String token;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +48,41 @@ public class SettingsActivity extends AppCompatActivity {
         addInterest = (Button) findViewById(R.id.buttonsave);
         tv = (TextView) findViewById(R.id.textview);
         addInterestEditText = (EditText) findViewById(R.id.interest);
+        settingsButton = (Button) findViewById(R.id.settingsbutton);
+        chatButton = (Button) findViewById(R.id.chatbutton);
+        homeButton = (Button) findViewById(R.id.homebutton);
 
-        DatabaseHelper myDb = new DatabaseHelper(this);
+        final DatabaseHelper myDb = new DatabaseHelper(this);
         final SQLiteDatabase connection = myDb.getWritableDatabase();
 
         loadInitialSettings(connection);
+
+
+        chatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("MainActivity Chat", "");
+                Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        homeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                intent.putExtra("EventUpdate", false + ""); //true if not logged in today yet, false if already logged in today
+                startActivity(intent);
+            }
+        });
 
 
         update.setOnClickListener(new View.OnClickListener() {
@@ -59,6 +90,9 @@ public class SettingsActivity extends AppCompatActivity {
 
             //volley request for documents here
             public void onClick(View v) {
+
+                connection.execSQL("UPDATE userinformation SET name='" + name.getText().toString() + "', phonenumber='" + phone.getText().toString() + "', email='" + email.getText().toString() + "', company='" + company.getText().toString() + "';");
+                Log.e("Setting SQL UPDATE", "UPDATE userinformation SET name='" + name.getText().toString() + "', phonenumber='" + phone.getText().toString() + "', email='" + email.getText().toString() + "', company='" + company.getText().toString() + "';");
 
                 RequestQueue queue = Volley.newRequestQueue(SettingsActivity.this);
 
@@ -113,8 +147,13 @@ public class SettingsActivity extends AppCompatActivity {
 
             //volley request for documents here
             public void onClick(View v) {
-                connection.execSQL("Insert into interests (name) VALUES ('" + addInterestEditText.getText().toString() + "');");
-                Config.popupMessage("Interessensgruppe entfernt", "Sie haben sich in " + addInterestEditText.getText().toString() + " eingetragen.", SettingsActivity.this);
+                try {
+                    myDb.insertInterest(connection, addInterestEditText.getText().toString());
+                    Config.popupMessage("Interessensgruppe hinzugefügt", "Sie haben sich in " + addInterestEditText.getText().toString() + " eingetragen.", SettingsActivity.this);
+                } catch (SQLiteConstraintException e) {
+                    Config.popupMessage("Interessensgruppe nicht hinzugefügt", "Sie sind bereits in " + addInterestEditText.getText().toString() + " eingetragen.", SettingsActivity.this);
+                }
+
                 tv.setText(generateInterests(connection));
             }
         });
@@ -157,7 +196,9 @@ public class SettingsActivity extends AppCompatActivity {
         }
         //removes ', ' from last loop
         String tmpInterest = buffer.toString();
-        return tmpInterest.substring(0, tmpInterest.length() - 2);
+        if (tmpInterest.length() != 0)
+            return tmpInterest.substring(0, tmpInterest.length() - 2);
+        else return null;
     }
 
     private String generateInterestsJsonString(SQLiteDatabase connection) {
@@ -170,6 +211,8 @@ public class SettingsActivity extends AppCompatActivity {
         }
         //removes ',' from last loop
         String tmpInterest = buffer.toString();
-        return tmpInterest.substring(0, tmpInterest.length() - 1);
+        if (tmpInterest.length() != 0)
+            return tmpInterest.substring(0, tmpInterest.length() - 1);
+        else return null;
     }
 }

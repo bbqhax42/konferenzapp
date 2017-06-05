@@ -7,11 +7,53 @@
     android:orientation="vertical"
     tools:context="com.example.chris.konferenz_app.SettingsActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:background="@color/textBackground"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/homebutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="44dp"
+            android:fontFamily="sans-serif-condensed-light"
+            android:text="Home" />
+
+        <Button
+            android:id="@+id/chatbutton"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif-condensed-light"
+            android:text="Chat" />
+
+        <Button
+            android:id="@+id/settingsbutton"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif-condensed-light"
+            android:text="Einstellungen" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/textBackground"
+        android:ems="10"
+        android:fontFamily="sans-serif-condensed-light"
+        android:gravity="center"
+        android:inputType="textPersonName"
         android:text="Einstellungen"
+        android:textColor="@color/textColor"
         android:textSize="32sp"
         android:textStyle="bold" />
 
@@ -161,7 +203,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/buttondel"
+            android:id="@+id/buttonsave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -169,7 +211,7 @@
             android:text="Interesse hinzufügen" />
 
         <Button
-            android:id="@+id/buttonsave"
+            android:id="@+id/buttondel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

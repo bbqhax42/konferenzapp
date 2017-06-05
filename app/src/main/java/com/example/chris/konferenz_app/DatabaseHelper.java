@@ -3,6 +3,7 @@ package com.example.chris.konferenz_app;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -21,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String table1 = "CREATE TABLE userinformation (name varchar(255), phonenumber varchar(255), email varchar(255), company varchar(255), loginemail varchar(255), loginkey varchar(255), stayloggedin BOOLEAN, lastlogin varchar(255), sessionkey varchar(255), sessioncid varchar(255));";
     private static final String table2 = "create table events (event_id INTEGER, id varchar(255), title varchar(255), description varchar(255), author varchar(255), start varchar(255), end varchar(255), street varchar(255), zip varchar(6), city varchar(255), location varchar(255), url varchar(255));";
     private static final String table3 = "create table documents (id INTEGER, title varchar(255), event_id integer);";
-    private static final String table4 = "create table interests (name varchar(255));";
+    private static final String table4 = "create table interests (name varchar(255) NOT NULL, PRIMARY KEY (name));";
 
 
     public DatabaseHelper(Context context) {
@@ -34,7 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(table2);
         db.execSQL(table3);
         db.execSQL(table4);
-        db.execSQL("INSERT INTO userinformation (name, phonenumber, email, company, loginemail, loginkey, stayloggedin, lastlogin, sessionkey, sessioncid) VALUES ('empty', 'empty', 'empty', 'empty', 'empty', 'empty', \"FALSE\", 'empty', 'empty', 'empty');");
+        db.execSQL("INSERT INTO userinformation (name, phonenumber, email, company, loginemail, loginkey, stayloggedin, lastlogin, sessionkey, sessioncid) VALUES ("+ null + ", "+ null + ", "+ null + ", "+ null + ", "+ null + ", "+ null + ", \"FALSE\", '1970-01-01',  "+ null + ",  "+ null + ");");
     }
 
     @Override
@@ -53,6 +54,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM events");
         db.execSQL("DELETE FROM documents");
+    }
+
+    public void insertInterest (SQLiteDatabase connection, String interest) throws SQLiteConstraintException {
+        try {
+            connection.execSQL("Insert into interests (name) VALUES ('" + interest + "');");
+        } catch (SQLiteConstraintException e) {
+            throw new SQLiteConstraintException();
+        }
     }
 
     public SQLiteDatabase getConnection() {

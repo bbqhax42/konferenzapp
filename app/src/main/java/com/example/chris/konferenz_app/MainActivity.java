@@ -1,15 +1,16 @@
 package com.example.chris.konferenz_app;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.EventLog;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -27,18 +28,42 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
+    DatabaseHelper myDb = new DatabaseHelper(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Button chatButton, settingsButton;
+        chatButton = (Button) findViewById(R.id.chatbutton);
+        settingsButton = (Button) findViewById(R.id.settingsbutton);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        DatabaseHelper myDb = new DatabaseHelper(this);
+
         final SQLiteDatabase connection = myDb.getWritableDatabase();
 
         //did we cache data today already?
         String s = getIntent().getStringExtra("EventUpdate");
         Log.e("Intent LoginActivity", s);
+
+
+
+        chatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("MainActivity Chat", "");
+                Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         s = "true";
@@ -168,7 +193,10 @@ public class MainActivity extends AppCompatActivity {
 
         //Log.e("SaveDB InterestAmnt", seminar.getInterestgroupAmount() + "");
         for (int i = 0; i < seminar.getInterestgroupAmount(); i++) {
-            connection.execSQL("Insert into interests (name) VALUES ('" + seminar.getInterestgroup(i).getName() + "');");
+            try {
+                myDb.insertInterest(connection, seminar.getInterestgroup(i).getName());
+            } catch (SQLiteConstraintException e) {
+            }
             //Log.e("Seminar Interest", seminar.getInterestgroup(i).getName());
         }
     }

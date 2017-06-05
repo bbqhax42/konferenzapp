@@ -1,5 +1,6 @@
 package com.example.chris.konferenz_app;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -34,7 +35,7 @@ import java.util.List;
 public class EventActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    Button downloadButton, viewMoreButton;
+    Button downloadButton, viewMoreButton, chatButton, settingsButton, homeButton;
     int eventId = -1;
     TextView title, textfield;
 
@@ -57,6 +58,10 @@ public class EventActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         downloadButton = (Button) findViewById(R.id.button);
         viewMoreButton = (Button) findViewById(R.id.viewmorebutton);
+        settingsButton = (Button) findViewById(R.id.settingsbutton);
+        chatButton = (Button) findViewById(R.id.chatbutton);
+        homeButton = (Button) findViewById(R.id.homebutton);
+
 
         title.setText(event.getTitle());
         textfield.setText(event.getDescription());
@@ -68,6 +73,38 @@ public class EventActivity extends AppCompatActivity {
         final LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);
+
+        //hides the downloadbutton if there are no files to show
+        if(adapter.getItemCount()==0){
+            downloadButton.setVisibility(View.GONE);
+        }
+
+        chatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("MainActivity Chat", "");
+                Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        homeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                intent.putExtra("EventUpdate", false + ""); //true if not logged in today yet, false if already logged in today
+                startActivity(intent);
+            }
+        });
+
 
         viewMoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,9 +135,9 @@ public class EventActivity extends AppCompatActivity {
                     RecyclerAdapter.Holder holder = (RecyclerAdapter.Holder) recyclerView.findViewHolderForAdapterPosition(i);
                     if (holder.checkBox.isChecked()) {
                         selectedFiles.add(holder.doc.getId() + "");
-                        Log.e("Checked", holder.doc.getId() + "");
+                        //Log.e("Checked", holder.doc.getTitle() + "");
                     } else {
-                        Log.e("Not Checked", holder.doc.getTitle());
+                        //Log.e("Not Checked", holder.doc.getTitle());
                     }
                 }
                 for (int i = 0; i < selectedFiles.size(); i++) {
@@ -153,8 +190,7 @@ public class EventActivity extends AppCompatActivity {
 
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Log.e("Error", error.getMessage());
-                                Log.e("Error", "error"); //parse the returned string here
+                                Config.popupMessage("Sie haben keine Dateien zum Download ausgewählt","", EventActivity.this);
                             }
                         });
 

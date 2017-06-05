@@ -1,6 +1,8 @@
 package com.example.chris.konferenz_app;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteConstraintException;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
@@ -26,4 +28,6 @@ public class Config {
         builder.setMessage(message);
         builder.show();
     }
+
+
 }
