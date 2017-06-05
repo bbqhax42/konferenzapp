@@ -121,6 +121,8 @@ public class EventActivity extends AppCompatActivity {
 
                 String url = Config.webserviceUrl + "DOC.REQUEST?token=" + token + "&doclist=" + downloadString;
 
+                Log.e("DL String", url);
+
                 JsonObjectRequest documentRequestRequest =
                         new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
