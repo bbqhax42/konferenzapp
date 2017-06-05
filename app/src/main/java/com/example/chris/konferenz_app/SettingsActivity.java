@@ -104,7 +104,6 @@ public class SettingsActivity extends AppCompatActivity {
 
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Log.e("Back to start noob", error.getMessage());
                             }
                         });
                 queue.add(settingRequest);
