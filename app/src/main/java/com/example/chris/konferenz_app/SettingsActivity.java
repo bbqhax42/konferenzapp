@@ -92,11 +92,7 @@ public class SettingsActivity extends AppCompatActivity {
                                         settingResponseString.append(", ");
                                 }
 
-                                AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
-                                builder.setCancelable(true);
-                                builder.setTitle("Ihre Einstellungen wurden aktualisiert");
-                                builder.setMessage(settingResponseString.toString());
-                                builder.show();
+                                Config.popupMessage("Ihre Einstellungen wurden aktualisiert", settingResponseString.toString(), SettingsActivity.this);
 
 
                             }
@@ -118,11 +114,7 @@ public class SettingsActivity extends AppCompatActivity {
             //volley request for documents here
             public void onClick(View v) {
                 connection.execSQL("Insert into interests (name) VALUES ('" + addInterestEditText.getText().toString() + "');");
-                AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
-                builder.setCancelable(true);
-                builder.setTitle("Interessensgruppe entfernt");
-                builder.setMessage("Sie haben sich in " + addInterestEditText.getText().toString() + " eingetragen.");
-                builder.show();
+                Config.popupMessage("Interessensgruppe entfernt", "Sie haben sich in " + addInterestEditText.getText().toString() + " eingetragen.", SettingsActivity.this);
                 tv.setText(generateInterests(connection));
             }
         });
@@ -133,15 +125,12 @@ public class SettingsActivity extends AppCompatActivity {
             //volley request for documents here
             public void onClick(View v) {
                 connection.execSQL("DELETE FROM interests WHERE name='" + addInterestEditText.getText().toString() + "';");
-                AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
-                builder.setCancelable(true);
-                builder.setTitle("Interessensgruppe entfernt");
-                builder.setMessage("Sie haben sich aus " + addInterestEditText.getText().toString() + " entfernt.");
-                builder.show();
+                Config.popupMessage("Interessensgruppe entfernt", "Sie haben sich aus " + addInterestEditText.getText().toString() + " entfernt.", SettingsActivity.this);
                 tv.setText(generateInterests(connection));
             }
         });
     }
+
 
     //loads the initial settings from DB and puts them on screen
     private void loadInitialSettings(SQLiteDatabase connection) {

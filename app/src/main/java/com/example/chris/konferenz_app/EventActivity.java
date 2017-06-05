@@ -80,11 +80,7 @@ public class EventActivity extends AppCompatActivity {
                         + "Zusatzangaben: " + event.getLocation() + "\n"
                         + "Website: " + event.getUrl();
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(EventActivity.this);
-                builder.setCancelable(true);
-                builder.setTitle("Mehr Informationen zu " + event.getTitle());
-                builder.setMessage(str);
-                builder.show();
+               Config.popupMessage("Mehr Informationen zu " + event.getTitle(), str, EventActivity.this);
             }
         });
 
@@ -150,11 +146,7 @@ public class EventActivity extends AppCompatActivity {
                                         documentRequestString.append(", ");
                                 }
 
-                                AlertDialog.Builder builder = new AlertDialog.Builder(EventActivity.this);
-                                builder.setCancelable(true);
-                                builder.setTitle("Mehr Informationen zu ihrem Download");
-                                builder.setMessage(documentRequestString.toString());
-                                builder.show();
+                                Config.popupMessage("Mehr Informationen zu ihrem Download", documentRequestString.toString(), EventActivity.this);
 
                             }
                         }, new Response.ErrorListener() {
