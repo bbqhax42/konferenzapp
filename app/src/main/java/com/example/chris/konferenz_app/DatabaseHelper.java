@@ -20,9 +20,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Database creation sql statement
     private static final String table1 = "CREATE TABLE userinformation (name varchar(255), phonenumber varchar(255), email varchar(255), company varchar(255), loginemail varchar(255), loginkey varchar(255), stayloggedin BOOLEAN, lastlogin varchar(255), sessionkey varchar(255), sessioncid varchar(255));";
-    private static final String table2 = "create table events (event_id INTEGER, id varchar(255), title varchar(255), description varchar(255), author varchar(255), start varchar(255), end varchar(255), street varchar(255), zip varchar(6), city varchar(255), location varchar(255), url varchar(255));";
-    private static final String table3 = "create table documents (id INTEGER, title varchar(255), event_id integer);";
+    private static final String table2 = "create table events (event_id INTEGER, id varchar(255), title varchar(255), description varchar(255), author varchar(255), start varchar(255), end varchar(255), street varchar(255), zip varchar(6), city varchar(255), location varchar(255), url varchar(255), PRIMARY KEY (event_id));";
+    private static final String table3 = "create table documents (id INTEGER, title varchar(255), event_id integer, PRIMARY KEY (id));";
     private static final String table4 = "create table interests (name varchar(255) NOT NULL, PRIMARY KEY (name));";
+    private static final String table5 = "create table chatmessages (channel varchar(255) NOT NULL, timestamp varchar(255), cid varchar(255), content varchar(255));";
+    private static final String table6 = "create table users (cid varchar(255) NOT NULL, profile_name varchar(255), profile_phone varchar(255), profile_email varchar(255), profile_company varchar(255), PRIMARY KEY (cid));";
 
 
     public DatabaseHelper(Context context) {
@@ -35,7 +37,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(table2);
         db.execSQL(table3);
         db.execSQL(table4);
+        db.execSQL(table5);
+        db.execSQL(table6);
         db.execSQL("INSERT INTO userinformation (name, phonenumber, email, company, loginemail, loginkey, stayloggedin, lastlogin, sessionkey, sessioncid) VALUES ("+ null + ", "+ null + ", "+ null + ", "+ null + ", "+ null + ", "+ null + ", \"FALSE\", '1970-01-01',  "+ null + ",  "+ null + ");");
+        db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content) VALUES ('Hund', '15:07', 'Lorenz', 'Hallo ich bin der Lorenz, auf Grund meines natürlichen Sexualtriebes bin ich sehr an Hunden interessiert.');");
+        db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content) VALUES ('Hund', '16:33', 'Chris', 'Man du ekliger Spast verpiss dich!!');");
+        db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content) VALUES ('Hund', '16:53', 'Chris', 'Man du ekliger Spast verpiss dich!!');");
+        db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content) VALUES ('Hund', '17:03', 'Chris', 'Man du ekliger Spast verpiss dich!!');");
+        db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content) VALUES ('Hund', '17:53', 'Chris', 'Sorry das war meine Schwester, Hunde find ich auch geil!');");
+
     }
 
     @Override
@@ -47,6 +57,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS table2");
         db.execSQL("DROP TABLE IF EXISTS table3");
         db.execSQL("DROP TABLE IF EXISTS table4");
+        db.execSQL("DROP TABLE IF EXISTS table5");
         onCreate(db);
     }
 
@@ -62,6 +73,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } catch (SQLiteConstraintException e) {
             throw new SQLiteConstraintException();
         }
+    }
+
+    public String getToken(SQLiteDatabase connection) {
+        Cursor res = connection.rawQuery("Select * from userinformation;", null);
+        res.moveToFirst();
+        return res.getString(8);
+    }
+
+
+    public String getCid(SQLiteDatabase connection) {
+        Cursor res = connection.rawQuery("Select * from userinformation;", null);
+        res.moveToFirst();
+        return res.getString(9);
     }
 
     public SQLiteDatabase getConnection() {

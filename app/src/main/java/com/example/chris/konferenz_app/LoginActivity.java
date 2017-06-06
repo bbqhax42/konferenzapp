@@ -41,9 +41,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
     //Returns little bubble visible for the user with errormessage
-    private void error_message(String message) {
-        Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
-    }
 
 
     @Override
@@ -68,10 +65,10 @@ public class LoginActivity extends AppCompatActivity {
             email_textfield.setText(res.getString(4));
             password_textfield.setText(res.getString(5));
             rememberme_checkbox.setChecked(true);
-            Log.e("Login DB User", res.getString(4));
-            Log.e("Login DB KEY", res.getString(5));
-            Log.e("Login DB BOOL", res.getString(6));
-            Log.e("Login DB LASTLOGIN", res.getString(7));
+            //Log.e("Login DB User", res.getString(4));
+            //Log.e("Login DB KEY", res.getString(5));
+            //Log.e("Login DB BOOL", res.getString(6));
+            //Log.e("Login DB LASTLOGIN", res.getString(7));
         }
 
         final String lastLogin = res.getString(7);
@@ -88,9 +85,10 @@ public class LoginActivity extends AppCompatActivity {
 
                 //Test auf Fehler der Usereingabe email format a@b.c und freischaltcode nicht leer
                 if (!email.matches(".+@.+\\..+")) {
-                    error_message("Invalide e-Mailadresse");
+                    Config.error_message(LoginActivity.this, "Invalide e-Mailadresse");
                 }
-                if (freischaltcode.length() == 0) error_message("Bitte Freischaltcode eingeben");
+                if (freischaltcode.length() == 0)
+                    Config.error_message(LoginActivity.this, "Bitte Freischaltcode eingeben");
 
 
                 //Erstellt eine Volley Request Queue
@@ -112,46 +110,56 @@ public class LoginActivity extends AppCompatActivity {
 
                                 //session token
                                 LoginResponse loginResponse = gson.fromJson(jsonObject.toString(), LoginResponse.class);
-                                if (loginResponse.getCid().trim().equals("") || loginResponse.getToken().trim().equals("")) {
-                                    //error message
-                                    return;
+
+                                if (loginResponse.getSuccess().equalsIgnoreCase("false")) {
+
+                                    switch (loginResponse.getErrorMessage()) {
+                                        case "invalid code":
+                                            Config.error_message(LoginActivity.this, "Invalider Entsperrcode");
+                                            break;
+                                        case "user not found":
+                                            Config.error_message(LoginActivity.this, "Nutzer nicht gefunden");
+                                            break;
+                                        default:
+                                            Config.error_message(LoginActivity.this, "Fehler");
+                                            break;
+                                    }
+                                } else {
+                                    //Log.e("Login Token", loginResponse.getToken());
+
+
+                                    //Speichert den Token fuer die weitere Verwendung in der datenbank
+                                    connection.execSQL("UPDATE userinformation SET sessionkey='" + loginResponse.getToken() + "', sessioncid='" + loginResponse.getCid() + "';");
+
+                                    String strDate = getCurrentDate();
+                                    boolean eventUpdate = true;
+                                    if (strDate.equalsIgnoreCase(lastLogin)) {
+                                        eventUpdate = false;
+                                    }
+
+                                    //saving current logindate and if user prefers to stay signed in
+                                    connection.execSQL("UPDATE userinformation SET stayloggedin=\"" + eingeloggt_bleiben + "\", lastlogin='" + strDate + "';");
+                                    //Log.e("Login SQL UPDATE 1/2", "UPDATE userinformation SET stayloggedin=" + eingeloggt_bleiben + ", lastlogin='" + strDate + "';");
+
+                                    if (eingeloggt_bleiben) {
+                                        //email and password saving in case user wants to
+                                        connection.execSQL("UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "';");
+                                        //Log.e("Login SQL UPDATE 2/2", "UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "'");
+
+                                    }
+
+                                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                                    intent.putExtra("EventUpdate", eventUpdate + ""); //true if not logged in today yet, false if already logged in today
+                                    startActivity(intent);
                                 }
-
-                                Log.e("Login Token", loginResponse.getToken());
-
-
-                                //Speichert den Token fuer die weitere Verwendung in der datenbank
-                                connection.execSQL("UPDATE userinformation SET sessionkey='" + loginResponse.getToken() + "', sessioncid='" + loginResponse.getCid() + "';");
-
-                                String strDate = getCurrentDate();
-                                boolean eventUpdate = true;
-                                if (strDate.equalsIgnoreCase(lastLogin)) {
-                                    eventUpdate = false;
-                                }
-
-                                //saving current logindate and if user prefers to stay signed in
-                                connection.execSQL("UPDATE userinformation SET stayloggedin=\"" + eingeloggt_bleiben + "\", lastlogin='" + strDate + "';");
-                                Log.e("Login SQL UPDATE 1/2", "UPDATE userinformation SET stayloggedin=" + eingeloggt_bleiben + ", lastlogin='" + strDate + "';");
-
-                                if (eingeloggt_bleiben) {
-                                    //email and password saving in case user wants to
-                                    connection.execSQL("UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "';");
-                                    Log.e("Login SQL UPDATE 2/2", "UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "'");
-
-                                }
-
-                                Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                                intent.putExtra("EventUpdate", eventUpdate + ""); //true if not logged in today yet, false if already logged in today
-                                startActivity(intent);
-
                             }
-                        }, new Response.ErrorListener() {
+                        }, new Response.ErrorListener()
+
+                        {
 
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Log.e("Error", error.getMessage());
-                                Log.e("Error", "error"); //parse the returned string here
-                                error_message("Falsche Logindaten");
+                                Config.error_message(LoginActivity.this, "Keine Internetverbindung");
                             }
                         });
 

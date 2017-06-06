@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * Created by Chris on 27.05.2017.
@@ -15,9 +16,13 @@ public class Config {
     public static final String webserviceUrl = "https://new.myconf.akademie-herkert.de/";
 
     //cuts off the date and only leaves the time without seconds
-    static final String formatDates(String date){
-        Log.e("Stringlog", date);
+    public static final String formatDates(String date){
+        //Log.e("formatDates", date);
         return date.substring(11, 16);
+    }
+
+    public static final void error_message(Context context, String message) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
 

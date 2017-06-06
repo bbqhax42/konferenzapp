@@ -35,24 +35,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button chatButton, settingsButton;
+        Button chatButton, settingsButton, homeButton;
         chatButton = (Button) findViewById(R.id.chatbutton);
         settingsButton = (Button) findViewById(R.id.settingsbutton);
+        homeButton = (Button) findViewById(R.id.homebutton);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         final SQLiteDatabase connection = myDb.getWritableDatabase();
 
         //did we cache data today already?
         String s = getIntent().getStringExtra("EventUpdate");
-        Log.e("Intent LoginActivity", s);
-
+        //Log.e("Intent LoginActivity", s);
 
 
         chatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("MainActivity Chat", "");
-                Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+                Intent intent = new Intent(getBaseContext(), ChatActivity.class);
                 startActivity(intent);
             }
         });
@@ -61,21 +60,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
+
                 startActivity(intent);
             }
         });
 
 
+
         s = "true";
         //we did not login today yet? GREAT!!!!111
         if (s.equalsIgnoreCase("true")) {
-            Log.e("first login?", s.equalsIgnoreCase("true") + "");
+            //Log.e("first login?", s.equalsIgnoreCase("true") + "");
             myDb.deleteAllUselessTablesLUL();
 
-            Cursor res = connection.rawQuery("Select * from userinformation;", null);
-            res.moveToFirst();
+            String token = myDb.getToken(connection);
 
-            String token = res.getString(8);
             String date = "2017-06-14"; //wow time flew by fast
 
 
@@ -83,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
             //load event data
             String url = Config.webserviceUrl + "EVENT.DAILY?token=" + token + "&date=" + date;
-            Log.e("Event Daily URL", url);
+            //Log.e("Event Daily URL", url);
             final JsonObjectRequest seminarRequest =
                     new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
@@ -94,9 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
                             Seminar seminar = gson.fromJson(jsonObject.toString(), Seminar.class);
                             //Log.e("Seminar DB EventAmnt", seminar.getEventAmount() + "");
-                            Log.e("kek", seminar + "");
                             if (seminar.isempty()) {
-                                Log.e("Back to start noob", "seminar is empty!");
                                 Intent intent = new Intent(getBaseContext(), LoginActivity.class);
                                 startActivity(intent);
                             } else {
@@ -110,12 +107,10 @@ public class MainActivity extends AppCompatActivity {
 
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Log.e("Back to start noob", error.getMessage());
                         }
                     });
             queue.add(seminarRequest);
         } else {
-            Log.e("not first login?", s.equalsIgnoreCase("false") + "");
             populateView(connection);
         }
 
@@ -126,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
         //setupRecyclerview adapter
 
-        EventsRecyclerAdapter adapter = new EventsRecyclerAdapter(MainActivity.this, eventsList);
+        MainActivityRecyclerAdapter adapter = new MainActivityRecyclerAdapter(MainActivity.this, eventsList);
         recyclerView.setAdapter(adapter);
 
         LinearLayoutManager llm = new LinearLayoutManager(MainActivity.this);

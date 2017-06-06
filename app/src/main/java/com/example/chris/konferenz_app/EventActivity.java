@@ -1,11 +1,9 @@
 package com.example.chris.konferenz_app;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -68,7 +66,7 @@ public class EventActivity extends AppCompatActivity {
 
 
         List<Document> idList = queryDocuments(connection);
-        final RecyclerAdapter adapter = new RecyclerAdapter(EventActivity.this, idList);
+        final EventActivityRecyclerAdapter adapter = new EventActivityRecyclerAdapter(EventActivity.this, idList);
         recyclerView.setAdapter(adapter);
         final LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -82,8 +80,7 @@ public class EventActivity extends AppCompatActivity {
         chatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("MainActivity Chat", "");
-                Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+                Intent intent = new Intent(getBaseContext(), ChatActivity.class);
                 startActivity(intent);
             }
         });
@@ -132,7 +129,7 @@ public class EventActivity extends AppCompatActivity {
                 StringBuffer downloadString = new StringBuffer();
 
                 for (int i = 0; i < adapter.getItemCount(); ++i) {
-                    RecyclerAdapter.Holder holder = (RecyclerAdapter.Holder) recyclerView.findViewHolderForAdapterPosition(i);
+                    EventActivityRecyclerAdapter.Holder holder = (EventActivityRecyclerAdapter.Holder) recyclerView.findViewHolderForAdapterPosition(i);
                     if (holder.checkBox.isChecked()) {
                         selectedFiles.add(holder.doc.getId() + "");
                         //Log.e("Checked", holder.doc.getTitle() + "");

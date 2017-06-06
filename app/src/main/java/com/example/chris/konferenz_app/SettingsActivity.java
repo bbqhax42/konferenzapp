@@ -61,8 +61,7 @@ public class SettingsActivity extends AppCompatActivity {
         chatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("MainActivity Chat", "");
-                Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+                Intent intent = new Intent(getBaseContext(), ChatActivity.class);
                 startActivity(intent);
             }
         });
@@ -127,6 +126,21 @@ public class SettingsActivity extends AppCompatActivity {
                                 }
 
                                 Config.popupMessage("Ihre Einstellungen wurden aktualisiert", settingResponseString.toString(), SettingsActivity.this);
+                                try {
+                                    connection.execSQL("Insert into users (cid, profile_name, profile_phone, profile_email, profile_company) VALUES ('"
+                                            + myDb.getCid(connection) + "', '"
+                                            + name.getText() + "', '"
+                                            + phone.getText() + "', '"
+                                            + email.getText() + "', '"
+                                            + company.getText() + "');");
+                                } catch (SQLiteConstraintException e) {
+                                    connection.execSQL("Update users SET " +
+                                            "profile_name='" + name.getText() + "', " +
+                                            "profile_phone='" + phone.getText() + "', " +
+                                            "profile_email='" + email.getText() + "', " +
+                                            "profile_company='" + company.getText() + "' " +
+                                            "Where cid='" + myDb.getCid(connection) + "';");
+                                }
 
 
                             }
