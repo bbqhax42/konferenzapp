@@ -23,7 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String table2 = "create table events (event_id INTEGER, id varchar(255), title varchar(255), description varchar(255), author varchar(255), start varchar(255), end varchar(255), street varchar(255), zip varchar(6), city varchar(255), location varchar(255), url varchar(255), PRIMARY KEY (event_id));";
     private static final String table3 = "create table documents (id INTEGER, title varchar(255), event_id integer, PRIMARY KEY (id));";
     private static final String table4 = "create table interests (name varchar(255) NOT NULL, PRIMARY KEY (name));";
-    private static final String table5 = "create table chatmessages (channel varchar(255) NOT NULL, timestamp varchar(255), cid varchar(255), content varchar(255));";
+    private static final String table5 = "create table chatmessages (channel varchar(255) NOT NULL, timestamp varchar(255), cid varchar(255), content varchar(255), issent BOOLEAN);";
     private static final String table6 = "create table users (cid varchar(255) NOT NULL, profile_name varchar(255), profile_phone varchar(255), profile_email varchar(255), profile_company varchar(255), PRIMARY KEY (cid));";
 
 
@@ -40,11 +40,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(table5);
         db.execSQL(table6);
         db.execSQL("INSERT INTO userinformation (name, phonenumber, email, company, loginemail, loginkey, stayloggedin, lastlogin, sessionkey, sessioncid) VALUES ("+ null + ", "+ null + ", "+ null + ", "+ null + ", "+ null + ", "+ null + ", \"FALSE\", '1970-01-01',  "+ null + ",  "+ null + ");");
-        db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content) VALUES ('Hund', '15:07', 'Lorenz', 'Hallo ich bin der Lorenz, auf Grund meines natürlichen Sexualtriebes bin ich sehr an Hunden interessiert.');");
-        db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content) VALUES ('Hund', '16:33', 'Chris', 'Man du ekliger Spast verpiss dich!!');");
-        db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content) VALUES ('Hund', '16:53', 'Chris', 'Man du ekliger Spast verpiss dich!!');");
-        db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content) VALUES ('Hund', '17:03', 'Chris', 'Man du ekliger Spast verpiss dich!!');");
-        db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content) VALUES ('Hund', '17:53', 'Chris', 'Sorry das war meine Schwester, Hunde find ich auch geil!');");
+        db.execSQL("Insert into users (cid, profile_name, profile_phone, profile_email, profile_company) values ('1234', 'Lorenz', '0123445678', 'lorenz@mail.de', 'KoksAG');");
+        db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('Testchannel', '08:39', '1234', 'Testnachricht von Lorenzo', \"FALSE\");");
 
     }
 
@@ -65,6 +62,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM events");
         db.execSQL("DELETE FROM documents");
+        //db.execSQL("DELETE FROM users");
     }
 
     public void insertInterest (SQLiteDatabase connection, String interest) throws SQLiteConstraintException {
@@ -85,6 +83,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public String getCid(SQLiteDatabase connection) {
         Cursor res = connection.rawQuery("Select * from userinformation;", null);
         res.moveToFirst();
+        Log.e("DBHELPER", res.getString(9));
         return res.getString(9);
     }
 

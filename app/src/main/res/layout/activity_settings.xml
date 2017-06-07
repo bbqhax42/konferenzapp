@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
     tools:context="com.example.chris.konferenz_app.SettingsActivity">
 
     <LinearLayout
@@ -51,7 +53,6 @@
         android:ems="10"
         android:fontFamily="sans-serif-condensed-light"
         android:gravity="center"
-        android:inputType="textPersonName"
         android:text="Einstellungen"
         android:textColor="@color/textColor"
         android:textSize="32sp"
@@ -78,7 +79,6 @@
             android:layout_gravity="center"
             android:ems="10"
             android:hint="Max Mustermann"
-            android:inputType="textPersonName"
             tools:layout_editor_absoluteX="70dp"
             tools:layout_editor_absoluteY="246dp" />
     </LinearLayout>
@@ -121,7 +121,7 @@
             android:layout_width="122dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="e-Mail-Adresse: "
+            android:text="E-Mail-Adresse: "
             android:textSize="18dp" />
 
         <EditText
@@ -131,7 +131,6 @@
             android:layout_gravity="center"
             android:ems="10"
             android:hint="max@mustermann.de"
-            android:inputType="textEmailAddress"
             tools:layout_editor_absoluteX="70dp"
             tools:layout_editor_absoluteY="246dp" />
     </LinearLayout>
@@ -158,7 +157,6 @@
             android:layout_gravity="center"
             android:ems="10"
             android:hint="Mustermann GmbH"
-            android:inputType="textPersonName"
             tools:layout_editor_absoluteX="70dp"
             tools:layout_editor_absoluteY="246dp" />
     </LinearLayout>
@@ -179,6 +177,8 @@
         android:layout_height="88dp"
         android:layout_gravity="center"
         android:layout_marginTop="25dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:scrollbars="vertical"
         android:text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
         android:textSize="18dp" />
@@ -199,11 +199,14 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
+        android:weightSum="100"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/buttonsave"
+            android:layout_weight="50"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -212,6 +215,7 @@
 
         <Button
             android:id="@+id/buttondel"
+            android:layout_weight="50"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

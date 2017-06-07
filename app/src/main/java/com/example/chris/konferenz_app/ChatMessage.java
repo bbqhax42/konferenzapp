@@ -6,6 +6,7 @@ package com.example.chris.konferenz_app;
 
 public class ChatMessage {
     private String timestamp, cid, content;
+    private boolean sendState;
 
     public ChatMessage(String timestamp, String cid, String content) {
         this.timestamp = timestamp;
@@ -14,6 +15,14 @@ public class ChatMessage {
     }
 
     public ChatMessage() {
+    }
+
+    public boolean isSendState() {
+        return sendState;
+    }
+
+    public void setSendState(boolean sendState) {
+        this.sendState = sendState;
     }
 
     public String getTimestamp() {

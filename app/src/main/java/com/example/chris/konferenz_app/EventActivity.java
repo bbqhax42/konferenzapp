@@ -3,6 +3,7 @@ package com.example.chris.konferenz_app;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -60,6 +61,8 @@ public class EventActivity extends AppCompatActivity {
         chatButton = (Button) findViewById(R.id.chatbutton);
         homeButton = (Button) findViewById(R.id.homebutton);
 
+        viewMoreButton.setPaintFlags(viewMoreButton.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
 
         title.setText(event.getTitle());
         textfield.setText(event.getDescription());
@@ -107,8 +110,8 @@ public class EventActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String str = "Autor: " + event.getAuthor() + "\n"
-                        + "Start: " + event.getStart() + "\n"
-                        + "Ende:" + event.getEnd() + "\n"
+                        + "Start: " + Config.formatDates(event.getStart()) + " Uhr\n"
+                        + "Ende: " + Config.formatDates(event.getEnd()) + " Uhr\n"
                         + "Strasse: " + event.getStreet() + "\n"
                         + "Ort: " + event.getZip() + " " + event.getCity() + "\n"
                         + "Zusatzangaben: " + event.getLocation() + "\n"

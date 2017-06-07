@@ -57,7 +57,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="450dp"
+        android:layout_height="480dp"
         android:clipToPadding="false" />
 
     <LinearLayout
@@ -70,12 +70,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Msg.: "
+            android:layout_marginLeft="10dp"
+            android:text="Nachricht: "
             android:textSize="18dp" />
 
         <EditText
             android:id="@+id/messagetosend"
-            android:layout_width="250dp"
+            android:layout_width="240dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:ems="10"
@@ -86,7 +87,6 @@
         <Button
             android:id="@+id/sendbutton"
             android:layout_width="wrap_content"
-            android:layout_marginLeft="1dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-condensed-light"

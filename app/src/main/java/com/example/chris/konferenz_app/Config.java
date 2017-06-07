@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -27,11 +28,11 @@ public class Config {
 
 
     public static final void popupMessage(String title, String message, Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setCancelable(true);
-        builder.setTitle(title);
-        builder.setMessage(message);
-        builder.show();
+
+        AlertDialog dialog = new AlertDialog.Builder(context).setTitle(title).setMessage(message).setCancelable(true).show();
+        TextView textView = (TextView) dialog.findViewById(android.R.id.message);
+        textView.setLineSpacing(1, 1.3f);
+        //builder.show();
     }
 
 

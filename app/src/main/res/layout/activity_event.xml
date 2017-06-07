@@ -80,7 +80,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="left"
         android:fontFamily="sans-serif-condensed-light"
-        android:text="Mehr Details..." />
+        android:textStyle="italic"
+        android:text=">>> Mehr Details..." />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"

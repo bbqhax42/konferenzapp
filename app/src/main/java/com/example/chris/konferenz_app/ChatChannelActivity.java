@@ -34,6 +34,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
+
 public class ChatChannelActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
@@ -57,7 +60,7 @@ public class ChatChannelActivity extends AppCompatActivity {
         messageToSend = (EditText) findViewById(R.id.messagetosend);
         sendButton = (Button) findViewById(R.id.sendbutton);
         channelName = (TextView) findViewById(R.id.title);
-        channelName.setText("Thema: "+getIntent().getStringExtra("ChannelName"));
+        channelName.setText("Thema: " + getIntent().getStringExtra("ChannelName"));
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         final String token = myDb.getToken(connection);
@@ -70,18 +73,18 @@ public class ChatChannelActivity extends AppCompatActivity {
         messageToSend.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
+                if (hasFocus) {
                     //Toast.makeText(getApplicationContext(), "got the focus", Toast.LENGTH_LONG).show();
-                    ViewGroup.LayoutParams params=recyclerView.getLayoutParams();
-                    params.height=900;
+                    ViewGroup.LayoutParams params = recyclerView.getLayoutParams();
+                    params.height = 900;
                     recyclerView.setLayoutParams(params);
-                    recyclerView.scrollToPosition(messages.size()-1);
-                }else {
+                    recyclerView.scrollToPosition(messages.size() - 1);
+                } else {
                     //Toast.makeText(getApplicationContext(), "lost the focus", Toast.LENGTH_LONG).show();
-                    ViewGroup.LayoutParams params=recyclerView.getLayoutParams();
-                    params.height=1680;
+                    ViewGroup.LayoutParams params = recyclerView.getLayoutParams();
+                    params.height = 1680;
                     recyclerView.setLayoutParams(params);
-                    recyclerView.scrollToPosition(messages.size()-1);
+                    recyclerView.scrollToPosition(messages.size() - 1);
                 }
             }
         });
@@ -116,74 +119,82 @@ public class ChatChannelActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RequestQueue queue = Volley.newRequestQueue(ChatChannelActivity.this);
-
-
-                String url = Config.webserviceUrl + "CHAT.SEND?token" + token + "&channel=" + channelName.getText().toString() + "&content=" + messageToSend.getText().toString();
-
-                Log.e("Chat Message URL", url);
-
-                JsonObjectRequest documentRequestRequest =
-                        new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-                            @Override
-                            public void onResponse(JSONObject jsonObject) {
-                                messageToSend.setText("");
-                                Config.error_message(ChatChannelActivity.this, "Nachricht erfolgreich gesendet");
-                                connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content) VALUES ('"+ channelName.getText().toString()+ "', '"+ getCurrentDate() +"', '" + cid + "', '"+messageToSend.getText().toString().trim() +"');");
-                                messageToSend.setText("");
-                                populateView(connection);
-                            }
-                        }, new Response.ErrorListener() {
-
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Config.error_message(ChatChannelActivity.this, "Senden fehlgeschlagen");
-                                connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content) VALUES ('"+ channelNameString+ "', '"+ getCurrentDate() +"', '" + cid + "', '"+messageToSend.getText().toString().trim() +"');");
-                                //Log.e("ChatActivity SQL", "INSERT INTO chatmessages (channel, timestamp, cid, content) VALUES ('"+ channelNameString+ "', '"+ getCurrentDate() +"', '" + cid + "', '"+messageToSend.getText().toString().trim() +"');");
-                                messageToSend.setText("");
-                                populateView(connection);
-                                //wieder loeschen!!! ! ! ! ! ! ! !
-                            }
-                        });
-
-                queue.add(documentRequestRequest);
-
+                onClickSendMessageButton(token, messageToSend, connection, cid);
             }
         });
 
 
     }
 
+    private void onClickSendMessageButton(String token, final EditText messageToSend, final SQLiteDatabase connection, final String cid) {
+        RequestQueue queue = Volley.newRequestQueue(ChatChannelActivity.this);
 
-    private void populateView(SQLiteDatabase connection) {
+
+        String url = Config.webserviceUrl + "CHAT.SEND?token" + token + "&channel=" + channelNameString + "&content=" + messageToSend.getText().toString().trim();
+
+        Log.e("Chat Message URL", url);
+
+        if (messageToSend.getText().toString().trim().length() != 0) {
+
+            JsonObjectRequest documentRequestRequest =
+                    new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject jsonObject) {
+                            messageToSend.setText("");
+                            Config.error_message(ChatChannelActivity.this, "Nachricht erfolgreich gesendet");
+                            connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + channelNameString + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"TRUE\");");
+                            messageToSend.setText("");
+                            populateView(connection);
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                            //!!!!!!!!!!!!!!!!!!!!!!
+                            Config.error_message(ChatChannelActivity.this, "Senden fehlgeschlagen");
+                            connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + channelNameString + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"FALSE\");");
+                            Log.e("ChatActivity SQL", "INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + channelNameString + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"FALSE\");");
+                            messageToSend.setText("");
+                            populateView(connection);
+                            //wieder loeschen!!! ! ! ! ! ! ! !
+                        }
+                    });
+
+            queue.add(documentRequestRequest);
+        } else Config.error_message(ChatChannelActivity.this, "Leere Nachrichten sind verboten");
+    }
+
+
+    public void populateView(SQLiteDatabase connection) {
         Log.e("populateview", "success");
 
-        messages= queryChatMessages(connection);
+        messages = queryChatMessages(connection);
 
-        ChatChannelRecyclerAdapter adapter = new ChatChannelRecyclerAdapter(ChatChannelActivity.this, messages);
+        ChatChannelRecyclerAdapter adapter = new ChatChannelRecyclerAdapter(ChatChannelActivity.this, messages, channelNameString);
         recyclerView.setAdapter(adapter);
 
         LinearLayoutManager llm = new LinearLayoutManager(ChatChannelActivity.this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
 
         recyclerView.setLayoutManager(llm);
-        recyclerView.scrollToPosition(messages.size()-1);
+        recyclerView.scrollToPosition(messages.size() - 1);
     }
 
     private ArrayList<ChatMessage> queryChatMessages(SQLiteDatabase connection) {
-        Cursor res = connection.rawQuery("Select * from chatmessages where channel='"+ channelNameString +"';", null);
-        Log.e("queryChatMessages", "Select * from chatmessages where channel='"+ channelNameString +"';");
+        Cursor res = connection.rawQuery("Select * from chatmessages where channel='" + channelNameString + "';", null);
+        Log.e("queryChatMessages", "Select * from chatmessages where channel='" + channelNameString + "';");
         ArrayList<ChatMessage> listOfChatMessages = new ArrayList<>();
         while (res.moveToNext()) {
             ChatMessage chatMessage = new ChatMessage();
             chatMessage.setTimestamp(res.getString(1));
             chatMessage.setCid(res.getString(2));
             chatMessage.setContent(res.getString(3));
+            Log.e("Chatmessage db state", res.getString(3));
+            Log.e("Chatmessage db state", res.getString(4));
+            chatMessage.setSendState(res.getString(4).equalsIgnoreCase("true") ? true : false);
             listOfChatMessages.add(chatMessage);
-            Log.e("queryChatMessages", res.getString(1));
-            Log.e("queryChatMessages", res.getString(2));
-            Log.e("queryChatMessages", res.getString(3));
         }
         //Log.e("List of Events Size", String.valueOf(listOfEvents.size()));
         return listOfChatMessages;
@@ -194,7 +205,6 @@ public class ChatChannelActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         return sdf.format(c.getTime());
     }
-
 
 
 }

@@ -38,7 +38,6 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
         name = (EditText) findViewById(R.id.name);
         email = (EditText) findViewById(R.id.email);
         phone = (EditText) findViewById(R.id.phonenumber);
@@ -51,6 +50,8 @@ public class SettingsActivity extends AppCompatActivity {
         settingsButton = (Button) findViewById(R.id.settingsbutton);
         chatButton = (Button) findViewById(R.id.chatbutton);
         homeButton = (Button) findViewById(R.id.homebutton);
+        name.clearFocus();
+
 
         final DatabaseHelper myDb = new DatabaseHelper(this);
         final SQLiteDatabase connection = myDb.getWritableDatabase();
@@ -89,9 +90,10 @@ public class SettingsActivity extends AppCompatActivity {
 
             //volley request for documents here
             public void onClick(View v) {
-
-                connection.execSQL("UPDATE userinformation SET name='" + name.getText().toString() + "', phonenumber='" + phone.getText().toString() + "', email='" + email.getText().toString() + "', company='" + company.getText().toString() + "';");
-                Log.e("Setting SQL UPDATE", "UPDATE userinformation SET name='" + name.getText().toString() + "', phonenumber='" + phone.getText().toString() + "', email='" + email.getText().toString() + "', company='" + company.getText().toString() + "';");
+                //too long names bug the chatview
+                final String nameString = name.getText().toString().length()>20 ? name.getText().toString().substring(0, 19) : name.getText().toString();
+                connection.execSQL("UPDATE userinformation SET name='" + nameString+ "', phonenumber='" + phone.getText().toString() + "', email='" + email.getText().toString() + "', company='" + company.getText().toString() + "';");
+                Log.e("Setting SQL UPDATE", "UPDATE userinformation SET name='" + nameString + "', phonenumber='" + phone.getText().toString() + "', email='" + email.getText().toString() + "', company='" + company.getText().toString() + "';");
 
                 RequestQueue queue = Volley.newRequestQueue(SettingsActivity.this);
 
@@ -129,13 +131,13 @@ public class SettingsActivity extends AppCompatActivity {
                                 try {
                                     connection.execSQL("Insert into users (cid, profile_name, profile_phone, profile_email, profile_company) VALUES ('"
                                             + myDb.getCid(connection) + "', '"
-                                            + name.getText() + "', '"
+                                            + nameString + "', '"
                                             + phone.getText() + "', '"
                                             + email.getText() + "', '"
                                             + company.getText() + "');");
                                 } catch (SQLiteConstraintException e) {
                                     connection.execSQL("Update users SET " +
-                                            "profile_name='" + name.getText() + "', " +
+                                            "profile_name='" + nameString + "', " +
                                             "profile_phone='" + phone.getText() + "', " +
                                             "profile_email='" + email.getText() + "', " +
                                             "profile_company='" + company.getText() + "' " +
@@ -148,6 +150,26 @@ public class SettingsActivity extends AppCompatActivity {
 
                             @Override
                             public void onErrorResponse(VolleyError error) {
+                                ///!!!!!!!!!!!!!!!!!!!!!!
+                                try {
+                                    connection.execSQL("Insert into users (cid, profile_name, profile_phone, profile_email, profile_company) VALUES ('"
+                                            + myDb.getCid(connection) + "', '"
+                                            + nameString + "', '"
+                                            + phone.getText() + "', '"
+                                            + email.getText() + "', '"
+                                            + company.getText() + "');");
+                                } catch (SQLiteConstraintException e) {
+                                    connection.execSQL("Update users SET " +
+                                            "profile_name='" + nameString + "', " +
+                                            "profile_phone='" + phone.getText() + "', " +
+                                            "profile_email='" + email.getText() + "', " +
+                                            "profile_company='" + company.getText() + "' " +
+                                            "Where cid='" + myDb.getCid(connection) + "';");
+                                }
+
+                                //NOCH LOESCHEN WICHTIG111111!!!!
+
+
                             }
                         });
                 queue.add(settingRequest);
