@@ -13,11 +13,18 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:layout_marginLeft="21dp"
+        android:layout_marginRight="21dp"
+        android:layout_marginTop="30dp"
+        android:maxWidth="480dp"
+        android:maxHeight="170dp"
         android:src="@drawable/applogo" />
 
 
     <EditText
         android:id="@+id/email"
+        android:layout_marginTop="40dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -25,7 +32,8 @@
         android:hint="max@mustermann.de"
         android:inputType="textEmailAddress"
         tools:layout_editor_absoluteX="70dp"
-        tools:layout_editor_absoluteY="246dp" />
+        tools:layout_editor_absoluteY="246dp"
+        />
 
     <EditText
         android:id="@+id/highsecuritypassword"
@@ -36,16 +44,18 @@
         android:hint="Freischaltcode"
         android:inputType="text"
         tools:layout_editor_absoluteX="70dp"
-        tools:layout_editor_absoluteY="303dp" />
+        tools:layout_editor_absoluteY="303dp"
+        />
 
     <CheckBox
         android:id="@+id/checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Remember me?"
+        android:text="Eingeloggt bleiben?"
         tools:layout_editor_absoluteX="70dp"
-        tools:layout_editor_absoluteY="365dp" />
+        tools:layout_editor_absoluteY="365dp"
+        android:buttonTint="@color/buttonSteffi"/>
 
 
     <Button
@@ -53,5 +63,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="SIGN ME THE FUCK IN" />
+        android:text="Einloggen" />
 </android.support.v7.widget.LinearLayoutCompat>

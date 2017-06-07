@@ -19,7 +19,7 @@ import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
     Button chatButton, settingsButton, homeButton;
-    RecyclerView recyclerView;
+    RecyclerView recyclerView, recyclerViewPrivate;
     DatabaseHelper myDb = new DatabaseHelper(this);
 
 
@@ -33,7 +33,7 @@ public class ChatActivity extends AppCompatActivity {
         chatButton = (Button) findViewById(R.id.chatbutton);
         homeButton = (Button) findViewById(R.id.homebutton);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-
+        recyclerViewPrivate = (RecyclerView) findViewById(R.id.recycler_view2);
 
         populateView(connection);
 
@@ -58,20 +58,38 @@ public class ChatActivity extends AppCompatActivity {
 
     private void populateView(SQLiteDatabase connection) {
         List<String> channelList = queryChannels(connection);
+        List<String> privateChannelList = queryPrivateChannels(connection);
 
         //setupRecyclerview adapter
 
         ChatActivityRecyclerAdapter adapter = new ChatActivityRecyclerAdapter(ChatActivity.this, channelList);
         recyclerView.setAdapter(adapter);
 
+        ChatActivityPrivateRecyclerAdapter adapter2 = new ChatActivityPrivateRecyclerAdapter(ChatActivity.this, privateChannelList);
+        recyclerViewPrivate.setAdapter(adapter2);
+
         LinearLayoutManager llm = new LinearLayoutManager(ChatActivity.this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
-
+        LinearLayoutManager llm2 = new LinearLayoutManager(ChatActivity.this);
+        llm2.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);
+        recyclerViewPrivate.setLayoutManager(llm2);
     }
 
     private List<String> queryChannels(SQLiteDatabase connection) {
         Cursor res = connection.rawQuery("Select * from interests", null);
+
+        ArrayList<String> listOfChannels = new ArrayList<>();
+        while (res.moveToNext()) {
+            listOfChannels.add(res.getString(0));
+
+        }
+        //Log.e("List of Events Size", String.valueOf(listOfEvents.size()));
+        return listOfChannels;
+    }
+
+    private List<String> queryPrivateChannels(SQLiteDatabase connection) {
+        Cursor res = connection.rawQuery("Select * from privatechatlist where blocked=\"FALSE\"", null);
 
         ArrayList<String> listOfChannels = new ArrayList<>();
         while (res.moveToNext()) {

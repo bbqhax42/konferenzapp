@@ -6,6 +6,7 @@
 
     <CheckBox
         android:id="@+id/checkBox"
+        android:buttonTint="@color/buttonSteffi"
         android:layout_marginLeft="15dp"
         android:layout_width="wrap_content"
         android:textSize="20sp"

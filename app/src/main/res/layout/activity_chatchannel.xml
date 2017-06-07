@@ -90,6 +90,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-condensed-light"
-            android:text="Senden" />
-    </LinearLayout>
+            android:text="Senden"
+            />
+        <!--android:background="@color/buttonBG"-->
+</LinearLayout>
 </LinearLayout>

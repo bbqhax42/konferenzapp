@@ -97,7 +97,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                 RequestQueue queue = Volley.newRequestQueue(SettingsActivity.this);
 
-                String url = Config.webserviceUrl + "USER.SETTINGS?token=" + token + "&visible=" + generateInterestsJsonString(connection) + "&profile=" + name.getText().toString() + "&phone=" + phone.getText().toString() + "&company=" + company.getText().toString() + "&email=" + email.getText().toString();
+                String url = Config.webserviceUrl + "USER.SETTINGS?token=" + token + "&visible=" + generateInterestsJsonString(connection) + "&profile=" + name.getText().toString() + "&phone=" + phone.getText().toString() + "&email=" + email.getText().toString() + "&company=" + company.getText().toString();
                 Log.e("Event Daily URL", url);
                 final JsonObjectRequest settingRequest =
                         new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {

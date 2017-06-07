@@ -28,12 +28,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
-public class ChatChannelRecyclerAdapter extends RecyclerView.Adapter<ChatChannelRecyclerAdapter.Holder> {
+public class ChatChannelPrivateRecyclerAdapter extends RecyclerView.Adapter<ChatChannelPrivateRecyclerAdapter.Holder> {
     Context context;
     List<ChatMessage> chatMessages;
     String channelNameString;
 
-    public ChatChannelRecyclerAdapter(Context context, List<ChatMessage> chatMessages, String channelNameString) {
+    public ChatChannelPrivateRecyclerAdapter(Context context, List<ChatMessage> chatMessages, String channelNameString) {
         this.chatMessages = chatMessages;
         this.context = context;
         this.channelNameString = channelNameString;
@@ -89,8 +89,6 @@ public class ChatChannelRecyclerAdapter extends RecyclerView.Adapter<ChatChannel
         holder.user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Log.e("das habe ich", "nicht geklickt");
                 if (!(chatMessage.getCid().equals(myDb.getCid(connection)))) {
                     Intent intent = new Intent(context, UserActivity.class);
                     intent.putExtra("Cid", chatMessage.getCid());
@@ -127,7 +125,7 @@ public class ChatChannelRecyclerAdapter extends RecyclerView.Adapter<ChatChannel
         RequestQueue queue = Volley.newRequestQueue(context);
 
 
-        String url = Config.webserviceUrl + "CHAT.SEND?token=" + token + "&channel=" + channelNameString + "&content=" + messageToSend.trim();
+        String url = Config.webserviceUrl + "CHAT.SEND?token=" + token + "&cid=" + channelNameString + "&content=" + messageToSend.trim();
 
         Log.e("Chat Message URL", url);
 
