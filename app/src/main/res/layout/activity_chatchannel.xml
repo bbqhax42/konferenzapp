@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+<LinearLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/textBackground"
+        android:weightSum="100"
         android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"/>
 
 
         <Button
@@ -15,27 +29,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="44dp"
+            android:layout_weight="23"
             android:fontFamily="sans-serif-condensed-light"
             android:text="Home" />
 
         <Button
             android:id="@+id/chatbutton"
             android:layout_width="wrap_content"
-            android:layout_marginLeft="5dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_weight="23"
             android:fontFamily="sans-serif-condensed-light"
             android:text="Chat" />
 
         <Button
             android:id="@+id/settingsbutton"
             android:layout_width="wrap_content"
-            android:layout_marginLeft="5dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_weight="24"
             android:fontFamily="sans-serif-condensed-light"
             android:text="Einstellungen" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"/>
 
     </LinearLayout>
 
@@ -57,12 +76,13 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="480dp"
+        android:layout_height="wrap_content"
         android:clipToPadding="false" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:weightSum="100"
         android:orientation="horizontal">
 
 
@@ -71,15 +91,17 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
-            android:text="Nachricht: "
-            android:textSize="18dp" />
+            android:text="Nachricht:"
+            android:layout_weight="16"
+            android:textSize="17dp" />
 
         <EditText
             android:id="@+id/messagetosend"
-            android:layout_width="240dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:ems="10"
+            android:layout_weight="71"
             android:hint="Nachricht hier eingeben..."
             android:inputType="textEmailAddress" />
 
@@ -89,9 +111,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_weight="13"
             android:fontFamily="sans-serif-condensed-light"
-            android:text="Senden"
-            />
+            android:text="Senden" />
         <!--android:background="@color/buttonBG"-->
+    </LinearLayout>
 </LinearLayout>
-</LinearLayout>
+</ScrollView>

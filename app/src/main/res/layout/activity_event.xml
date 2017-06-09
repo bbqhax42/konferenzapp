@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,7 +15,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/textBackground"
+        android:weightSum="100"
         android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"/>
 
 
         <Button
@@ -21,30 +29,34 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="44dp"
+            android:layout_weight="23"
             android:fontFamily="sans-serif-condensed-light"
             android:text="Home" />
 
         <Button
             android:id="@+id/chatbutton"
             android:layout_width="wrap_content"
-            android:layout_marginLeft="5dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_weight="23"
             android:fontFamily="sans-serif-condensed-light"
             android:text="Chat" />
 
         <Button
             android:id="@+id/settingsbutton"
             android:layout_width="wrap_content"
-            android:layout_marginLeft="5dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_weight="24"
             android:fontFamily="sans-serif-condensed-light"
             android:text="Einstellungen" />
 
-    </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"/>
 
+    </LinearLayout>
 
     <TextView
         android:id="@+id/title"
@@ -76,12 +88,12 @@
         android:id="@+id/viewmorebutton"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
-        android:layout_marginLeft="15dp"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
+        android:layout_marginLeft="15dp"
         android:fontFamily="sans-serif-condensed-light"
-        android:textStyle="italic"
-        android:text=">>> Mehr Details..." />
+        android:text=">>> Mehr Details..."
+        android:textStyle="italic" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
