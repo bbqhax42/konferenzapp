@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +57,7 @@ public class ChatChannelPrivateActivity extends AppCompatActivity {
         Cursor res = connection.rawQuery("Select * from users where cid='" + partnerCid + "';", null);
 
         while (res.moveToNext()) {
-            channelNameString = res.getString(1);
+            channelNameString ="<u>" + res.getString(1) + "</u>";
         }
         try {
             connection.execSQL("Insert into privatechatlist (cid, blocked) VALUES ('" + partnerCid + "', \"FALSE\");");
@@ -71,7 +72,7 @@ public class ChatChannelPrivateActivity extends AppCompatActivity {
         messageToSend = (EditText) findViewById(R.id.messagetosend);
         sendButton = (Button) findViewById(R.id.sendbutton);
         channelName = (TextView) findViewById(R.id.title);
-        channelName.setText(channelNameString);
+        channelName.setText(Html.fromHtml(channelNameString));
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         final String token = myDb.getToken(connection);

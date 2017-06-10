@@ -37,8 +37,9 @@ public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivi
         final Event event = wordList.get(position);
         holder.eventTitle.setText(event.getTitle());
         holder.start.setText(Config.formatDates(event.getStart()));
-        holder.end.setText(Config.formatDates(event.getEnd()));
-        holder.location.setText(event.getLocation());
+        holder.end.setText(Config.formatDates(event.getEnd()) +" Uhr");
+        holder.location.setText(event.getStreet());
+        holder.ort.setText(event.getCity());
         holder.cw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,7 +57,7 @@ public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivi
     }
 
     public static class Holder extends RecyclerView.ViewHolder {
-        TextView eventTitle, start, end, location;
+        TextView eventTitle, start, end, location, ort;
         CardView cw;
 
         public Holder(View itemView) {
@@ -65,6 +66,7 @@ public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivi
             start = (TextView) itemView.findViewById(R.id.starttime);
             end = (TextView) itemView.findViewById(R.id.endtime);
             location = (TextView) itemView.findViewById(R.id.location);
+            ort = (TextView) itemView.findViewById(R.id.ort);
 
             cw = (CardView) itemView.findViewById(R.id.card_view);
 
