@@ -19,10 +19,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     // Database creation sql statement
-    private static final String table1 = "CREATE TABLE userinformation (name varchar(255), phonenumber varchar(255), email varchar(255), company varchar(255), loginemail varchar(255), loginkey varchar(255), stayloggedin BOOLEAN, lastlogin varchar(255), sessionkey varchar(255), sessioncid varchar(255));";
+    private static final String table1 = "CREATE TABLE userinformation (name varchar(255), phonenumber varchar(255), email varchar(255), company varchar(255), loginemail varchar(255), loginkey varchar(255), stayloggedin BOOLEAN, lastlogin varchar(255), sessionkey varchar(255), sessioncid varchar(255), firstlogin BOOLEAN);";
     private static final String table2 = "create table events (event_id INTEGER, id varchar(255), title varchar(255), description varchar(255), author varchar(255), start varchar(255), end varchar(255), street varchar(255), zip varchar(6), city varchar(255), location varchar(255), url varchar(255), PRIMARY KEY (event_id));";
     private static final String table3 = "create table documents (id INTEGER, title varchar(255), event_id integer, PRIMARY KEY (id));";
-    private static final String table4 = "create table interests (name varchar(255) NOT NULL, PRIMARY KEY (name));";
+    private static final String table4 = "create table interests (name varchar(255) NOT NULL, isvisible BOOLEAN DEFAULT FALSE, PRIMARY KEY (name));";
     private static final String table5 = "create table chatmessages (channel varchar(255) NOT NULL, timestamp varchar(255), cid varchar(255), content TEXT, issent BOOLEAN);";
     private static final String table6 = "create table users (cid varchar(255) NOT NULL, profile_name varchar(255), profile_phone varchar(255), profile_email varchar(255), profile_company varchar(255), PRIMARY KEY (cid));";
     private static final String table7 = "create table privatechatlist (cid varchar(255) NOT NULL, blocked BOOLEAN, PRIMARY KEY (cid));";
@@ -41,7 +41,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(table5);
         db.execSQL(table6);
         db.execSQL(table7);
-        db.execSQL("INSERT INTO userinformation (name, phonenumber, email, company, loginemail, loginkey, stayloggedin, lastlogin, sessionkey, sessioncid) VALUES ("+ null + ", "+ null + ", "+ null + ", "+ null + ", "+ null + ", "+ null + ", \"FALSE\", '1970-01-01',  "+ null + ",  "+ null + ");");
+        db.execSQL("INSERT INTO userinformation (name, phonenumber, email, company, loginemail, loginkey, stayloggedin, lastlogin, sessionkey, sessioncid, firstlogin) VALUES ("+ null + ", "+ null + ", "+ null + ", "+ null + ", "+ null + ", "+ null + ", \"FALSE\", '1970-01-01',  "+ null + ",  "+ null + ", \"TRUE\");");
         db.execSQL("Insert into users (cid, profile_name, profile_phone, profile_email, profile_company) values ('cid1234', 'Lorenz Vöhringer', '+49 123456789', 'lorenz@mail.de', 'Vöhringer GmbH & Co. KG');");
         db.execSQL("Insert into users (cid, profile_name, profile_phone, profile_email, profile_company) values ('cid1235', 'Alfredo Gross', '+49 987654321', 'alfredo.gross@sehrlange-emailadresse.de', 'Research and Development (R&D) / Product Development bei Alfredos Firma');");
         db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('Hund', '08:39', 'cid1234', 'Testnachricht von Lorenz', \"FALSE\");");

@@ -43,9 +43,10 @@ public class MainActivity extends AppCompatActivity {
 
         final SQLiteDatabase connection = myDb.getWritableDatabase();
 
-        //did we cache data today already?
-        String s = getIntent().getStringExtra("EventUpdate");
-        //Log.e("Intent LoginActivity", s);
+        Log.e("Mainactivity", "are we doing this");
+        populateView(connection);
+
+
 
 
         chatButton.setOnClickListener(new View.OnClickListener() {
@@ -67,52 +68,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        s = "true";
-        //we did not login today yet? GREAT!!!!111
-        if (s.equalsIgnoreCase("true")) {
-            //Log.e("first login?", s.equalsIgnoreCase("true") + "");
-            myDb.deleteAllUselessTablesLUL();
-
-            String token = myDb.getToken(connection);
-
-            String date = "2017-06-14"; //wow time flew by fast
-
-
-            RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-
-            //load event data
-            String url = Config.webserviceUrl + "EVENT.DAILY?token=" + token + "&date=" + date;
-            //Log.e("Event Daily URL", url);
-            final JsonObjectRequest seminarRequest =
-                    new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-                        @Override
-                        public void onResponse(JSONObject jsonObject) {
-                            String s = jsonObject.toString();
-                            Gson gson = new Gson();
-
-                            Seminar seminar = gson.fromJson(jsonObject.toString(), Seminar.class);
-                            //Log.e("Seminar DB EventAmnt", seminar.getEventAmount() + "");
-                            if (seminar.isempty()) {
-                                Intent intent = new Intent(getBaseContext(), LoginActivity.class);
-                                startActivity(intent);
-                            } else {
-                                saveEventToDatabase(seminar, connection);
-                                populateView(connection);
-                            }
-
-
-                        }
-                    }, new Response.ErrorListener() {
-
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                        }
-                    });
-            queue.add(seminarRequest);
-        } else {
-            populateView(connection);
-        }
 
     }
 
@@ -157,42 +112,4 @@ public class MainActivity extends AppCompatActivity {
         return listOfEvents;
     }
 
-    private void saveEventToDatabase(Seminar seminar, SQLiteDatabase connection) {
-        for (int i = 0; i < seminar.getEventAmount(); i++) {
-            Event event = seminar.getEvent(i);
-            connection.execSQL("Insert into events (event_id, id, title, description, author, start, end, street, zip, city, location, url) VALUES ('"
-                    + event.getEventId() + "' , '"
-                    + event.getId() + "' , '"
-                    + event.getTitle() + "' , '"
-                    + event.getDescription() + "' , '"
-                    + event.getAuthor() + "' , '"
-                    + event.getStart() + "' , '"
-                    + event.getEnd() + "' , '"
-                    + event.getStreet() + "' , '"
-                    + event.getZip() + "' , '"
-                    + event.getCity() + "' , '"
-                    + event.getLocation() + "' , '"
-                    + event.getUrl() + "');");
-
-            for (int j = 0; j < event.getDocumentAmount(); j++) {
-                Document doc = event.getDocument(j);
-                connection.execSQL("Insert into documents (id, title, event_id) VALUES ('"
-                        + doc.getId() + "' , '"
-                        + doc.getTitle() + "' , '"
-                        + event.getEventId() + "');");
-            }
-
-
-            //Log.e("SaveDB DocumentAmnt", seminar.getEvent(i).getDocumentAmount() + "");
-        }
-
-        //Log.e("SaveDB InterestAmnt", seminar.getInterestgroupAmount() + "");
-        for (int i = 0; i < seminar.getInterestgroupAmount(); i++) {
-            try {
-                myDb.insertInterest(connection, seminar.getInterestgroup(i).getName());
-            } catch (SQLiteConstraintException e) {
-            }
-            //Log.e("Seminar Interest", seminar.getInterestgroup(i).getName());
-        }
-    }
 }

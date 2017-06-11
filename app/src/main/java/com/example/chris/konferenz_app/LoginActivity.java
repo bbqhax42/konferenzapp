@@ -2,6 +2,7 @@ package com.example.chris.konferenz_app;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -38,6 +40,8 @@ public class LoginActivity extends AppCompatActivity {
     EditText email_textfield, password_textfield;
     boolean eingeloggt_bleiben;
     String freischaltcode;
+    boolean firstlogin;
+    final DatabaseHelper myDb = new DatabaseHelper(this);
 
 
     //Returns little bubble visible for the user with errormessage
@@ -53,12 +57,13 @@ public class LoginActivity extends AppCompatActivity {
         password_textfield = (EditText) (findViewById(R.id.highsecuritypassword));
 
 
-        DatabaseHelper myDb = new DatabaseHelper(this);
         final SQLiteDatabase connection = myDb.getWritableDatabase();
         final Seminar seminar;
 
         Cursor res = connection.rawQuery("Select * from userinformation;", null);
         res.moveToFirst();
+
+        firstlogin = res.getString(10).equalsIgnoreCase("true");
 
         //if you want to stay logged in this loads your credentials
         if (res.getString(6).equalsIgnoreCase("true")) {
@@ -132,25 +137,101 @@ public class LoginActivity extends AppCompatActivity {
                                     connection.execSQL("UPDATE userinformation SET sessionkey='" + loginResponse.getToken() + "', sessioncid='" + loginResponse.getCid() + "';");
 
                                     String strDate = getCurrentDate();
-                                    boolean eventUpdate = true;
-                                    if (strDate.equalsIgnoreCase(lastLogin)) {
-                                        eventUpdate = false;
-                                    }
 
                                     //saving current logindate and if user prefers to stay signed in
                                     connection.execSQL("UPDATE userinformation SET stayloggedin=\"" + eingeloggt_bleiben + "\", lastlogin='" + strDate + "';");
                                     //Log.e("Login SQL UPDATE 1/2", "UPDATE userinformation SET stayloggedin=" + eingeloggt_bleiben + ", lastlogin='" + strDate + "';");
 
-                                    if (eingeloggt_bleiben) {
-                                        //email and password saving in case user wants to
-                                        connection.execSQL("UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "';");
-                                        //Log.e("Login SQL UPDATE 2/2", "UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "'");
 
+                                    boolean loggedInToday = strDate.equalsIgnoreCase(lastLogin);
+                                    loggedInToday = false;
+
+                                    if (!loggedInToday) {
+                                        myDb.deleteAllUselessTablesLUL();
+
+                                        String token = myDb.getToken(connection);
+
+                                        String date = "2017-06-14"; //wow time flew by fast
+
+
+                                        RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
+
+                                        //load event data
+                                        String url = Config.webserviceUrl + "EVENT.DAILY?token=" + token + "&date=" + date;
+                                        //Log.e("Event Daily URL", url);
+                                        final JsonObjectRequest seminarRequest =
+                                                new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                                                    @Override
+                                                    public void onResponse(JSONObject jsonObject) {
+                                                        String s = jsonObject.toString();
+                                                        Gson gson = new Gson();
+
+                                                        Seminar seminar = gson.fromJson(jsonObject.toString(), Seminar.class);
+                                                        //Log.e("Seminar DB EventAmnt", seminar.getEventAmount() + "");
+
+                                                            saveEventToDatabase(seminar, connection);
+
+
+
+                                                    }
+                                                }, new Response.ErrorListener() {
+
+                                                    @Override
+                                                    public void onErrorResponse(VolleyError error) {
+                                                    }
+                                                });
+                                        queue.add(seminarRequest);
                                     }
 
-                                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                                    intent.putExtra("EventUpdate", eventUpdate + ""); //true if not logged in today yet, false if already logged in today
-                                    startActivity(intent);
+
+                                    if (firstlogin && eingeloggt_bleiben) {
+
+                                        try {
+                                            TimeUnit.MILLISECONDS.sleep(333);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        //email and password saving in case user wants to
+                                        connection.execSQL("UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', firstlogin=\"FALSE\", loginkey='" + freischaltcode + "';");
+
+                                        Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
+                                        startActivity(intent);
+                                        //Log.e("Login SQL UPDATE 2/2", "UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "'");
+
+                                    } else if (firstlogin && !eingeloggt_bleiben) {
+                                        try {
+                                            TimeUnit.MILLISECONDS.sleep(333);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                        connection.execSQL("UPDATE userinformation SET firstlogin=\"FALSE\";");
+                                        Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
+                                        startActivity(intent);
+
+                                    } else if (eingeloggt_bleiben) {
+                                        try {
+                                            TimeUnit.MILLISECONDS.sleep(333);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                        //email and password saving in case user wants to
+                                        connection.execSQL("UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "';");
+
+                                        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                                        startActivity(intent);
+                                        //Log.e("Login SQL UPDATE 2/2", "UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "'");
+
+                                    } else {
+                                        try {
+                                            TimeUnit.MILLISECONDS.sleep(333);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                                        startActivity(intent);
+                                    }
                                 }
                             }
                         }, new Response.ErrorListener()
@@ -176,6 +257,60 @@ public class LoginActivity extends AppCompatActivity {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return sdf.format(c.getTime());
+    }
+
+
+    private void saveEventToDatabase(Seminar seminar, SQLiteDatabase connection) {
+        for (int i = 0; i < seminar.getEventAmount(); i++) {
+            Event event = seminar.getEvent(i);
+            connection.execSQL("Insert into events (event_id, id, title, description, author, start, end, street, zip, city, location, url) VALUES ('"
+                    + event.getEventId() + "' , '"
+                    + event.getId() + "' , '"
+                    + event.getTitle() + "' , '"
+                    + event.getDescription() + "' , '"
+                    + event.getAuthor() + "' , '"
+                    + event.getStart() + "' , '"
+                    + event.getEnd() + "' , '"
+                    + event.getStreet() + "' , '"
+                    + event.getZip() + "' , '"
+                    + event.getCity() + "' , '"
+                    + event.getLocation() + "' , '"
+                    + event.getUrl() + "');");
+
+            Log.e("SQL EVENT", ("Insert into events (event_id, id, title, description, author, start, end, street, zip, city, location, url) VALUES ('"
+                    + event.getEventId() + "' , '"
+                    + event.getId() + "' , '"
+                    + event.getTitle() + "' , '"
+                    + event.getDescription() + "' , '"
+                    + event.getAuthor() + "' , '"
+                    + event.getStart() + "' , '"
+                    + event.getEnd() + "' , '"
+                    + event.getStreet() + "' , '"
+                    + event.getZip() + "' , '"
+                    + event.getCity() + "' , '"
+                    + event.getLocation() + "' , '"
+                    + event.getUrl() + "');"));
+
+            for (int j = 0; j < event.getDocumentAmount(); j++) {
+                Document doc = event.getDocument(j);
+                connection.execSQL("Insert into documents (id, title, event_id) VALUES ('"
+                        + doc.getId() + "' , '"
+                        + doc.getTitle() + "' , '"
+                        + event.getEventId() + "');");
+            }
+
+
+            Log.e("SaveDB DocumentAmnt", seminar.getEvent(i).getDocumentAmount() + "");
+        }
+
+        Log.e("SaveDB InterestAmnt", seminar.getInterestgroupAmount() + "");
+        for (int i = 0; i < seminar.getInterestgroupAmount(); i++) {
+            try {
+                myDb.insertInterest(connection, seminar.getInterestgroup(i).getName());
+            } catch (SQLiteConstraintException e) {
+            }
+            Log.e("Seminar Interest", seminar.getInterestgroup(i).getName());
+        }
     }
 
 

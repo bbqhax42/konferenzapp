@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -24,39 +26,49 @@ import com.google.gson.Gson;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Chris on 31.05.2017.
  */
 
 public class SettingsActivity extends AppCompatActivity {
 
-    EditText name, email, phone, company, addInterestEditText;
+    EditText name, email, phone, company;
     TextView tv;
-    Button update, deleteInterest, addInterest, chatButton, settingsButton, homeButton;
+    Button chatButton, settingsButton, homeButton, updateSettings;
     String token;
+    RecyclerView recyclerView;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
         name = (EditText) findViewById(R.id.name);
         email = (EditText) findViewById(R.id.email);
         phone = (EditText) findViewById(R.id.phonenumber);
         company = (EditText) findViewById(R.id.company);
-        update = (Button) findViewById(R.id.button);
-        deleteInterest = (Button) findViewById(R.id.buttondel);
-        addInterest = (Button) findViewById(R.id.buttonsave);
-        tv = (TextView) findViewById(R.id.textview);
-        addInterestEditText = (EditText) findViewById(R.id.interest);
         settingsButton = (Button) findViewById(R.id.settingsbutton);
         chatButton = (Button) findViewById(R.id.chatbutton);
         homeButton = (Button) findViewById(R.id.homebutton);
+        updateSettings = (Button) findViewById(R.id.button);
         name.clearFocus();
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
 
         final DatabaseHelper myDb = new DatabaseHelper(this);
         final SQLiteDatabase connection = myDb.getWritableDatabase();
 
         loadInitialSettings(connection);
+
+        List<Interestgroup> interestList = queryInterests(connection);
+        final SettingsActivityRecyclerAdapter adapter = new SettingsActivityRecyclerAdapter(SettingsActivity.this, interestList);
+        recyclerView.setAdapter(adapter);
+        final LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(llm);
 
 
         chatButton.setOnClickListener(new View.OnClickListener() {
@@ -78,26 +90,51 @@ public class SettingsActivity extends AppCompatActivity {
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String s = getIntent().getStringExtra("EventUpdate");
                 Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                intent.putExtra("EventUpdate", false + ""); //true if not logged in today yet, false if already logged in today
+                if (s == null || s.length() == 0) {
+                    intent.putExtra("EventUpdate", false); //true if not logged in today yet, false if already logged in today
+                } else {
+                    intent.putExtra("EventUpdate", s); //true if not logged in today yet, false if already logged in today
+                }
+
                 startActivity(intent);
             }
         });
 
 
-        update.setOnClickListener(new View.OnClickListener() {
+        updateSettings.setOnClickListener(new View.OnClickListener() {
             @Override
 
             //volley request for documents here
             public void onClick(View v) {
                 //too long names bug the chatview
-                final String nameString = name.getText().toString().length()>20 ? name.getText().toString().substring(0, 19) : name.getText().toString();
-                connection.execSQL("UPDATE userinformation SET name='" + nameString+ "', phonenumber='" + phone.getText().toString() + "', email='" + email.getText().toString() + "', company='" + company.getText().toString() + "';");
+
+                ArrayList<Interestgroup> selectedFiles = new ArrayList<Interestgroup>();
+                for (int i = 0; i < adapter.getItemCount(); ++i) {
+                    SettingsActivityRecyclerAdapter.Holder holder = (SettingsActivityRecyclerAdapter.Holder) recyclerView.findViewHolderForAdapterPosition(i);
+                    if (holder.checkBox.isChecked()) {
+                        holder.interestgroup.setVisible(true);
+                        selectedFiles.add(holder.interestgroup);
+                        Log.e("Checked", holder.interestgroup.getName());
+                    } else {
+                        holder.interestgroup.setVisible(false);
+                        selectedFiles.add(holder.interestgroup);
+                        Log.e("Not Checked", holder.interestgroup.getName());
+                    }
+                }
+
+                updateInterests(connection, selectedFiles);
+
+
+                final String nameString = name.getText().toString().length() > 20 ? name.getText().toString().substring(0, 19) : name.getText().toString();
+                connection.execSQL("UPDATE userinformation SET name='" + nameString + "', phonenumber='" + phone.getText().toString() + "', email='" + email.getText().toString() + "', company='" + company.getText().toString() + "';");
                 Log.e("Setting SQL UPDATE", "UPDATE userinformation SET name='" + nameString + "', phonenumber='" + phone.getText().toString() + "', email='" + email.getText().toString() + "', company='" + company.getText().toString() + "';");
+
 
                 RequestQueue queue = Volley.newRequestQueue(SettingsActivity.this);
 
-                String url = Config.webserviceUrl + "USER.SETTINGS?token=" + token + "&visible=" + generateInterestsJsonString(connection) + "&profile=" + name.getText().toString() + "&phone=" + phone.getText().toString() + "&email=" + email.getText().toString() + "&company=" + company.getText().toString();
+                String url = Config.webserviceUrl + "USER.SETTINGS?token=" + token + "&visible=" + generateInterestsJsonString(selectedFiles) + "&profile=" + name.getText().toString() + "&phone=" + phone.getText().toString() + "&email=" + email.getText().toString() + "&company=" + company.getText().toString();
                 Log.e("Event Daily URL", url);
                 final JsonObjectRequest settingRequest =
                         new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -178,32 +215,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         });
 
-        addInterest.setOnClickListener(new View.OnClickListener() {
-            @Override
 
-            //volley request for documents here
-            public void onClick(View v) {
-                try {
-                    myDb.insertInterest(connection, addInterestEditText.getText().toString());
-                    Config.popupMessage("Interessensgruppe hinzugefügt", "Sie haben sich in " + addInterestEditText.getText().toString() + " eingetragen.", SettingsActivity.this);
-                } catch (SQLiteConstraintException e) {
-                    Config.popupMessage("Interessensgruppe nicht hinzugefügt", "Sie sind bereits in " + addInterestEditText.getText().toString() + " eingetragen.", SettingsActivity.this);
-                }
-
-                tv.setText(generateInterests(connection));
-            }
-        });
-
-        deleteInterest.setOnClickListener(new View.OnClickListener() {
-            @Override
-
-            //volley request for documents here
-            public void onClick(View v) {
-                connection.execSQL("DELETE FROM interests WHERE name='" + addInterestEditText.getText().toString() + "';");
-                Config.popupMessage("Interessensgruppe entfernt", "Sie haben sich aus " + addInterestEditText.getText().toString() + " entfernt.", SettingsActivity.this);
-                tv.setText(generateInterests(connection));
-            }
-        });
     }
 
 
@@ -217,38 +229,41 @@ public class SettingsActivity extends AppCompatActivity {
         phone.setText(res.getString(1));
         company.setText(res.getString(3));
         token = res.getString(8);
-        tv.setText(generateInterests(connection));
 
     }
 
-
-    private String generateInterests(SQLiteDatabase connection) {
-        Cursor res;
-        res = connection.rawQuery("Select * from interests;", null);
-        StringBuffer buffer = new StringBuffer();
-        while (res.moveToNext()) {
-            buffer.append(res.getString(0));
-            buffer.append(", ");
+    private void updateInterests(SQLiteDatabase connection, ArrayList<Interestgroup> selectedFiles) {
+        for (int i = 0; i < selectedFiles.size(); i++) {
+            connection.execSQL("Update interests SET " +
+                    "isvisible=\"" + selectedFiles.get(i).isVisible() + "\" Where name='" + selectedFiles.get(i).getName() + "';");
         }
-        //removes ', ' from last loop
-        String tmpInterest = buffer.toString();
-        if (tmpInterest.length() != 0)
-            return tmpInterest.substring(0, tmpInterest.length() - 2);
-        else return null;
     }
 
-    private String generateInterestsJsonString(SQLiteDatabase connection) {
-        Cursor res;
-        res = connection.rawQuery("Select * from interests;", null);
+
+    private String generateInterestsJsonString(ArrayList<Interestgroup> selectedFiles) {
         StringBuffer buffer = new StringBuffer();
-        while (res.moveToNext()) {
-            buffer.append(res.getString(0));
-            buffer.append(",");
+        for (int i = 0; i < selectedFiles.size(); i++) {
+            if (selectedFiles.get(i).isVisible()) {
+                buffer.append(selectedFiles.get(i).getName());
+                buffer.append(",");
+            }
         }
         //removes ',' from last loop
         String tmpInterest = buffer.toString();
         if (tmpInterest.length() != 0)
             return tmpInterest.substring(0, tmpInterest.length() - 1);
-        else return null;
+        else return "";
+    }
+
+
+    private List<Interestgroup> queryInterests(SQLiteDatabase connection) {
+
+        List<Interestgroup> listofInterestgroups = new ArrayList<Interestgroup>();
+        Cursor interestgroups = connection.rawQuery("Select * from interests;", null);
+        while (interestgroups.moveToNext()) {
+            Interestgroup interestgroup = new Interestgroup(interestgroups.getString(0), interestgroups.getString(1).equalsIgnoreCase("true"));
+            listofInterestgroups.add(interestgroup);
+        }
+        return listofInterestgroups;
     }
 }

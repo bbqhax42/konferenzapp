@@ -183,7 +183,7 @@ public class UserActivity extends AppCompatActivity {
                 // Asking the Contact provider to create a new contact
                 try {
                     getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
-                    Config.popupMessage("Kontakt erstellt", "Sie haben "+ displayNameStr+ "erfolgreich zu ihren Kontakten hinzugefügt.", UserActivity.this);
+                    Config.popupMessage("Kontakt erstellt", "Sie haben "+ displayNameStr+ " erfolgreich zu ihren Kontakten hinzugefügt.", UserActivity.this);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.e("Error", e.getMessage());

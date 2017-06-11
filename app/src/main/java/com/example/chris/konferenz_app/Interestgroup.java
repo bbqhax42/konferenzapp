@@ -6,13 +6,28 @@ package com.example.chris.konferenz_app;
 
 public class Interestgroup {
     String name;
+    boolean visible;
 
 
-    public Interestgroup(String name) {
-        this.name = name;
-    }
 
     public String getName() {
         return name;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public Interestgroup(String name, boolean visible) {
+        this.name = name;
+        this.visible = visible;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }
