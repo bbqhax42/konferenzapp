@@ -1,67 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
+    android:orientation="vertical"
     tools:context="com.example.chris.konferenz_app.LoginActivity">
 
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
         android:layout_marginLeft="21dp"
         android:layout_marginRight="21dp"
-        android:layout_marginTop="30dp"
-        android:maxWidth="480dp"
+        android:layout_marginTop="50dp"
+        android:adjustViewBounds="true"
         android:maxHeight="170dp"
+        android:maxWidth="480dp"
         android:src="@drawable/applogo" />
 
 
     <EditText
         android:id="@+id/email"
-        android:layout_marginTop="40dp"
-        android:layout_width="wrap_content"
+        android:layout_width="265dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="70dp"
         android:ems="10"
         android:hint="max@mustermann.de"
-        android:inputType="textEmailAddress"
-        tools:layout_editor_absoluteX="70dp"
-        tools:layout_editor_absoluteY="246dp"
-        />
+        android:inputType="textEmailAddress" />
+
 
     <EditText
         android:id="@+id/highsecuritypassword"
-        android:layout_width="wrap_content"
+        android:layout_width="265dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:ems="10"
         android:hint="Freischaltcode"
-        android:inputType="text"
-        tools:layout_editor_absoluteX="70dp"
-        tools:layout_editor_absoluteY="303dp"
-        />
+        android:inputType="text" />
 
-    <CheckBox
-        android:id="@+id/checkBox"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Eingeloggt bleiben?"
-        tools:layout_editor_absoluteX="70dp"
-        tools:layout_editor_absoluteY="365dp"
-        android:buttonTint="@color/buttonSteffi"/>
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginRight="10dp"
+            android:text="Einloggen" />
 
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Einloggen" />
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/buttonSteffi"
+            android:text="Eingeloggt bleiben?" />
+
+
+    </LinearLayout>
+
+
 </android.support.v7.widget.LinearLayoutCompat>

@@ -60,7 +60,7 @@ public class ChatChannelPrivateActivity extends AppCompatActivity {
             channelNameString ="<u>" + res.getString(1) + "</u>";
         }
         try {
-            connection.execSQL("Insert into privatechatlist (cid, blocked) VALUES ('" + partnerCid + "', \"FALSE\");");
+            connection.execSQL("Insert into privatechatlist (cid, blocked) VALUES ('" + partnerCid + "', \"false\");");
         } catch (SQLiteConstraintException e) {
         }
 
@@ -163,7 +163,7 @@ public class ChatChannelPrivateActivity extends AppCompatActivity {
                         public void onResponse(JSONObject jsonObject) {
                             messageToSend.setText("");
                             Config.error_message(ChatChannelPrivateActivity.this, "Nachricht erfolgreich gesendet");
-                            connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + partnerCid + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"TRUE\");");
+                            connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + partnerCid + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"true\");");
                             messageToSend.setText("");
                             populateView(connection);
                         }
@@ -174,8 +174,8 @@ public class ChatChannelPrivateActivity extends AppCompatActivity {
 
                             //!!!!!!!!!!!!!!!!!!!!!!
                             Config.error_message(ChatChannelPrivateActivity.this, "Senden fehlgeschlagen");
-                            connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + partnerCid + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"FALSE\");");
-                            Log.e("ChatActivity SQL", "INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + partnerCid + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"FALSE\");");
+                            connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + partnerCid + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"false\");");
+                            Log.e("ChatActivity SQL", "INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + partnerCid + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"false\");");
                             messageToSend.setText("");
                             populateView(connection);
                             //wieder loeschen!!! ! ! ! ! ! ! !
@@ -184,7 +184,7 @@ public class ChatChannelPrivateActivity extends AppCompatActivity {
 
             queue.add(documentRequestRequest);
         } else
-            Config.error_message(ChatChannelPrivateActivity.this, "Leere Nachrichten sind verboten");
+            Config.error_message(ChatChannelPrivateActivity.this, Config.sendMessageShortError);
     }
 
 

@@ -44,8 +44,6 @@ public class LoginActivity extends AppCompatActivity {
     final DatabaseHelper myDb = new DatabaseHelper(this);
 
 
-    //Returns little bubble visible for the user with errormessage
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +56,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
         final SQLiteDatabase connection = myDb.getWritableDatabase();
-        final Seminar seminar;
 
         Cursor res = connection.rawQuery("Select * from userinformation;", null);
         res.moveToFirst();
@@ -194,7 +191,7 @@ public class LoginActivity extends AppCompatActivity {
                                         }
 
                                         //email and password saving in case user wants to
-                                        connection.execSQL("UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', firstlogin=\"FALSE\", loginkey='" + freischaltcode + "';");
+                                        connection.execSQL("UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', firstlogin=\"false\", loginkey='" + freischaltcode + "';");
 
                                         Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
                                         startActivity(intent);
@@ -206,7 +203,7 @@ public class LoginActivity extends AppCompatActivity {
                                         } catch (InterruptedException e) {
                                             e.printStackTrace();
                                         }
-                                        connection.execSQL("UPDATE userinformation SET firstlogin=\"FALSE\";");
+                                        connection.execSQL("UPDATE userinformation SET firstlogin=\"false\";");
                                         Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
                                         startActivity(intent);
 

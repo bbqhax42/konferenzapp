@@ -15,6 +15,7 @@ import android.widget.Toast;
 public class Config {
 
     public static final String webserviceUrl = "https://new.myconf.akademie-herkert.de/";
+    public static final String sendMessageShortError = "Das Senden leerer Nachrichten ist nicht möglich.";
 
     //cuts off the date and only leaves the time without seconds
     public static final String formatDates(String date){

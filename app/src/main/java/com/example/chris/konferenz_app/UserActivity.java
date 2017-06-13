@@ -108,14 +108,14 @@ public class UserActivity extends AppCompatActivity {
         blockButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                connection.execSQL("Update privatechatlist SET blocked=\"TRUE\" where cid='" + cid + "';");
+                connection.execSQL("Update privatechatlist SET blocked=\"true\" where cid='" + cid + "';");
             }
         });
 
         unblockButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                connection.execSQL("Update privatechatlist SET blocked=\"FALSE\" where cid='" + cid + "';");
+                connection.execSQL("Update privatechatlist SET blocked=\"false\" where cid='" + cid + "';");
             }
         });
 

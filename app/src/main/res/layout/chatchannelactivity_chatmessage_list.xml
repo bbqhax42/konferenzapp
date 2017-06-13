@@ -40,7 +40,7 @@
 
                         <TextView
                             android:id="@+id/username"
-                            android:layout_weight="79"
+                            android:layout_weight="100"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/buttonSteffi"
@@ -52,11 +52,11 @@
                         android:id="@+id/sendenstate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="8"
+                        android:layout_gravity="right"
                         android:clickable="true"
                         android:text="Senden erfolgreich"
                         android:textColor="@color/Red"
+                        android:layout_marginRight="5dp"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textSize="10sp" />
 
@@ -64,9 +64,8 @@
                         android:id="@+id/time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="13"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="5dp"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textSize="10sp" />
                 </LinearLayout>

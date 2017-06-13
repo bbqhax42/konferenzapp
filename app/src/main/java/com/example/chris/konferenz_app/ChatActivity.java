@@ -77,24 +77,22 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private List<String> queryChannels(SQLiteDatabase connection) {
-        Cursor res = connection.rawQuery("Select * from interests", null);
+        Cursor res = connection.rawQuery("Select * from interests where isvisible=\"true\";", null);
 
         ArrayList<String> listOfChannels = new ArrayList<>();
         while (res.moveToNext()) {
             listOfChannels.add(res.getString(0));
-
         }
         //Log.e("List of Events Size", String.valueOf(listOfEvents.size()));
         return listOfChannels;
     }
 
     private List<String> queryPrivateChannels(SQLiteDatabase connection) {
-        Cursor res = connection.rawQuery("Select * from privatechatlist where blocked=\"FALSE\"", null);
+        Cursor res = connection.rawQuery("Select * from privatechatlist where blocked=\"false\"", null);
 
         ArrayList<String> listOfChannels = new ArrayList<>();
         while (res.moveToNext()) {
             listOfChannels.add(res.getString(0));
-
         }
         //Log.e("List of Events Size", String.valueOf(listOfEvents.size()));
         return listOfChannels;

@@ -73,10 +73,10 @@ public class ChatChannelRecyclerAdapter extends RecyclerView.Adapter<ChatChannel
                 holder.sendenstate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.e("SQL ON CLICK", "Update chatmessages SET issent=\"TRUE\" WHERE cid='" + chatMessage.getCid() + "' AND timestamp='" + chatMessage.getTimestamp() + "' AND content='" + chatMessage.getContent() + "';");
+                        Log.e("SQL ON CLICK", "Update chatmessages SET issent=\"true\" WHERE cid='" + chatMessage.getCid() + "' AND timestamp='" + chatMessage.getTimestamp() + "' AND content='" + chatMessage.getContent() + "';");
 
 
-                        connection.execSQL("Update chatmessages SET issent=\"TRUE\" WHERE cid='" + chatMessage.getCid() + "' AND timestamp='" + chatMessage.getTimestamp() + "' AND content='" + chatMessage.getContent() + "';");
+                        connection.execSQL("Update chatmessages SET issent=\"true\" WHERE cid='" + chatMessage.getCid() + "' AND timestamp='" + chatMessage.getTimestamp() + "' AND content='" + chatMessage.getContent() + "';");
                         holder.sendenstate.setVisibility(View.INVISIBLE);
                         onClickSendMessageButton(myDb.getToken(connection), chatMessage.getContent(), connection, myDb.getCid(connection), chatMessage.getTimestamp());
                     }
@@ -146,8 +146,8 @@ public class ChatChannelRecyclerAdapter extends RecyclerView.Adapter<ChatChannel
                         public void onErrorResponse(VolleyError error) {
 
                             Config.error_message(context, "Senden fehlgeschlagen");
-                            connection.execSQL("Update chatmessages SET issent=\"FALSE\" WHERE cid='" + cid + "' AND  timestamp='" + timestamp + "'  AND content='" + messageToSend + "';");
-                            Log.e("ChatActivity SQL", "Update chatmessages SET issent=\"FALSE\" WHERE cid='" + cid + "' AND  timestamp='" + timestamp + "'  AND content='" + messageToSend + "';");
+                            connection.execSQL("Update chatmessages SET issent=\"false\" WHERE cid='" + cid + "' AND  timestamp='" + timestamp + "'  AND content='" + messageToSend + "';");
+                            Log.e("ChatActivity SQL", "Update chatmessages SET issent=\"false\" WHERE cid='" + cid + "' AND  timestamp='" + timestamp + "'  AND content='" + messageToSend + "';");
                         }
                     });
 

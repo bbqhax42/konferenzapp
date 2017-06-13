@@ -143,7 +143,7 @@ public class ChatChannelActivity extends AppCompatActivity {
                         public void onResponse(JSONObject jsonObject) {
                             messageToSend.setText("");
                             Config.error_message(ChatChannelActivity.this, "Nachricht erfolgreich gesendet");
-                            connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + channelNameString + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"TRUE\");");
+                            connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + channelNameString + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"true\");");
                             messageToSend.setText("");
                             populateView(connection);
                         }
@@ -154,8 +154,8 @@ public class ChatChannelActivity extends AppCompatActivity {
 
                             //!!!!!!!!!!!!!!!!!!!!!!
                             Config.error_message(ChatChannelActivity.this, "Senden fehlgeschlagen");
-                            connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + channelNameString + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"FALSE\");");
-                            Log.e("ChatActivity SQL", "INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + channelNameString + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"FALSE\");");
+                            connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + channelNameString + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"false\");");
+                            Log.e("ChatActivity SQL", "INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + channelNameString + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"false\");");
                             messageToSend.setText("");
                             populateView(connection);
                             //wieder loeschen!!! ! ! ! ! ! ! !
@@ -163,12 +163,11 @@ public class ChatChannelActivity extends AppCompatActivity {
                     });
 
             queue.add(documentRequestRequest);
-        } else Config.error_message(ChatChannelActivity.this, "Leere Nachrichten sind verboten");
+        } else Config.error_message(ChatChannelActivity.this, Config.sendMessageShortError);
     }
 
 
     public void populateView(SQLiteDatabase connection) {
-        Log.e("populateview", "success");
 
         messages = queryChatMessages(connection);
 
@@ -184,15 +183,13 @@ public class ChatChannelActivity extends AppCompatActivity {
 
     private ArrayList<ChatMessage> queryChatMessages(SQLiteDatabase connection) {
         Cursor res = connection.rawQuery("Select * from chatmessages where channel='" + channelNameString + "';", null);
-        Log.e("queryChatMessages", "Select * from chatmessages where channel='" + channelNameString + "';");
+        //Log.e("queryChatMessages", "Select * from chatmessages where channel='" + channelNameString + "';");
         ArrayList<ChatMessage> listOfChatMessages = new ArrayList<>();
         while (res.moveToNext()) {
             ChatMessage chatMessage = new ChatMessage();
             chatMessage.setTimestamp(res.getString(1));
             chatMessage.setCid(res.getString(2));
             chatMessage.setContent(res.getString(3));
-            Log.e("Chatmessage db state", res.getString(3));
-            Log.e("Chatmessage db state", res.getString(4));
             chatMessage.setSendState(res.getString(4).equalsIgnoreCase("true") ? true : false);
             listOfChatMessages.add(chatMessage);
         }

@@ -236,6 +236,8 @@ public class SettingsActivity extends AppCompatActivity {
         for (int i = 0; i < selectedFiles.size(); i++) {
             connection.execSQL("Update interests SET " +
                     "isvisible=\"" + selectedFiles.get(i).isVisible() + "\" Where name='" + selectedFiles.get(i).getName() + "';");
+            Log.e("updateInteestdasdsas", "Update interests SET " +
+                    "isvisible=\"" + selectedFiles.get(i).isVisible() + "\" Where name='" + selectedFiles.get(i).getName() + "';");
         }
     }
 

@@ -8,14 +8,14 @@ import java.util.ArrayList;
 
 public class ChatPullResponse {
     String timestamp;
-    ArrayList<ChatChannel> chatChannels;
+    ArrayList<ChatChannel> channels;
 
     public ChatPullResponse() {
     }
 
-    public ChatPullResponse(String timestamp, ArrayList<ChatChannel> chatChannels) {
+    public ChatPullResponse(String timestamp, ArrayList<ChatChannel> channels) {
         this.timestamp = timestamp;
-        this.chatChannels = chatChannels;
+        this.channels = channels;
     }
 
     public String getTimestamp() {
@@ -23,13 +23,13 @@ public class ChatPullResponse {
     }
 
 
-    public int getChatChannelAmount() {
-        if (chatChannels != null)
-            return chatChannels.size();
+    public int channelAmount() {
+        if (channels != null)
+            return channels.size();
         else return 0;
     }
 
     public ChatChannel getChatChannel(int i) {
-        return chatChannels.get(i);
+        return channels.get(i);
     }
 }

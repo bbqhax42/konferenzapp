@@ -106,6 +106,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:fontFamily="sans-serif-condensed-light"
-        android:text="Download selected files" />
+        android:text="Herunterladen" />
 </LinearLayout>

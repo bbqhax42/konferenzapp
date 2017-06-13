@@ -42,14 +42,14 @@ public class EventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
-        DatabaseHelper myDb = new DatabaseHelper(this);
+        final DatabaseHelper myDb = new DatabaseHelper(this);
         final SQLiteDatabase connection = myDb.getWritableDatabase();
 
 
         //retrieving the intent of the previous activity (in this case the eventid)
         eventId = getIntent().getIntExtra("EventID", 0);
 
-        final Event event = getData(connection, eventId);
+        final Event event = myDb.getData(connection, eventId);
 
 
         title = (TextView) findViewById(R.id.title);
@@ -145,10 +145,8 @@ public class EventActivity extends AppCompatActivity {
                     if (i + 1 < selectedFiles.size()) downloadString.append(",");
                 }
 
-                Cursor res = connection.rawQuery("Select * from userinformation;", null);
-                res.moveToFirst();
 
-                String token = res.getString(8);
+                String token = myDb.getToken(connection);
 
                 RequestQueue queue = Volley.newRequestQueue(EventActivity.this);
 
@@ -190,7 +188,7 @@ public class EventActivity extends AppCompatActivity {
 
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Config.popupMessage("Sie haben keine Dateien zum Download ausgewählt","", EventActivity.this);
+                                Config.error_message(EventActivity.this, "Sie haben keine Dateien zum Download ausgewählt");
                             }
                         });
 
@@ -217,23 +215,5 @@ public class EventActivity extends AppCompatActivity {
         return listofDocuments;
     }
 
-    private Event getData(SQLiteDatabase connection, int eventId) {
-        Log.e("eventid", "Select * from events where event_id=" + eventId + ";");
-        Cursor result = connection.rawQuery("Select * from events where event_id=" + eventId + ";", null);
-        result.moveToFirst();
-        Event event = new Event();
-        event.setEvent_id(Integer.parseInt(result.getString(0)));
-        event.setId(result.getString(1));
-        event.setTitle(result.getString(2));
-        event.setDescription(result.getString(3));
-        event.setAuthor(result.getString(4));
-        event.setStart(result.getString(5));
-        event.setEnd(result.getString(6));
-        event.setStreet(result.getString(7));
-        event.setZip(result.getString(8));
-        event.setCity(result.getString(9));
-        event.setLocation(result.getString(10));
-        event.setUrl(result.getString(11));
-        return event;
-    }
+
 }
