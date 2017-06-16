@@ -15,8 +15,9 @@ import android.util.Log;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "KonferenzAppDB";
+    Context context;
 
-    private static final int DATABASE_VERSION = 1;
+
 
     // Database creation sql statement
     private static final String table1 = "CREATE TABLE userinformation (name varchar(255), phonenumber varchar(255), email varchar(255), company varchar(255), loginemail varchar(255), loginkey varchar(255), stayloggedin BOOLEAN, lastlogin varchar(255), sessionkey varchar(255), sessioncid varchar(255), firstlogin BOOLEAN);";
@@ -29,7 +30,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DATABASE_NAME, null, Config.appversion);
+        this.context=context;
     }
 
     @Override
@@ -49,14 +51,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "\n" +
                 "Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. ', \"FALSE\");");
         db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('Hund', '08:39', 'cid1234', 'tl;dr?', \"false\");");
-        db.execSQL("INSERT INTO privatechatlist (cid, blocked) VALUES ('cid1234', \"FALSE\");");
+        db.execSQL("INSERT INTO privatechatlist (cid, blocked) VALUES ('cid1234', \"false\");");
         db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('cid1234', '18:39', 'cid1234', 'Hey Chris, wie gehts dir heute so?', \"false\");");
         db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('cid1234', '18:40', 'cid1234', 'Gehen wir nachher ins McFit?', \"false\");");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.w(DatabaseHelper.class.getName(),
+        Config.error_message(context,
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS userinformation");

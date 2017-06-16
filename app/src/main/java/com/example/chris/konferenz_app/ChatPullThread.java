@@ -69,17 +69,23 @@ public class ChatPullThread {
         for (int i = 0; i < chatPullResponse.channelAmount(); i++) {
             for (int j = 0; j < chatPullResponse.getChatChannel(i).getChatMessageAmount(); j++) {
                 connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('"
-                        + chatPullResponse.getChatChannel(i).getChannel() == null ? chatPullResponse.getChatChannel(i).getCid() : chatPullResponse.getChatChannel(i).getChannel() + "' , '"
+                        + chatPullResponse.getChatChannel(i).getChannel() == null || chatPullResponse.getChatChannel(i).getChannel().length() == 0 ? chatPullResponse.getChatChannel(i).getCid() : chatPullResponse.getChatChannel(i).getChannel() + "' , '"
                         + Config.formatDates(chatPullResponse.getChatChannel(i).getChatMessage(j).getTimestamp()) + "' , '"
                         + chatPullResponse.getChatChannel(i).getChatMessage(j).getCid() + "' , '"
                         + chatPullResponse.getChatChannel(i).getChatMessage(j).getContent() + "' , \"" +
                         "TRUE\");");
                 Log.e("Chat.Pull Save DB", "INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('"
-                        + chatPullResponse.getChatChannel(i).getChannel() == null ? chatPullResponse.getChatChannel(i).getCid() : chatPullResponse.getChatChannel(i).getChannel() + "' , '"
+                        + chatPullResponse.getChatChannel(i).getChannel() == null || chatPullResponse.getChatChannel(i).getChannel().length() == 0 ? chatPullResponse.getChatChannel(i).getCid() : chatPullResponse.getChatChannel(i).getChannel() + "' , '"
                         + Config.formatDates(chatPullResponse.getChatChannel(i).getChatMessage(j).getTimestamp()) + "' , '"
                         + chatPullResponse.getChatChannel(i).getChatMessage(j).getCid() + "' , '"
                         + chatPullResponse.getChatChannel(i).getChatMessage(j).getContent() + "' , \"" +
                         "TRUE\");");
+                if (chatPullResponse.getChatChannel(i).getCid() != null && chatPullResponse.getChatChannel(i).getCid().length() != 0) {
+                    try {
+                        connection.execSQL("INSERT INTO privatechatlist (cid, blocked) VALUES ('" + chatPullResponse.getChatChannel(i).getCid() + "', \"FALSE\");");
+                    } catch (SQLiteConstraintException e) {
+                    }
+                }
             }
 
 

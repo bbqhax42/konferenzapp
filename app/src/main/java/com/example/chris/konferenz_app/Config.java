@@ -16,12 +16,8 @@ public class Config {
 
     public static final String webserviceUrl = "https://new.myconf.akademie-herkert.de/";
     public static final String sendMessageShortError = "Das Senden leerer Nachrichten ist nicht möglich.";
+    public static final int appversion = 5;
 
-    //cuts off the date and only leaves the time without seconds "2017-05-23 11:23:03.000" -> "11:23"
-    public static final String formatDates(String date){
-        //Log.e("formatDates", date);
-        return date.substring(11, 16);
-    }
 
     public static final void error_message(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
@@ -36,5 +32,10 @@ public class Config {
         //builder.show();
     }
 
+    //cuts off the date and only leaves the time without seconds "2017-05-23 11:23:03.000" -> "11:23"
+    public static final String formatDates(String date) {
+        //Log.e("formatDates", date);
+        return date.substring(11, 16);
+    }
 
 }
