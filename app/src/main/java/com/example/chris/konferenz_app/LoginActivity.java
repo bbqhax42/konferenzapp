@@ -95,10 +95,7 @@ public class LoginActivity extends AppCompatActivity {
                 //Erstellt eine Volley Request Queue
                 RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
 
-                /*for testing
-                email = "juergen.vonhirschheydt@forum-media.com";
-                freischaltcode = "JVH_UNLOCK";
-                */
+
                 String url = Config.webserviceUrl + "ACC.UNLOCK?email=" + email + "&code=" + freischaltcode;
 
                 JsonObjectRequest ipAddressJsonRequest =

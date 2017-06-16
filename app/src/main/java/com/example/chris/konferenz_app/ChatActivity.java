@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,23 @@ public class ChatActivity extends AppCompatActivity {
         homeButton = (Button) findViewById(R.id.homebutton);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerViewPrivate = (RecyclerView) findViewById(R.id.recycler_view2);
+
+        chatButton.setBackgroundResource(R.drawable.toolbar_button_selected);
+
+        TextView tv= (TextView) findViewById(R.id.title);
+        tv.setText("Chat");
+
+
+        Cursor res = connection.rawQuery("Select * from userinformation;", null);
+        res.moveToFirst();
+        String tmp=res.getString(0);
+
+        if(tmp==null || tmp.length()==0){
+            Config.error_message(ChatActivity.this, "Sichtbarer Name erforderlich für Chats");
+            Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
+            startActivity(intent);
+        }
+
 
         populateView(connection);
 

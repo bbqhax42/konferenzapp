@@ -26,18 +26,6 @@
 
                 <include layout="@layout/titlebar" />
 
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:background="@color/textBackground"
-                    android:ems="10"
-                    android:fontFamily="sans-serif-condensed-light"
-                    android:gravity="center"
-                    android:text="Einstellungen"
-                    android:textColor="@color/textColor"
-                    android:textSize="30dp"
-                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -204,6 +192,21 @@
 
 
             </LinearLayout>
+
+            <Button
+                android:id="@+id/logoutbutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:background="@drawable/toolbar_button_selected"
+                android:text="Logout Placeholder"
+                android:textColor="@color/textColor" />
+
+
+
 
         </LinearLayout>
     </RelativeLayout>

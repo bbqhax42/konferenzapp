@@ -10,18 +10,6 @@
 
         <include layout="@layout/titlebar" />
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:background="@color/textBackground"
-            android:ems="10"
-            android:fontFamily="sans-serif-condensed-light"
-            android:gravity="center"
-            android:text="Profil von Max Mustermann"
-            android:textColor="@color/textColor"
-            android:textSize="30dp"
-            android:textStyle="bold" />
 
 
         <LinearLayout

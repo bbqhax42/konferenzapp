@@ -7,6 +7,7 @@
     <color name="textBackground">#303F9F</color>
     <color name="textColor">#ededed</color>
     <color name="buttonSteffi">#52b9b6</color>
+    <color name="buttonSteffiComplement">#b95255</color>
 
 
     <color name="White">#FFFFFF</color>
@@ -67,6 +68,7 @@
     <color name="Crimson">#DC143C</color>
     <color name="PaleVioletRed">#DB7093</color>
     <color name="Goldenrod">#DAA520</color>
+    <color name="Teknos">#d4855c</color>
     <color name="Orchid">#DA70D6</color>
     <color name="Thistle">#D8BFD8</color>
     <color name="LightGrey">#D3D3D3</color>

@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -40,6 +41,11 @@ public class MainActivity extends AppCompatActivity {
         settingsButton = (Button) findViewById(R.id.settingsbutton);
         homeButton = (Button) findViewById(R.id.homebutton);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
+        homeButton.setBackgroundResource(R.drawable.toolbar_button_selected);
+
+        TextView tv= (TextView) findViewById(R.id.title);
+        tv.setText("Start");
 
         final SQLiteDatabase connection = myDb.getWritableDatabase();
 

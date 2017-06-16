@@ -37,7 +37,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     EditText name, email, phone, company;
     TextView tv;
-    Button chatButton, settingsButton, homeButton, updateSettings;
+    Button chatButton, settingsButton, homeButton, updateSettings, logout;
     String token;
     RecyclerView recyclerView;
 
@@ -54,8 +54,13 @@ public class SettingsActivity extends AppCompatActivity {
         chatButton = (Button) findViewById(R.id.chatbutton);
         homeButton = (Button) findViewById(R.id.homebutton);
         updateSettings = (Button) findViewById(R.id.button);
+        logout = (Button) findViewById(R.id.logoutbutton);
         name.clearFocus();
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
+        settingsButton.setBackgroundResource(R.drawable.toolbar_button_selected);
+        TextView tv= (TextView) findViewById(R.id.title);
+        tv.setText("Einstellungen");
 
 
         final DatabaseHelper myDb = new DatabaseHelper(this);
@@ -90,18 +95,22 @@ public class SettingsActivity extends AppCompatActivity {
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String s = getIntent().getStringExtra("EventUpdate");
                 Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                if (s == null || s.length() == 0) {
-                    intent.putExtra("EventUpdate", false); //true if not logged in today yet, false if already logged in today
-                } else {
-                    intent.putExtra("EventUpdate", s); //true if not logged in today yet, false if already logged in today
-                }
-
                 startActivity(intent);
             }
         });
 
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                connection.execSQL("Delete from userinformation;");
+                connection.execSQL("INSERT INTO userinformation (name, phonenumber, email, company, loginemail, loginkey, stayloggedin, lastlogin, sessionkey, sessioncid, firstlogin) VALUES ("+ null + ", "+ null + ", "+ null + ", "+ null + ", "+ null + ", "+ null + ", \"false\", '1970-01-01',  "+ null + ",  "+ null + ", \"true\");");
+                Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+                startActivity(intent);
+                Config.error_message(SettingsActivity.this, "Erfolgreich ausgeloggt.");
+            }
+        });
 
         updateSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,7 +136,7 @@ public class SettingsActivity extends AppCompatActivity {
                 updateInterests(connection, selectedFiles);
 
 
-                final String nameString = name.getText().toString().length() > 20 ? name.getText().toString().substring(0, 19) : name.getText().toString();
+                final String nameString = name.getText().toString().length() > 20 ? name.getText().toString().substring(0, 19).trim() : name.getText().toString().trim();
                 connection.execSQL("UPDATE userinformation SET name='" + nameString + "', phonenumber='" + phone.getText().toString() + "', email='" + email.getText().toString() + "', company='" + company.getText().toString() + "';");
                 Log.e("Setting SQL UPDATE", "UPDATE userinformation SET name='" + nameString + "', phonenumber='" + phone.getText().toString() + "', email='" + email.getText().toString() + "', company='" + company.getText().toString() + "';");
 

@@ -130,9 +130,9 @@ public class ChatChannelActivity extends AppCompatActivity {
 
                         @Override
                         public void onResponse(JSONObject jsonObject) {
-                            messageToSend.setText("");
                             Config.error_message(ChatChannelActivity.this, "Nachricht erfolgreich gesendet");
                             connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + channelNameString + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"true\");");
+                            Log.e("Msg SQL", "INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + channelNameString + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"true\");");
                             messageToSend.setText("");
                             populateView(connection);
                         }
