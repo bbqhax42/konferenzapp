@@ -63,6 +63,7 @@ public class ChatChannelActivity extends AppCompatActivity {
         channelName = (TextView) findViewById(R.id.title);
         channelName.setText("Thema: " + getIntent().getStringExtra("ChannelName"));
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        chatButton.setBackgroundResource(R.drawable.toolbar_button_selected);
 
         final String token = myDb.getToken(connection);
         final String cid = myDb.getCid(connection);

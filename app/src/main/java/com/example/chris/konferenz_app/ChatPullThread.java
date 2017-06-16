@@ -45,7 +45,6 @@ public class ChatPullThread {
                                 Gson gson = new Gson();
 
                                 ChatPullResponse chatPullResponse = gson.fromJson(jsonObject.toString(), ChatPullResponse.class);
-                                //Log.e("Seminar DB EventAmnt", seminar.getEventAmount() + "");
 
                                 saveChatPullResponseToDatabase(chatPullResponse, connection);
 

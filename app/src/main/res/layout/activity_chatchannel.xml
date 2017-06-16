@@ -26,25 +26,20 @@
             android:id="@+id/chatTextLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:layout_alignParentBottom="true"
             android:orientation="horizontal"
             android:weightSum="100">
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="8dp"
-                android:layout_weight="16"
-                android:text="Nachricht:"
-                android:textSize="17dp" />
+
 
             <EditText
                 android:id="@+id/messagetosend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
                 android:layout_weight="71"
                 android:ems="10"
                 android:hint="Nachricht hier eingeben..."
@@ -64,7 +59,7 @@
 
 
         <android.support.v7.widget.RecyclerView
-            android:background="@color/Gray"
+            android:background="@color/Beige"
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

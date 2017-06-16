@@ -7,8 +7,9 @@ import java.util.ArrayList;
  */
 
 public class ChatChannel {
-    private String channel, cid;
+    private String channel, cid, last_activity;
     private ArrayList<ChatMessage> messages;
+    private ArrayList<User> users;
 
     public ChatChannel(String channel, String cid, ArrayList<ChatMessage> messages) {
         this.channel = channel;
@@ -17,6 +18,10 @@ public class ChatChannel {
     }
 
     public ChatChannel() {
+    }
+
+    public String getLast_activity() {
+        return last_activity;
     }
 
     public String getChannel() {
@@ -35,6 +40,16 @@ public class ChatChannel {
 
     public ChatMessage getChatMessage(int i) {
         return messages.get(i);
+    }
+
+    public int getUserAmount() {
+        if (users != null)
+            return users.size();
+        else return 0;
+    }
+
+    public User getUser(int i) {
+        return users.get(i);
     }
 }
 

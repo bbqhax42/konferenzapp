@@ -166,8 +166,7 @@ public class EventActivity extends AppCompatActivity {
                                 DocumentRequest documentRequest = gson.fromJson(jsonObject.toString(), DocumentRequest.class);
 
                                 StringBuffer documentRequestString = new StringBuffer("Status: " + documentRequest.getStatus() + "\n"
-                                        + "Status Info: " + documentRequest.getStatus_info() + "\n"
-                                        + "Empfänger:" + documentRequest.getRecipient() + "\n"
+                                        + "Empfänger: " + documentRequest.getRecipient() + "\n"
                                         + "Betreff: " + documentRequest.getSubject() + "\n"
                                         + "Dokumente: ");
 

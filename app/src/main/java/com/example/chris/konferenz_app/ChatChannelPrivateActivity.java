@@ -54,6 +54,7 @@ public class ChatChannelPrivateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chatchannel);
         final SQLiteDatabase connection = myDb.getWritableDatabase();
         partnerCid = getIntent().getStringExtra("ChannelName");
+
         Cursor res = connection.rawQuery("Select * from users where cid='" + partnerCid + "';", null);
 
         while (res.moveToNext()) {
@@ -74,6 +75,7 @@ public class ChatChannelPrivateActivity extends AppCompatActivity {
         channelName = (TextView) findViewById(R.id.title);
         channelName.setText(Html.fromHtml(channelNameString));
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        chatButton.setBackgroundResource(R.drawable.toolbar_button_selected);
 
         final String token = myDb.getToken(connection);
         final String cid = myDb.getCid(connection);
