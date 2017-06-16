@@ -37,15 +37,14 @@
                     android:weightSum="100">
 
 
-
-                        <TextView
-                            android:id="@+id/username"
-                            android:layout_weight="100"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/buttonSteffi"
-                            android:layout_gravity="left"
-                            android:textAppearance="?android:attr/textAppearanceLarge" />
+                    <TextView
+                        android:id="@+id/username"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_weight="100"
+                        android:textColor="@color/buttonSteffi"
+                        android:textSize="20dp" />
 
 
                     <TextView
@@ -53,11 +52,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
+                        android:layout_marginRight="5dp"
                         android:clickable="true"
                         android:text="Senden erfolgreich"
                         android:textColor="@color/Red"
-                        android:layout_marginRight="5dp"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textSize="10sp" />
 
                     <TextView
@@ -66,7 +64,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
                         android:layout_marginRight="5dp"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textSize="10sp" />
                 </LinearLayout>
 
@@ -82,7 +79,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textSize="18dp"
                         android:textStyle="italic" />
                 </LinearLayout>
             </LinearLayout>

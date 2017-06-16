@@ -1,56 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/textBackground"
-        android:weightSum="100"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="10"/>
+    <include layout="@layout/titlebar" />
 
 
-        <Button
-            android:id="@+id/homebutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="23"
-            android:fontFamily="sans-serif-condensed-light"
-            android:text="Home" />
-
-        <Button
-            android:id="@+id/chatbutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="23"
-            android:fontFamily="sans-serif-condensed-light"
-            android:text="Chat" />
-
-        <Button
-            android:id="@+id/settingsbutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="24"
-            android:fontFamily="sans-serif-condensed-light"
-            android:text="Einstellungen" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="10"/>
-
-    </LinearLayout>
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
@@ -60,9 +17,19 @@
         android:fontFamily="sans-serif-condensed-light"
         android:gravity="center"
         android:inputType="textPersonName"
-        android:text="Ihre Events für den heutigen Tag: "
+        android:text="Start"
         android:textColor="@color/textColor"
-        android:textSize="25sp"
+        android:textSize="30dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:text="Ihr persönlicher Tagesplan"
+        android:textSize="20dp"
         android:textStyle="bold" />
 
 
@@ -71,7 +38,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false" />
-
 
 
 </LinearLayout>

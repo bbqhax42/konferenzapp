@@ -43,10 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         final SQLiteDatabase connection = myDb.getWritableDatabase();
 
-        Log.e("Mainactivity", "are we doing this");
         populateView(connection);
-
-
 
 
         chatButton.setOnClickListener(new View.OnClickListener() {
@@ -65,8 +62,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
 
 
     }

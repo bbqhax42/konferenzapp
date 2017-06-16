@@ -22,38 +22,38 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="1dp"
-            android:layout_marginTop="1dp"
-            android:orientation="horizontal"
-            android:weightSum="1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="1dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
 
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginTop="10dp"
-                android:layout_weight="1"
-                android:text="Event title"
-                android:textStyle="bold"
-                android:textColor="@color/buttonSteffi"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:text="Event title"
+                    android:textColor="@color/buttonSteffi"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/ort"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginTop="10dp"
-                android:layout_weight="0"
-                android:text="Event place"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                <TextView
+                    android:id="@+id/ort"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="0"
+                    android:text="Event place"
+                    android:textSize="18dp" />
 
-        </LinearLayout>
+            </LinearLayout>
 
 
             <LinearLayout
@@ -76,21 +76,21 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Start time"
-                        android:textAppearance="?android:attr/textAppearanceLarge" />
+                        android:textSize="18dp" />
 
                     <TextView
                         android:id="@+id/connector"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="-"
-                        android:textAppearance="?android:attr/textAppearanceLarge" />
+                        android:textSize="18dp" />
 
                     <TextView
                         android:id="@+id/endtime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="End time"
-                        android:textAppearance="?android:attr/textAppearanceLarge" />
+                        android:textSize="18dp" />
 
                 </LinearLayout>
 
@@ -101,7 +101,7 @@
                     android:layout_gravity="right"
                     android:layout_weight="0"
                     android:text="Event street"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textSize="18dp" />
             </LinearLayout>
         </LinearLayout>
 

@@ -146,6 +146,8 @@ public class ChatChannelPrivateRecyclerAdapter extends RecyclerView.Adapter<Chat
                             Config.error_message(context, "Senden fehlgeschlagen");
                             connection.execSQL("Update chatmessages SET issent=\"false\" WHERE cid='" + cid + "' AND  timestamp='" + timestamp + "'  AND content='" + messageToSend + "';");
                             Log.e("ChatActivity SQL", "Update chatmessages SET issent=\"false\" WHERE cid='" + cid + "' AND  timestamp='" + timestamp + "'  AND content='" + messageToSend + "';");
+
+                            ChatChannelPrivateRecyclerAdapter.this.notifyDataSetChanged();
                         }
                     });
 
@@ -153,9 +155,4 @@ public class ChatChannelPrivateRecyclerAdapter extends RecyclerView.Adapter<Chat
         } else Config.error_message(context, "Leere Nachrichten sind verboten");
     }
 
-    private String getCurrentDate() {
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        return sdf.format(c.getTime());
-    }
 }

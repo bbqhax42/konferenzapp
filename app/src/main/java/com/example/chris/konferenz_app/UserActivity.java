@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +23,8 @@ import java.util.ArrayList;
 public class UserActivity extends AppCompatActivity {
 
     TextView name, email, phone, companyTV, title;
-    Button privatechat, savecontact, chatButton, settingsButton, homeButton, blockButton, unblockButton;
+    Button privatechat, savecontact, chatButton, settingsButton, homeButton;
+    CheckBox blockcheckbox;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,21 +32,19 @@ public class UserActivity extends AppCompatActivity {
         final String cid = getIntent().getStringExtra("Cid");
 
 
-
         settingsButton = (Button) findViewById(R.id.settingsbutton);
         chatButton = (Button) findViewById(R.id.chatbutton);
         homeButton = (Button) findViewById(R.id.homebutton);
         privatechat = (Button) findViewById(R.id.privatechatbutton);
         savecontact = (Button) findViewById(R.id.contactbutton);
-        blockButton = (Button) findViewById(R.id.blockbutton);
-        unblockButton = (Button) findViewById(R.id.unblockbutton);
+        blockcheckbox = (CheckBox) findViewById(R.id.blockcheckBox);
         name = (TextView) findViewById(R.id.name);
         email = (TextView) findViewById(R.id.email);
         phone = (TextView) findViewById(R.id.phone);
         companyTV = (TextView) findViewById(R.id.company);
         title = (TextView) findViewById(R.id.title);
 
-        String displayName="", workNumber="", emailID="", company="";
+        String displayName = "", workNumber = "", emailID = "", company = "";
         final String jobTitle = "Kein Jobtitel";
 
         DatabaseHelper myDb = new DatabaseHelper(UserActivity.this);
@@ -55,21 +55,26 @@ public class UserActivity extends AppCompatActivity {
             workNumber = res.getString(2);
             emailID = res.getString(3);
             company = res.getString(4);
-        }
-        else
-           displayName="Unbekannt";
+        } else
+            displayName = "Unbekannt";
+
+        res = connection.rawQuery("Select privatechatlist.blocked from privatechatlist where cid='" + cid + "';", null);
+        if (res.moveToNext()) {
+            blockcheckbox.setChecked(res.getString(0).equalsIgnoreCase("true"));
+        } else
+            blockcheckbox.setChecked(false);
 
         name.setText(displayName);
         email.setText(emailID);
         phone.setText(workNumber);
         companyTV.setText(company);
-        title.setText("Profil von " +displayName);
+        title.setText("Profil");
 
 
-        final String displayNameStr=displayName;
-        final String workNumberStr=workNumber;
-        final String emailIDStr=emailID;
-        final String companyStr=company;
+        final String displayNameStr = displayName;
+        final String workNumberStr = workNumber;
+        final String emailIDStr = emailID;
+        final String companyStr = company;
 
         privatechat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,24 +110,26 @@ public class UserActivity extends AppCompatActivity {
             }
         });
 
-        blockButton.setOnClickListener(new View.OnClickListener() {
+
+        blockcheckbox.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                connection.execSQL("Update privatechatlist SET blocked=\"true\" where cid='" + cid + "';");
+                if (blockcheckbox.isChecked()) {
+                    Log.e("checkbox user", "checked");
+                    connection.execSQL("Update privatechatlist SET blocked=\"true\" where cid='" + cid + "';");
+                } else {
+                    Log.e("checkbox user", "unchecked");
+                    connection.execSQL("Update privatechatlist SET blocked=\"false\" where cid='" + cid + "';");
+                }
             }
         });
 
-        unblockButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                connection.execSQL("Update privatechatlist SET blocked=\"false\" where cid='" + cid + "';");
-            }
-        });
 
         savecontact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList <ContentProviderOperation> ops = new ArrayList< ContentProviderOperation >();
+                ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
 
                 ops.add(ContentProviderOperation.newInsert(
                         ContactsContract.RawContacts.CONTENT_URI)
@@ -183,11 +190,11 @@ public class UserActivity extends AppCompatActivity {
                 // Asking the Contact provider to create a new contact
                 try {
                     getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
-                    Config.popupMessage("Kontakt erstellt", "Sie haben "+ displayNameStr+ " erfolgreich zu ihren Kontakten hinzugefügt.", UserActivity.this);
+                    Config.popupMessage("Kontakt erstellt", "Sie haben " + displayNameStr + " erfolgreich zu ihren Kontakten hinzugefügt.", UserActivity.this);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.e("Error", e.getMessage());
-                    Config.popupMessage("Kontakt nicht erstellt", "Wir konnten "+ displayNameStr+ "nicht zu ihren Kontakten hinzugefügen. Bitte stellen Sie sicher das die App die nötigen Berechtigungen hat.", UserActivity.this);
+                    Config.popupMessage("Kontakt nicht erstellt", "Wir konnten " + displayNameStr + " nicht zu ihren Kontakten hinzugefügen. Bitte stellen Sie sicher das die App die nötigen Berechtigungen hat.", UserActivity.this);
                 }
             }
         });

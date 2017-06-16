@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -70,25 +71,13 @@ public class ChatChannelActivity extends AppCompatActivity {
         populateView(connection);
 
 
-        messageToSend.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    //Toast.makeText(getApplicationContext(), "got the focus", Toast.LENGTH_LONG).show();
-                    ViewGroup.LayoutParams params = recyclerView.getLayoutParams();
-                    params.height = 900;
-                    recyclerView.setLayoutParams(params);
-                    recyclerView.scrollToPosition(messages.size() - 1);
-                } else {
-                    //Toast.makeText(getApplicationContext(), "lost the focus", Toast.LENGTH_LONG).show();
-                    ViewGroup.LayoutParams params = recyclerView.getLayoutParams();
-                    params.height = 1680;
-                    recyclerView.setLayoutParams(params);
-                    recyclerView.scrollToPosition(messages.size() - 1);
-                }
-            }
-        });
-
+        recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                                                   @Override
+                                                   public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                                                       recyclerView.scrollToPosition(messages.size() - 1);
+                                                   }
+                                               }
+        );
 
         chatButton.setOnClickListener(new View.OnClickListener() {
             @Override

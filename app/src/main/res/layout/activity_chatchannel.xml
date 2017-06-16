@@ -6,54 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/textBackground"
-        android:orientation="horizontal"
-        android:weightSum="100">
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="0px"
+        android:layout_height="0px"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="10" />
-
-
-        <Button
-            android:id="@+id/homebutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="23"
-            android:fontFamily="sans-serif-condensed-light"
-            android:text="Home" />
-
-        <Button
-            android:id="@+id/chatbutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="23"
-            android:fontFamily="sans-serif-condensed-light"
-            android:text="Chat" />
-
-        <Button
-            android:id="@+id/settingsbutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="24"
-            android:fontFamily="sans-serif-condensed-light"
-            android:text="Einstellungen" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="10" />
-
-    </LinearLayout>
+    <include layout="@layout/titlebar" />
 
 
     <TextView
@@ -67,23 +26,17 @@
         android:inputType="textPersonName"
         android:text="Channel Name"
         android:textColor="@color/textColor"
-        android:textSize="40sp"
+        android:textSize="30dp"
         android:textStyle="bold" />
 
 
-    <LinearLayout
-
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="500dp"
-            android:clipToPadding="false" />
-
         <LinearLayout
+            android:id="@+id/chatTextLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -95,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="8dp"
                 android:layout_weight="16"
                 android:text="Nachricht:"
                 android:textSize="17dp" />
@@ -117,9 +70,19 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="13"
-                android:fontFamily="sans-serif-condensed-light"
-                android:text="Senden" />
+                android:text="Senden"
+                android:textColor="@color/Gray" />
             <!--android:background="@color/buttonBG"-->
         </LinearLayout>
-    </LinearLayout>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:background="@color/Gray"
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_above="@+id/chatTextLayout"
+            android:clipToPadding="false" />
+    </RelativeLayout>
 </LinearLayout>

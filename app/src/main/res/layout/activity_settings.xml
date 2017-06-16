@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -15,218 +15,196 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/textBackground"
-            android:orientation="horizontal"
-            android:weightSum="100">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="10" />
-
-
-            <Button
-                android:id="@+id/homebutton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="23"
-                android:fontFamily="sans-serif-condensed-light"
-                android:text="Home" />
-
-            <Button
-                android:id="@+id/chatbutton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="23"
-                android:fontFamily="sans-serif-condensed-light"
-                android:text="Chat" />
-
-            <Button
-                android:id="@+id/settingsbutton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="24"
-                android:fontFamily="sans-serif-condensed-light"
-                android:text="Einstellungen" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="10" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:background="@color/textBackground"
-            android:ems="10"
-            android:fontFamily="sans-serif-condensed-light"
-            android:gravity="center"
-            android:text="Einstellungen"
-            android:textColor="@color/textColor"
-            android:textSize="32sp"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:orientation="horizontal"
-            android:weightSum="1">
-
-            <TextView
-                android:layout_width="122dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Name: "
-                android:textSize="18dp" />
-
-            <EditText
-                android:id="@+id/name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:ems="10"
-                android:hint="Max Mustermann"
-                tools:layout_editor_absoluteX="70dp"
-                tools:layout_editor_absoluteY="246dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="122dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Telefonnr: "
-                android:textSize="18dp" />
-
-            <EditText
-                android:id="@+id/phonenumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:ems="10"
-                android:hint="+49 123456789"
-                android:inputType="phone"
-                tools:layout_editor_absoluteX="70dp"
-                tools:layout_editor_absoluteY="246dp" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="122dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="E-Mail-Adresse: "
-                android:textSize="18dp" />
-
-            <EditText
-                android:id="@+id/email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:ems="10"
-                android:hint="max@mustermann.de"
-                tools:layout_editor_absoluteX="70dp"
-                tools:layout_editor_absoluteY="246dp" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="122dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Firma: "
-                android:textSize="18dp" />
-
-            <EditText
-                android:id="@+id/company"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:ems="10"
-                android:hint="Mustermann GmbH"
-                tools:layout_editor_absoluteX="70dp"
-                tools:layout_editor_absoluteY="246dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="105dp"
-                android:layout_marginTop="17dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:text="Interessen: "
-                android:textSize="18dp" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_marginTop="15dp"
+            <LinearLayout
+                android:id="@+id/top_form"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:clipToPadding="false" />
-        </LinearLayout>
-
-
-
-
-
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="122dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textSize="18dp" />
+                android:orientation="vertical">
 
-            <Button
-                android:id="@+id/button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                <include layout="@layout/titlebar" />
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:background="@color/textBackground"
+                    android:ems="10"
+                    android:fontFamily="sans-serif-condensed-light"
+                    android:gravity="center"
+                    android:text="Einstellungen"
+                    android:textColor="@color/textColor"
+                    android:textSize="30dp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:layout_width="122dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Name: "
+                        android:textColor="@color/Gray"
+                        android:textSize="18dp" />
+
+                    <EditText
+                        android:id="@+id/name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:ems="10"
+                        android:hint="Max Mustermann"
+                        android:textColor="@color/Gray"
+                        tools:layout_editor_absoluteX="70dp"
+                        tools:layout_editor_absoluteY="246dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="122dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Telefonnr: "
+                        android:textColor="@color/Gray"
+                        android:textSize="18dp" />
+
+                    <EditText
+                        android:id="@+id/phonenumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:ems="10"
+                        android:hint="+49 123456789"
+                        android:inputType="phone"
+                        android:textColor="@color/Gray"
+                        tools:layout_editor_absoluteX="70dp"
+                        tools:layout_editor_absoluteY="246dp" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="122dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="E-Mail-Adresse: "
+                        android:textColor="@color/Gray"
+                        android:textSize="18dp" />
+
+                    <EditText
+                        android:id="@+id/email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:ems="10"
+                        android:hint="max@mustermann.de"
+                        android:textColor="@color/Gray"
+                        tools:layout_editor_absoluteX="70dp"
+                        tools:layout_editor_absoluteY="246dp" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="122dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Firma: "
+                        android:textColor="@color/Gray"
+                        android:textSize="18dp" />
+
+                    <EditText
+                        android:id="@+id/company"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:ems="10"
+                        android:hint="Mustermann GmbH"
+                        android:textColor="@color/Gray"
+                        tools:layout_editor_absoluteX="70dp"
+                        tools:layout_editor_absoluteY="246dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_above="@+id/bottom_form"
+                android:layout_below="@+id/top_form"
+                android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
-                android:text="Einstellungen speichern" />
+                android:orientation="horizontal">
 
+                <TextView
+                    android:layout_width="105dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:layout_marginTop="17dp"
+                    android:text="Interessen: "
+                    android:textColor="@color/Gray"
+                    android:textSize="18dp" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="15dp"
+                    android:clipToPadding="false" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bottom_form"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:gravity="bottom"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="122dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="18dp" />
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="Einstellungen speichern"
+                    android:textColor="@color/Gray" />
+
+
+            </LinearLayout>
 
         </LinearLayout>
-
-    </android.support.v7.widget.LinearLayoutCompat>
+    </RelativeLayout>
 </ScrollView>

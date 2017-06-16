@@ -6,9 +6,10 @@
 
     <CheckBox
         android:id="@+id/checkBox"
-        android:buttonTint="@color/buttonSteffi"
-        android:layout_marginLeft="15dp"
         android:layout_width="wrap_content"
-        android:textSize="20sp"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:buttonTint="@color/buttonSteffi"
+        android:textColor="@color/Gray"
+        android:textSize="16sp" />
 </LinearLayout>

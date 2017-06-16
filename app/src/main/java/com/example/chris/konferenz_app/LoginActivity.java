@@ -44,7 +44,6 @@ public class LoginActivity extends AppCompatActivity {
     final DatabaseHelper myDb = new DatabaseHelper(this);
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,22 +132,21 @@ public class LoginActivity extends AppCompatActivity {
                                     //Speichert den Token fuer die weitere Verwendung in der datenbank
                                     connection.execSQL("UPDATE userinformation SET sessionkey='" + loginResponse.getToken() + "', sessioncid='" + loginResponse.getCid() + "';");
 
-                                    String strDate = getCurrentDate();
+                                    String date = getCurrentDate();
 
                                     //saving current logindate and if user prefers to stay signed in
-                                    connection.execSQL("UPDATE userinformation SET stayloggedin=\"" + eingeloggt_bleiben + "\", lastlogin='" + strDate + "';");
+                                    connection.execSQL("UPDATE userinformation SET stayloggedin=\"" + eingeloggt_bleiben + "\", lastlogin='" + date + "';");
                                     //Log.e("Login SQL UPDATE 1/2", "UPDATE userinformation SET stayloggedin=" + eingeloggt_bleiben + ", lastlogin='" + strDate + "';");
 
 
-                                    boolean loggedInToday = strDate.equalsIgnoreCase(lastLogin);
+                                    boolean loggedInToday = date.equalsIgnoreCase(lastLogin);
                                     loggedInToday = false;
 
                                     if (!loggedInToday) {
                                         myDb.deleteAllUselessTablesLUL();
 
                                         String token = myDb.getToken(connection);
-
-                                        String date = "2017-06-14"; //wow time flew by fast
+                                        date = "2017-06-14"; //wow time flew by fast
 
 
                                         RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
@@ -167,8 +165,7 @@ public class LoginActivity extends AppCompatActivity {
                                                         Seminar seminar = gson.fromJson(jsonObject.toString(), Seminar.class);
                                                         //Log.e("Seminar DB EventAmnt", seminar.getEventAmount() + "");
 
-                                                            saveEventToDatabase(seminar, connection);
-
+                                                        saveEventToDatabase(seminar, connection);
 
 
                                                     }
@@ -184,11 +181,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                     if (firstlogin && eingeloggt_bleiben) {
 
-                                        try {
-                                            TimeUnit.MILLISECONDS.sleep(333);
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
+                                        waitReply();
 
                                         //email and password saving in case user wants to
                                         connection.execSQL("UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', firstlogin=\"false\", loginkey='" + freischaltcode + "';");
@@ -198,21 +191,13 @@ public class LoginActivity extends AppCompatActivity {
                                         //Log.e("Login SQL UPDATE 2/2", "UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "'");
 
                                     } else if (firstlogin && !eingeloggt_bleiben) {
-                                        try {
-                                            TimeUnit.MILLISECONDS.sleep(333);
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
+                                        waitReply();
                                         connection.execSQL("UPDATE userinformation SET firstlogin=\"false\";");
                                         Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
                                         startActivity(intent);
 
                                     } else if (eingeloggt_bleiben) {
-                                        try {
-                                            TimeUnit.MILLISECONDS.sleep(333);
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
+                                        waitReply();
                                         //email and password saving in case user wants to
                                         connection.execSQL("UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "';");
 
@@ -221,11 +206,7 @@ public class LoginActivity extends AppCompatActivity {
                                         //Log.e("Login SQL UPDATE 2/2", "UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "'");
 
                                     } else {
-                                        try {
-                                            TimeUnit.MILLISECONDS.sleep(333);
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
+                                        waitReply();
                                         Intent intent = new Intent(getBaseContext(), MainActivity.class);
                                         startActivity(intent);
                                     }
@@ -237,7 +218,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Config.error_message(LoginActivity.this, "Keine Internetverbindung");
+                                Config.error_message(LoginActivity.this, "Bitte versuchen Sie es später erneut.");
                             }
                         });
 
@@ -248,6 +229,14 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void waitReply() {
+        try {
+            TimeUnit.MILLISECONDS.sleep(222);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private String getCurrentDate() {

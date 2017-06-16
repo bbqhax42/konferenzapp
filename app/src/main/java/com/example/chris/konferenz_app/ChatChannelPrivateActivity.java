@@ -215,7 +215,6 @@ public class ChatChannelPrivateActivity extends AppCompatActivity {
             chatMessage.setSendState(res.getString(4).equalsIgnoreCase("true") ? true : false);
             listOfChatMessages.add(chatMessage);
         }
-        //Log.e("List of Events Size", String.valueOf(listOfEvents.size()));
         return listOfChatMessages;
     }
 

@@ -8,52 +8,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/textBackground"
-            android:orientation="horizontal"
-            android:weightSum="100">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="10" />
-
-
-            <Button
-                android:id="@+id/homebutton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="23"
-                android:fontFamily="sans-serif-condensed-light"
-                android:text="Home" />
-
-            <Button
-                android:id="@+id/chatbutton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="23"
-                android:fontFamily="sans-serif-condensed-light"
-                android:text="Chat" />
-
-            <Button
-                android:id="@+id/settingsbutton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="24"
-                android:fontFamily="sans-serif-condensed-light"
-                android:text="Einstellungen" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="10" />
-
-        </LinearLayout>
+        <include layout="@layout/titlebar" />
 
         <TextView
             android:id="@+id/title"
@@ -65,7 +20,7 @@
             android:gravity="center"
             android:text="Profil von Max Mustermann"
             android:textColor="@color/textColor"
-            android:textSize="32sp"
+            android:textSize="30dp"
             android:textStyle="bold" />
 
 
@@ -83,6 +38,9 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="15dp"
+                android:adjustViewBounds="true"
+                android:maxHeight="140dp"
+                android:maxWidth="140dp"
                 android:src="@drawable/profilepicture" />
 
 
@@ -90,7 +48,7 @@
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="10dp"
                 android:text="Max Mustermann"
                 android:textSize="18dp" />
 
@@ -99,7 +57,7 @@
                 android:id="@+id/company"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="10dp"
                 android:text="Mustermann GmbH und Co. KG"
                 android:textSize="18dp" />
 
@@ -108,7 +66,7 @@
                 android:id="@+id/email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="10dp"
                 android:text="max@mustermann.de"
                 android:textSize="18dp" />
 
@@ -117,7 +75,7 @@
                 android:id="@+id/phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="10dp"
                 android:text="+49 123456789"
                 android:textSize="18dp" />
 
@@ -156,25 +114,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
-                    android:layout_marginTop="25dp"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal">
 
-                    <Button
-                        android:id="@+id/blockbutton"
+                    <CheckBox
+                        android:id="@+id/blockcheckBox"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:fontFamily="sans-serif-condensed-light"
-                        android:text="Nutzer blockieren" />
-
-                    <Button
-                        android:id="@+id/unblockbutton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-
-                        android:fontFamily="sans-serif-condensed-light"
-                        android:text="Nutzer entsperren" />
+                        android:buttonTint="@color/buttonSteffi"
+                        android:text="Nutzer blockieren"
+                        android:textColor="@color/Gray"
+                        android:textSize="18dp" />
                 </LinearLayout>
 
             </LinearLayout>

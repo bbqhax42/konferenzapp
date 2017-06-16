@@ -1,57 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
 
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/textBackground"
-        android:weightSum="100"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="10"/>
-
-
-        <Button
-            android:id="@+id/homebutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="23"
-            android:fontFamily="sans-serif-condensed-light"
-            android:text="Home" />
-
-        <Button
-            android:id="@+id/chatbutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="23"
-            android:fontFamily="sans-serif-condensed-light"
-            android:text="Chat" />
-
-        <Button
-            android:id="@+id/settingsbutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="24"
-            android:fontFamily="sans-serif-condensed-light"
-            android:text="Einstellungen" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="10"/>
-
-    </LinearLayout>
+    <include layout="@layout/titlebar" />
 
 
     <TextView
@@ -65,7 +19,7 @@
         android:inputType="textPersonName"
         android:text="Chat"
         android:textColor="@color/textColor"
-        android:textSize="25sp"
+        android:textSize="30dp"
         android:textStyle="bold" />
 
     <android.support.v7.widget.RecyclerView
@@ -79,10 +33,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false" />
-
-
-
-
 
 
 </LinearLayout>
