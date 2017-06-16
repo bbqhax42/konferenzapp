@@ -119,7 +119,7 @@ public class ChatChannelActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(ChatChannelActivity.this);
 
 
-        String url = Config.webserviceUrl + "CHAT.SEND?token" + token + "&channel=" + channelNameString + "&content=" + messageToSend.getText().toString().trim();
+        String url = Config.webserviceUrl + "CHAT.SEND?token=" + token + "&channel=" + channelNameString + "&content=" + messageToSend.getText().toString().trim();
 
         Log.e("Chat Message URL", url);
 

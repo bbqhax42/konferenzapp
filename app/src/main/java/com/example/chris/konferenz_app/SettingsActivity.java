@@ -147,13 +147,11 @@ public class SettingsActivity extends AppCompatActivity {
                                 SettingResponse settingResponse = gson.fromJson(jsonObject.toString(), SettingResponse.class);
 
                                 StringBuffer settingResponseString = new StringBuffer("Status: " + settingResponse.getStatus() + "\n"
-                                        + "Status Info: " + settingResponse.getStatus_info() + "\n"
-                                        + "Name:" + settingResponse.getProfile_name() + "\n"
+                                        + "Name: " + settingResponse.getProfile_name() + "\n"
                                         + "Tel.Nr.: " + settingResponse.getProfile_phone() + "\n"
                                         + "e-Mail: " + settingResponse.getProfile_email() + "\n"
                                         + "Firma: " + settingResponse.getProfile_company() + "\n"
                                         + "Sichtbare Interessen: ");
-
 
                                 if (settingResponse.getInterestgroupAmount() == 0) {
                                     settingResponseString.append("keine");
@@ -165,6 +163,9 @@ public class SettingsActivity extends AppCompatActivity {
                                 }
 
                                 Config.popupMessage("Ihre Einstellungen wurden aktualisiert", settingResponseString.toString(), SettingsActivity.this);
+
+
+
                                 try {
                                     connection.execSQL("Insert into users (cid, profile_name, profile_phone, profile_email, profile_company) VALUES ('"
                                             + myDb.getCid(connection) + "', '"

@@ -151,7 +151,7 @@ public class ChatChannelPrivateActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(ChatChannelPrivateActivity.this);
 
 
-        String url = Config.webserviceUrl + "CHAT.SEND?token" + token + "&cid=" + getIntent().getStringExtra("ChannelName") + "&content=" + partnerCid;
+        String url = Config.webserviceUrl + "CHAT.SEND?token=" + token + "&cid=" + getIntent().getStringExtra("ChannelName") + "&content=" + messageToSend.getText();
         Log.e("Priv Chat Message URL", url);
 
         if (messageToSend.getText().toString().trim().length() != 0) {
