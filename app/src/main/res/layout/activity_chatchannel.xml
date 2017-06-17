@@ -5,6 +5,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bgcolor"
     android:orientation="vertical">
     <LinearLayout
         android:focusable="true"
@@ -26,7 +27,6 @@
             android:id="@+id/chatTextLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/linearlayout_border"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal"
             android:weightSum="100">
@@ -59,8 +59,8 @@
 
 
         <android.support.v7.widget.RecyclerView
-            android:background="@color/Beige"
             android:id="@+id/recycler_view"
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"

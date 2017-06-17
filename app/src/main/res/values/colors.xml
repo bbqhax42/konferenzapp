@@ -7,8 +7,9 @@
     <color name="textBackground">#303F9F</color>
     <color name="textColor">#ededed</color>
     <color name="buttonSteffi">#52b9b6</color>
-    <color name="titlebar">#5289b9</color>
-
+    <color name="titlebar">#002e6d</color>
+    <color name="titlebarBeautiful">#5289b9</color>
+    <color name="bgcolor">#ededed</color>
 
     <color name="White">#FFFFFF</color>
     <color name="Ivory">#FFFFF0</color>

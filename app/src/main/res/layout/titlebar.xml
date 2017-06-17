@@ -2,81 +2,113 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
 
     <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/titlebar"
-    android:orientation="horizontal"
-    android:weightSum="100">
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/titlebar"
+        android:orientation="horizontal"
+        android:weightSum="100">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_weight="10" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
 
+            android:layout_weight="14" />
 
-    <Button
-        android:id="@+id/homebutton"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_gravity="center"
-        android:layout_weight="23"
-        android:layout_marginTop="25dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/toolbar_button_unselected"
-        android:text="Start" />
+        <View
+            android:layout_height="25dp"
+            android:layout_width="1dp"
+            android:layout_marginTop="25dp"
+            android:layout_gravity="bottom"
+            android:background="#ffffff" />
 
-    <Button
-        android:id="@+id/chatbutton"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="25dp"
-        android:layout_weight="23"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/toolbar_button_unselected"
-        android:text="Chat" />
+        <Button
+            android:id="@+id/homebutton"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="25dp"
+            android:layout_weight="23"
+            android:background="@drawable/toolbar_button_unselected"
+            android:text="Start"
+            android:textColor="@color/textColor" />
 
-    <Button
-        android:id="@+id/settingsbutton"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="25dp"
-        android:layout_weight="24"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/toolbar_button_unselected"
-        android:text="Einstellungen" />
+        <View
+            android:layout_height="25dp"
+            android:layout_width="1dp"
+            android:layout_marginTop="25dp"
+            android:layout_gravity="bottom"
+            android:background="#ffffff" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        />
+        <Button
+            android:id="@+id/chatbutton"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="25dp"
+            android:layout_weight="23"
+            android:background="@drawable/toolbar_button_unselected"
+            android:text="Chat"
+            android:textColor="@color/textColor" />
 
+        <View
+            android:layout_height="25dp"
+            android:layout_width="1dp"
+            android:layout_marginTop="25dp"
+            android:layout_gravity="bottom"
+            android:background="#ffffff" />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/settingsbutton"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="25dp"
+            android:layout_weight="24"
+            android:background="@drawable/toolbar_button_unselected"
+            android:text="Einstellungen"
+            android:textColor="@color/textColor" />
 
-<TextView
-android:id="@+id/title"
-android:layout_width="match_parent"
-android:layout_height="55dp"
-android:background="@color/titlebar"
-android:ems="10"
-android:fontFamily="sans-serif-condensed-light"
-android:gravity="center"
-android:inputType="textPersonName"
-android:text="titlebar"
-android:textColor="@color/textColor"
-android:textSize="30dp"
-android:textStyle="bold" />
+        <View
+            android:layout_height="25dp"
+            android:layout_width="1dp"
+            android:layout_marginTop="25dp"
+            android:layout_gravity="bottom"
+            android:background="#ffffff" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp" />
+
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/titlebar"
+        android:ems="10"
+        android:fontFamily="sans-serif-condensed-light"
+        android:gravity="center"
+        android:inputType="textPersonName"
+        android:text="titlebar"
+        android:textColor="@color/textColor"
+        android:textSize="30dp"
+        android:textStyle="bold" />
+
+</LinearLayout>
 
 
 
