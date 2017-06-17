@@ -26,7 +26,7 @@
             android:id="@+id/chatTextLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
+            android:background="@drawable/linearlayout_border"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal"
             android:weightSum="100">

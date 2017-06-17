@@ -168,6 +168,7 @@ public class ChatChannelActivity extends AppCompatActivity {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
 
         recyclerView.setLayoutManager(llm);
+
         recyclerView.scrollToPosition(messages.size() - 1);
     }
 
