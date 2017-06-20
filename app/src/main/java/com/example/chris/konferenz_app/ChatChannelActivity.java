@@ -126,14 +126,23 @@ public class ChatChannelActivity extends AppCompatActivity {
 
         if (messageToSend.getText().toString().trim().length() != 0) {
 
-            JsonObjectRequest documentRequestRequest =
+            JsonObjectRequest chatSendRequest =
                     new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
                         @Override
                         public void onResponse(JSONObject jsonObject) {
-                            Config.error_message(ChatChannelActivity.this, "Nachricht erfolgreich gesendet");
-                            connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + channelNameString + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"true\");");
-                            Log.e("Msg SQL", "INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + channelNameString + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"true\");");
+                            Gson gson = new Gson();
+
+                            ChatSendResponse chatSendResponse = gson.fromJson(jsonObject.toString(), ChatSendResponse.class);
+                            if (chatSendResponse.getSuccess().equalsIgnoreCase("true")) {
+                                Config.error_message(ChatChannelActivity.this, "Nachricht erfolgreich gesendet");
+                                connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + channelNameString + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"true\");");
+                                Log.e("Msg SQL", "INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + channelNameString + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"true\");");
+                            } else {
+                                Config.error_message(ChatChannelActivity.this, "Senden fehlgeschlagen");
+                                connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + channelNameString + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"false\");");
+                                Log.e("ChatActivity SQL", "INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + channelNameString + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"false\");");
+                            }
                             messageToSend.setText("");
                             populateView(connection);
                         }
@@ -141,18 +150,11 @@ public class ChatChannelActivity extends AppCompatActivity {
 
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
-                            //!!!!!!!!!!!!!!!!!!!!!!
-                            Config.error_message(ChatChannelActivity.this, "Senden fehlgeschlagen");
-                            connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + channelNameString + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"false\");");
-                            Log.e("ChatActivity SQL", "INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + channelNameString + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"false\");");
-                            messageToSend.setText("");
-                            populateView(connection);
-                            //wieder loeschen!!! ! ! ! ! ! ! !
+                            Config.error_message(ChatChannelActivity.this, "Senden fehlgeschlagen - Keine Internetverbindung");
                         }
                     });
 
-            queue.add(documentRequestRequest);
+            queue.add(chatSendRequest);
         } else Config.error_message(ChatChannelActivity.this, Config.sendMessageShortError);
     }
 

@@ -7,6 +7,7 @@ import java.util.ArrayList;
  */
 
 public class ChatPullResponse {
+    String success;
     String timestamp;
     ArrayList<ChatChannel> channels;
 
@@ -27,6 +28,10 @@ public class ChatPullResponse {
         if (channels != null)
             return channels.size();
         else return 0;
+    }
+
+    public String getSuccess() {
+        return success;
     }
 
     public ChatChannel getChatChannel(int i) {

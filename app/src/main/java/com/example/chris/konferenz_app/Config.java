@@ -16,7 +16,7 @@ public class Config {
 
     public static final String webserviceUrl = "https://new.myconf.akademie-herkert.de/";
     public static final String sendMessageShortError = "Das Senden leerer Nachrichten ist nicht möglich.";
-    public static final int appversion = 5;
+    public static final int appversion = 6;
 
 
     public static final void error_message(Context context, String message) {

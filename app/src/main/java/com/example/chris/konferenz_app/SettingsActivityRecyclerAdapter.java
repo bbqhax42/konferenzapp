@@ -16,7 +16,6 @@ public class SettingsActivityRecyclerAdapter extends RecyclerView.Adapter<Settin
     List<Interestgroup> wordList;
 
     public SettingsActivityRecyclerAdapter(Context context, List<Interestgroup> wordList) {
-        Log.e("is this happening", "yes");
         this.wordList = wordList;
         this.context = context;
     }

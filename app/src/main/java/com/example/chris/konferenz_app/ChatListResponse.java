@@ -7,6 +7,7 @@ import java.util.ArrayList;
  */
 
 public class ChatListResponse {
+    String success;
     String timestamp;
     ArrayList<ChatChannel> channels;
 
@@ -22,6 +23,9 @@ public class ChatListResponse {
         return timestamp;
     }
 
+    public String getSuccess() {
+        return success;
+    }
 
     public int channelAmount() {
         if (channels != null)

@@ -58,7 +58,7 @@ public class ChatChannelPrivateActivity extends AppCompatActivity {
         Cursor res = connection.rawQuery("Select * from users where cid='" + partnerCid + "';", null);
 
         while (res.moveToNext()) {
-            channelNameString ="<u>" + res.getString(1) + "</u>";
+            channelNameString = "<u>" + res.getString(1) + "</u>";
         }
         try {
             connection.execSQL("Insert into privatechatlist (cid, blocked) VALUES ('" + partnerCid + "', \"false\");");
@@ -163,9 +163,17 @@ public class ChatChannelPrivateActivity extends AppCompatActivity {
 
                         @Override
                         public void onResponse(JSONObject jsonObject) {
-                            messageToSend.setText("");
-                            Config.error_message(ChatChannelPrivateActivity.this, "Nachricht erfolgreich gesendet");
-                            connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + partnerCid + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"true\");");
+                            Gson gson = new Gson();
+                            ChatSendResponse chatSendResponse = gson.fromJson(jsonObject.toString(), ChatSendResponse.class);
+                            if (chatSendResponse.getSuccess().equalsIgnoreCase("true")) {
+                                connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + partnerCid + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"true\");");
+                                Config.error_message(ChatChannelPrivateActivity.this, "Nachricht erfolgreich gesendet");
+                            } else {
+                                connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + partnerCid + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"false\");");
+                                Log.e("ChatActivity SQL", "INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + partnerCid + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"false\");");
+                                Config.error_message(ChatChannelPrivateActivity.this, "Senden fehlgeschlagen");
+                            }
+
                             messageToSend.setText("");
                             populateView(connection);
                         }
@@ -173,14 +181,7 @@ public class ChatChannelPrivateActivity extends AppCompatActivity {
 
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
-                            //!!!!!!!!!!!!!!!!!!!!!!
-                            Config.error_message(ChatChannelPrivateActivity.this, "Senden fehlgeschlagen");
-                            connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + partnerCid + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"false\");");
-                            Log.e("ChatActivity SQL", "INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + partnerCid + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"false\");");
-                            messageToSend.setText("");
-                            populateView(connection);
-                            //wieder loeschen!!! ! ! ! ! ! ! !
+                            Config.error_message(ChatChannelPrivateActivity.this, "Senden fehlgeschlagen - Keine Internetverbindung");
                         }
                     });
 
@@ -191,7 +192,6 @@ public class ChatChannelPrivateActivity extends AppCompatActivity {
 
 
     public void populateView(SQLiteDatabase connection) {
-        Log.e("populateview", "success");
 
         messages = queryChatMessages(connection);
 

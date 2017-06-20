@@ -156,15 +156,10 @@ public class LoginActivity extends AppCompatActivity {
 
                                                     @Override
                                                     public void onResponse(JSONObject jsonObject) {
-                                                        String s = jsonObject.toString();
                                                         Gson gson = new Gson();
 
                                                         Seminar seminar = gson.fromJson(jsonObject.toString(), Seminar.class);
-                                                        //Log.e("Seminar DB EventAmnt", seminar.getEventAmount() + "");
-
                                                         saveEventToDatabase(seminar, connection);
-
-
                                                     }
                                                 }, new Response.ErrorListener() {
 
@@ -179,6 +174,7 @@ public class LoginActivity extends AppCompatActivity {
                                     if (firstlogin && eingeloggt_bleiben) {
 
                                         waitReply();
+                                        startChatService();
 
                                         //email and password saving in case user wants to
                                         connection.execSQL("UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', firstlogin=\"false\", loginkey='" + freischaltcode + "';");
@@ -189,12 +185,14 @@ public class LoginActivity extends AppCompatActivity {
 
                                     } else if (firstlogin && !eingeloggt_bleiben) {
                                         waitReply();
+                                        startChatService();
                                         connection.execSQL("UPDATE userinformation SET firstlogin=\"false\";");
                                         Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
                                         startActivity(intent);
 
                                     } else if (eingeloggt_bleiben) {
                                         waitReply();
+                                        startChatService();
                                         //email and password saving in case user wants to
                                         connection.execSQL("UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "';");
 
@@ -204,6 +202,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                     } else {
                                         waitReply();
+                                        startChatService();
                                         Intent intent = new Intent(getBaseContext(), MainActivity.class);
                                         startActivity(intent);
                                     }
@@ -226,6 +225,11 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void startChatService() {
+        Intent chatservice = new Intent(this, ChatService.class);
+        startService(chatservice);
     }
 
     private void waitReply() {
@@ -259,8 +263,7 @@ public class LoginActivity extends AppCompatActivity {
                     + event.getCity() + "' , '"
                     + event.getLocation() + "' , '"
                     + event.getUrl() + "');");
-
-            Log.e("SQL EVENT", ("Insert into events (event_id, id, title, description, author, start, end, street, zip, city, location, url) VALUES ('"
+/*            Log.e("SQL EVENT", ("Insert into events (event_id, id, title, description, author, start, end, street, zip, city, location, url) VALUES ('"
                     + event.getEventId() + "' , '"
                     + event.getId() + "' , '"
                     + event.getTitle() + "' , '"
@@ -273,7 +276,7 @@ public class LoginActivity extends AppCompatActivity {
                     + event.getCity() + "' , '"
                     + event.getLocation() + "' , '"
                     + event.getUrl() + "');"));
-
+*/
             for (int j = 0; j < event.getDocumentAmount(); j++) {
                 Document doc = event.getDocument(j);
                 connection.execSQL("Insert into documents (id, title, event_id) VALUES ('"
@@ -283,16 +286,16 @@ public class LoginActivity extends AppCompatActivity {
             }
 
 
-            Log.e("SaveDB DocumentAmnt", seminar.getEvent(i).getDocumentAmount() + "");
+            // Log.e("SaveDB DocumentAmnt", seminar.getEvent(i).getDocumentAmount() + "");
         }
 
-        Log.e("SaveDB InterestAmnt", seminar.getInterestgroupAmount() + "");
+        // Log.e("SaveDB InterestAmnt", seminar.getInterestgroupAmount() + "");
         for (int i = 0; i < seminar.getInterestgroupAmount(); i++) {
             try {
                 myDb.insertInterest(connection, seminar.getInterestgroup(i).getName());
             } catch (SQLiteConstraintException e) {
             }
-            Log.e("Seminar Interest", seminar.getInterestgroup(i).getName());
+            //  Log.e("Seminar Interest", seminar.getInterestgroup(i).getName());
         }
     }
 

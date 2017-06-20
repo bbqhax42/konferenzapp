@@ -59,7 +59,7 @@ public class SettingsActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         settingsButton.setBackgroundResource(R.drawable.toolbar_button_selected);
-        TextView tv= (TextView) findViewById(R.id.title);
+        TextView tv = (TextView) findViewById(R.id.title);
         tv.setText("Einstellungen");
 
 
@@ -105,7 +105,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 connection.execSQL("Delete from userinformation;");
-                connection.execSQL("INSERT INTO userinformation (name, phonenumber, email, company, loginemail, loginkey, stayloggedin, lastlogin, sessionkey, sessioncid, firstlogin) VALUES ("+ null + ", "+ null + ", "+ null + ", "+ null + ", "+ null + ", "+ null + ", \"false\", '1970-01-01',  "+ null + ",  "+ null + ", \"true\");");
+                connection.execSQL("INSERT INTO userinformation (name, phonenumber, email, company, loginemail, loginkey, stayloggedin, lastlogin, sessionkey, sessioncid, firstlogin) VALUES (" + null + ", " + null + ", " + null + ", " + null + ", " + null + ", " + null + ", \"false\", '1970-01-01',  " + null + ",  " + null + ", \"true\");");
                 Intent intent = new Intent(getBaseContext(), LoginActivity.class);
                 startActivity(intent);
                 Config.error_message(SettingsActivity.this, "Erfolgreich ausgeloggt.");
@@ -136,14 +136,14 @@ public class SettingsActivity extends AppCompatActivity {
                 updateInterests(connection, selectedFiles);
 
 
-                final String nameString = name.getText().toString().length() > 20 ? name.getText().toString().substring(0, 19).trim() : name.getText().toString().trim();
-                connection.execSQL("UPDATE userinformation SET name='" + nameString + "', phonenumber='" + phone.getText().toString() + "', email='" + email.getText().toString() + "', company='" + company.getText().toString() + "';");
-                Log.e("Setting SQL UPDATE", "UPDATE userinformation SET name='" + nameString + "', phonenumber='" + phone.getText().toString() + "', email='" + email.getText().toString() + "', company='" + company.getText().toString() + "';");
+                final String nameString = name.getText().toString().length() > 20 ? name.getText().toString().substring(0, 19).trim().replace("\\n", "") : name.getText().toString().trim().replace("\\n", "");
+                connection.execSQL("UPDATE userinformation SET name='" + nameString + "', phonenumber='" + phone.getText().toString().replace("\\n", "").trim() + "', email='" + email.getText().toString().replace("\\n", "").trim() + "', company='" + company.getText().toString().replace("\\n", "").trim() + "';");
+                Log.e("Setting SQL UPDATE", "UPDATE userinformation SET name='" + nameString + "', phonenumber='" + phone.getText().toString().replace("\\n", "").trim() + "', email='" + email.getText().toString().replace("\\n", "").trim() + "', company='" + company.getText().toString().replace("\\n", "").trim() + "';");
 
 
                 RequestQueue queue = Volley.newRequestQueue(SettingsActivity.this);
 
-                String url = Config.webserviceUrl + "USER.SETTINGS?token=" + token + "&visible=" + generateInterestsJsonString(selectedFiles) + "&profile=" + name.getText().toString() + "&phone=" + phone.getText().toString() + "&email=" + email.getText().toString() + "&company=" + company.getText().toString();
+                String url = Config.webserviceUrl + "USER.SETTINGS?token=" + token + "&visible=" + generateInterestsJsonString(selectedFiles) + "&profile=" + name.getText().toString().replace("\\n", "").trim() + "&phone=" + phone.getText().toString().replace("\\n", "").trim() + "&email=" + email.getText().toString().replace("\\n", "").trim() + "&company=" + company.getText().toString().replace("\\n", "").trim();
                 Log.e("Event Daily URL", url);
                 final JsonObjectRequest settingRequest =
                         new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -174,21 +174,20 @@ public class SettingsActivity extends AppCompatActivity {
                                 Config.popupMessage("Ihre Einstellungen wurden aktualisiert", settingResponseString.toString(), SettingsActivity.this);
 
 
-
                                 try {
                                     connection.execSQL("Insert into users (cid, profile_name, profile_phone, profile_email, profile_company) VALUES ('"
                                             + myDb.getCid(connection) + "', '"
                                             + nameString + "', '"
-                                            + phone.getText() + "', '"
-                                            + email.getText() + "', '"
-                                            + company.getText() + "');");
+                                            + phone.getText().toString().replace("\\n", "").trim() + "', '"
+                                            + email.getText().toString().replace("\\n", "").trim() + "', '"
+                                            + company.getText().toString().replace("\\n", "").trim() + "');");
                                 } catch (SQLiteConstraintException e) {
                                     connection.execSQL("Update users SET " +
                                             "profile_name='" + nameString + "', " +
-                                            "profile_phone='" + phone.getText() + "', " +
-                                            "profile_email='" + email.getText() + "', " +
-                                            "profile_company='" + company.getText() + "' " +
-                                            "Where cid='" + myDb.getCid(connection) + "';");
+                                            "profile_phone='" + phone.getText().toString().replace("\\n", "").trim() + "', " +
+                                            "profile_email='" + email.getText().toString().replace("\\n", "").trim() + "', " +
+                                            "profile_company='" + company.getText().toString().replace("\\n", "").trim() + "' " +
+                                            "Where cid='" + myDb.getCid(connection).toString().replace("\\n", "").trim() + "';");
                                 }
 
 
@@ -197,26 +196,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                ///!!!!!!!!!!!!!!!!!!!!!!
-                                try {
-                                    connection.execSQL("Insert into users (cid, profile_name, profile_phone, profile_email, profile_company) VALUES ('"
-                                            + myDb.getCid(connection) + "', '"
-                                            + nameString + "', '"
-                                            + phone.getText() + "', '"
-                                            + email.getText() + "', '"
-                                            + company.getText() + "');");
-                                } catch (SQLiteConstraintException e) {
-                                    connection.execSQL("Update users SET " +
-                                            "profile_name='" + nameString + "', " +
-                                            "profile_phone='" + phone.getText() + "', " +
-                                            "profile_email='" + email.getText() + "', " +
-                                            "profile_company='" + company.getText() + "' " +
-                                            "Where cid='" + myDb.getCid(connection) + "';");
-                                }
-
-                                //NOCH LOESCHEN WICHTIG111111!!!!
-
-
+                                Config.error_message(SettingsActivity.this, "Bitte überprüfen sie Ihre Internetverbindung");
                             }
                         });
                 queue.add(settingRequest);
