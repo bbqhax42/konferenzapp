@@ -108,6 +108,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 myDb.deleteAllTables(connection);
+                stopService(new Intent(SettingsActivity.this, ChatService.class));
                 Intent intent = new Intent(getBaseContext(), LoginActivity.class);
                 startActivity(intent);
                 Config.error_message(SettingsActivity.this, "Erfolgreich ausgeloggt.");
@@ -148,7 +149,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                 final String nameString = name.getText().toString().length() > 20 ? name.getText().toString().substring(0, 19).trim().replace("\\n", "") : name.getText().toString().trim().replace("\\n", "");
                 connection.execSQL("UPDATE userinformation SET name='" + nameString + "', phonenumber='" + phone.getText().toString().replace("\\n", "").trim() + "', email='" + email.getText().toString().replace("\\n", "").trim() + "', company='" + company.getText().toString().replace("\\n", "").trim() + "';");
-                Log.e("Setting SQL UPDATE", "UPDATE userinformation SET name='" + nameString + "', phonenumber='" + phone.getText().toString().replace("\\n", "").trim() + "', email='" + email.getText().toString().replace("\\n", "").trim() + "', company='" + company.getText().toString().replace("\\n", "").trim() + "';");
+                //Log.e("Setting SQL UPDATE", "UPDATE userinformation SET name='" + nameString + "', phonenumber='" + phone.getText().toString().replace("\\n", "").trim() + "', email='" + email.getText().toString().replace("\\n", "").trim() + "', company='" + company.getText().toString().replace("\\n", "").trim() + "';");
 
 
                 RequestQueue queue = Volley.newRequestQueue(SettingsActivity.this);
@@ -235,8 +236,6 @@ public class SettingsActivity extends AppCompatActivity {
     private void updateInterests(SQLiteDatabase connection, ArrayList<Interestgroup> selectedFiles) {
         for (int i = 0; i < selectedFiles.size(); i++) {
             connection.execSQL("Update interests SET " +
-                    "isvisible=\"" + selectedFiles.get(i).isVisible() + "\" Where name='" + selectedFiles.get(i).getName() + "';");
-            Log.e("updateInteestdasdsas", "Update interests SET " +
                     "isvisible=\"" + selectedFiles.get(i).isVisible() + "\" Where name='" + selectedFiles.get(i).getName() + "';");
         }
     }

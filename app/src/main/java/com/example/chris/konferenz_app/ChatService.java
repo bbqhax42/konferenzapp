@@ -8,6 +8,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -15,7 +16,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+
 import org.json.JSONObject;
+
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -23,6 +26,9 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class ChatService extends Service {
+    Thread chatList, chatPull;
+    boolean chatListRun = false, chatPullRun = false;
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -36,6 +42,7 @@ public class ChatService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        //Toast.makeText(this, "Service started", Toast.LENGTH_SHORT).show();
         startChatPull();
         startChatList();
         return super.onStartCommand(intent, flags, startId);
@@ -43,14 +50,16 @@ public class ChatService extends Service {
 
     @Override
     public void onDestroy() {
+        chatListRun=false;
+        chatPullRun=false;
         super.onDestroy();
-        Toast.makeText(this, "Service stopped", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Service stopped", Toast.LENGTH_SHORT).show();
     }
 
 
     private void startChatList() {
-
-        Thread thread = new Thread(new Runnable() {
+        chatListRun = true;
+        chatList = new Thread(new Runnable() {
             @Override
             public void run() {
                 //code to do the HTTP request
@@ -64,7 +73,7 @@ public class ChatService extends Service {
                 //Log.e("Chat.Pull URL", url);
 
 
-                while (true) {
+                while (chatListRun) {
                     //pull help_channeloverview data
                     final JsonObjectRequest chatListRequest =
                             new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -101,7 +110,7 @@ public class ChatService extends Service {
 
 
         });
-        thread.start();
+        chatList.start();
 
 
     }
@@ -110,7 +119,7 @@ public class ChatService extends Service {
     private void saveChatListResponseToDatabase(ChatListResponse chatListResponse, SQLiteDatabase connection) {
         for (int i = 0; i < chatListResponse.channelAmount(); i++) {
             for (int j = 0; j < chatListResponse.getChatChannel(i).getUserAmount(); j++) {
-               Log.e("Chat.List Save DB", "Insert into users (cid, profile_name, profile_phone, profile_email, profile_company) VALUES ('"
+                Log.e("Chat.List Save DB", "Insert into users (cid, profile_name, profile_phone, profile_email, profile_company) VALUES ('"
                         + chatListResponse.getChatChannel(i).getUser(j).getCid() + "' , '"
                         + chatListResponse.getChatChannel(i).getUser(j).getProfile_name() + "' , '"
                         + chatListResponse.getChatChannel(i).getUser(j).getProfile_phone() + "' , '"
@@ -125,7 +134,7 @@ public class ChatService extends Service {
                             + chatListResponse.getChatChannel(i).getUser(j).getProfile_email() + "' , '"
                             + chatListResponse.getChatChannel(i).getUser(j).getProfile_company() + "');");
                 } catch (SQLiteConstraintException e) {
-
+                    Log.e("Chat.Pull", "User " + chatListResponse.getChatChannel(i).getUser(j).getCid() + " schon vorhanden.");
                 }
 
             }
@@ -138,7 +147,8 @@ public class ChatService extends Service {
 
 
     private void startChatPull() {
-        Thread thread = new Thread(new Runnable() {
+        chatPullRun = true;
+        chatPull = new Thread(new Runnable() {
             @Override
             public void run() {
                 //code to do the HTTP request
@@ -151,7 +161,7 @@ public class ChatService extends Service {
                 String url = Config.webserviceUrl + "CHAT.PULL?token=" + token;
                 Log.e("Chat.Pull URL", url);
 
-                while (true) {
+                while (chatPullRun) {
                     //pull help_channeloverview data
                     final JsonObjectRequest chatPullRequest =
                             new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -187,7 +197,7 @@ public class ChatService extends Service {
             }
 
         });
-        thread.start();
+        chatPull.start();
     }
 
 
