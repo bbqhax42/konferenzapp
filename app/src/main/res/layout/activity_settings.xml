@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="@color/bgcolor"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/bgcolor">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -176,8 +176,23 @@
                 android:gravity="bottom"
                 android:orientation="horizontal">
 
+                <ImageView
+                    android:id="@+id/helpicon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@color/bgcolor"
+                    android:src="@drawable/help" />
+
+
+                <ImageView
+                    android:id="@+id/logouticon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@color/bgcolor"
+                    android:src="@drawable/poweroff" />
+
                 <TextView
-                    android:layout_width="122dp"
+                    android:layout_width="22dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:textSize="18dp" />
@@ -193,20 +208,6 @@
 
 
             </LinearLayout>
-
-            <Button
-                android:id="@+id/logoutbutton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="5dp"
-                android:paddingRight="5dp"
-                android:paddingLeft="5dp"
-                android:background="@drawable/toolbar_button_selected"
-                android:text="Logout Placeholder"
-                android:textColor="@color/textColor" />
-
-
 
 
         </LinearLayout>

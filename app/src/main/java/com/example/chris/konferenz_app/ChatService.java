@@ -8,7 +8,6 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -16,9 +15,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-
 import org.json.JSONObject;
-
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -68,8 +65,8 @@ public class ChatService extends Service {
 
 
                 while (true) {
-                    //pull chat data
-                    final JsonObjectRequest chatPullRequest =
+                    //pull help_channeloverview data
+                    final JsonObjectRequest chatListRequest =
                             new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
                                 @Override
@@ -92,9 +89,9 @@ public class ChatService extends Service {
                                 public void onErrorResponse(VolleyError error) {
                                 }
                             });
-                    queue.add(chatPullRequest);
+                    queue.add(chatListRequest);
                     try {
-                        TimeUnit.SECONDS.sleep(300);
+                        TimeUnit.SECONDS.sleep(Config.chatListWaitTime);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -155,7 +152,7 @@ public class ChatService extends Service {
                 Log.e("Chat.Pull URL", url);
 
                 while (true) {
-                    //pull chat data
+                    //pull help_channeloverview data
                     final JsonObjectRequest chatPullRequest =
                             new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
@@ -182,7 +179,7 @@ public class ChatService extends Service {
                     queue.add(chatPullRequest);
 
                     try {
-                        TimeUnit.SECONDS.sleep(5);
+                        TimeUnit.SECONDS.sleep(Config.chatPullWaitTime);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

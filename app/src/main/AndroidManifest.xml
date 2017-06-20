@@ -28,6 +28,7 @@
         <activity android:name=".EventActivity"></activity>
         <activity android:name=".SettingsActivity"></activity>
         <activity android:name=".UserActivity"></activity>
+        <activity android:name=".HelpActivity"></activity>
 
         <service android:name=".ChatService"></service>
 

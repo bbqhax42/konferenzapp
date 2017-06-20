@@ -1,11 +1,11 @@
 package com.example.chris.konferenz_app;
 
+import android.app.Service;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -22,9 +23,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,9 +38,10 @@ public class SettingsActivity extends AppCompatActivity {
 
     EditText name, email, phone, company;
     TextView tv;
-    Button chatButton, settingsButton, homeButton, updateSettings, logout;
+    Button chatButton, settingsButton, homeButton, updateSettings;
     String token;
     RecyclerView recyclerView;
+    ImageView logout, help;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +56,10 @@ public class SettingsActivity extends AppCompatActivity {
         chatButton = (Button) findViewById(R.id.chatbutton);
         homeButton = (Button) findViewById(R.id.homebutton);
         updateSettings = (Button) findViewById(R.id.button);
-        logout = (Button) findViewById(R.id.logoutbutton);
         name.clearFocus();
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        logout = (ImageView) findViewById(R.id.logouticon);
+        help = (ImageView) findViewById(R.id.helpicon);
 
         settingsButton.setBackgroundResource(R.drawable.toolbar_button_selected);
         TextView tv = (TextView) findViewById(R.id.title);
@@ -104,11 +107,18 @@ public class SettingsActivity extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                connection.execSQL("Delete from userinformation;");
-                connection.execSQL("INSERT INTO userinformation (name, phonenumber, email, company, loginemail, loginkey, stayloggedin, lastlogin, sessionkey, sessioncid, firstlogin) VALUES (" + null + ", " + null + ", " + null + ", " + null + ", " + null + ", " + null + ", \"false\", '1970-01-01',  " + null + ",  " + null + ", \"true\");");
+                myDb.deleteAllTables(connection);
                 Intent intent = new Intent(getBaseContext(), LoginActivity.class);
                 startActivity(intent);
                 Config.error_message(SettingsActivity.this, "Erfolgreich ausgeloggt.");
+            }
+        });
+
+        help.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), HelpActivity.class);
+                startActivity(intent);
             }
         });
 

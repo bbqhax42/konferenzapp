@@ -1,6 +1,5 @@
 package com.example.chris.konferenz_app;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
@@ -43,8 +42,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(table6);
         db.execSQL(table7);
         db.execSQL("INSERT INTO userinformation (name, phonenumber, email, company, loginemail, loginkey, stayloggedin, lastlogin, sessionkey, sessioncid, firstlogin) VALUES (" + null + ", " + null + ", " + null + ", " + null + ", " + null + ", " + null + ", \"false\", '1970-01-01',  " + null + ",  " + null + ", \"true\");");
-     /*
-       db.execSQL("Insert into users (cid, profile_name, profile_phone, profile_email, profile_company) values ('cid1234', 'Lorenz Vöhringer', '+49 123456789', 'lorenz@mail.de', 'Vöhringer GmbH & Co. KG');");
+
+        db.execSQL("Insert into users (cid, profile_name, profile_phone, profile_email, profile_company) values ('cid1234', 'Lorenz Vöhringer', '+49 123456789', 'lorenz@mail.de', 'Vöhringer GmbH & Co. KG');");
         db.execSQL("Insert into users (cid, profile_name, profile_phone, profile_email, profile_company) values ('cid1235', 'Alfredo Gross', '+49 987654321', 'alfredo.gross@sehrlange-emailadresse.de', 'Research and Development (R&D) / Product Development bei Alfredos Firma');");
         db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('Hund', '08:39', 'cid1234', 'Testnachricht von Lorenz', \"false\");");
         db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('Hund', '18:59', 'cid1235', 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. \n" +
@@ -54,14 +53,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO privatechatlist (cid, blocked) VALUES ('cid1234', \"false\");");
         db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('cid1234', '18:39', 'cid1234', 'Hey Chris, wie gehts dir heute so?', \"false\");");
         db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('cid1234', '18:40', 'cid1234', 'Gehen wir nachher ins McFit?', \"false\");");
-        */
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Config.error_message(context,
-                "Datenbank v." + oldVersion + " ist veraltet. Wir installieren Ihnen v."
+                "Datenbank Version " + oldVersion + " ist veraltet. Wir installieren Ihnen Version "
                         + newVersion + ". Dabei werden alle Daten gelöscht.");
+        deleteAllTables(db);
+    }
+
+    public void deleteAllTables(SQLiteDatabase db) {
         db.execSQL("DROP TABLE IF EXISTS userinformation");
         db.execSQL("DROP TABLE IF EXISTS events");
         db.execSQL("DROP TABLE IF EXISTS documents");

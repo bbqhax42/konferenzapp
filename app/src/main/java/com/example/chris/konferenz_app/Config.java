@@ -1,10 +1,7 @@
 package com.example.chris.konferenz_app;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteConstraintException;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,9 +11,17 @@ import android.widget.Toast;
 
 public class Config {
 
+    public static final int appversion = 8;
+
+    public static final int chatPullWaitTime = 5;
+    public static final int chatListWaitTime = 300;
+
+
+
+
     public static final String webserviceUrl = "https://new.myconf.akademie-herkert.de/";
     public static final String sendMessageShortError = "Das Senden leerer Nachrichten ist nicht möglich.";
-    public static final int appversion = 6;
+
 
 
     public static final void error_message(Context context, String message) {

@@ -31,10 +31,7 @@ public class ChatActivityPrivateRecyclerAdapter extends RecyclerView.Adapter<Cha
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         //inflate the xml/ view shell and return it
-
         View item_list_view = LayoutInflater.from(context).inflate(R.layout.chatactivity_chat_list, parent, false);
-
-
         return new Holder(item_list_view);
     }
 
@@ -53,12 +50,10 @@ public class ChatActivityPrivateRecyclerAdapter extends RecyclerView.Adapter<Cha
             tmpName="Unbekannt";
 
         final String name =tmpName;
-
         holder.channelname.setText(name);
         holder.cw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(context, ChatChannelPrivateActivity.class);
                 intent.putExtra("ChannelName", cid); //goes to the selected channel!!
                 context.startActivity(intent);
@@ -78,10 +73,7 @@ public class ChatActivityPrivateRecyclerAdapter extends RecyclerView.Adapter<Cha
         public Holder(View itemView) {
             super(itemView);
             channelname = (TextView) itemView.findViewById(R.id.channelname);
-
             cw = (CardView) itemView.findViewById(R.id.card_view);
-
-
         }
     }
 }

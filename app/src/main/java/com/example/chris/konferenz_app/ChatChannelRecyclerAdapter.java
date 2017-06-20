@@ -1,7 +1,6 @@
 package com.example.chris.konferenz_app;
 
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,18 +11,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-
 import org.json.JSONObject;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -55,7 +50,7 @@ public class ChatChannelRecyclerAdapter extends RecyclerView.Adapter<ChatChannel
         final DatabaseHelper myDb = new DatabaseHelper(context);
         final SQLiteDatabase connection = myDb.getWritableDatabase();
         Cursor res = connection.rawQuery("Select * from users where cid='" + chatMessage.getCid() + "';", null);
-        Log.e("chatchannelrecycler", "Select * from users where cid='" + chatMessage.getCid() + "';");
+        //Log.e("chatchannelrecycler", "Select * from users where cid='" + chatMessage.getCid() + "';");
         holder.time.setText(chatMessage.getTimestamp());
         holder.message.setText(chatMessage.getContent());
         if (res.moveToNext())

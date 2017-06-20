@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,9 +34,7 @@ public class ChatActivity extends AppCompatActivity {
         homeButton = (Button) findViewById(R.id.homebutton);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerViewPrivate = (RecyclerView) findViewById(R.id.recycler_view2);
-
         chatButton.setBackgroundResource(R.drawable.toolbar_button_selected);
-
         TextView tv = (TextView) findViewById(R.id.title);
         tv.setText("Chat");
 

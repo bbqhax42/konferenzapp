@@ -1,7 +1,5 @@
 package com.example.chris.konferenz_app;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * Created by Chris on 01.06.2017.
  */

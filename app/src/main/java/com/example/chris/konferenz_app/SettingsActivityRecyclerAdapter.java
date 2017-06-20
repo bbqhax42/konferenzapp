@@ -3,12 +3,10 @@ package com.example.chris.konferenz_app;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-
 import java.util.List;
 
 public class SettingsActivityRecyclerAdapter extends RecyclerView.Adapter<SettingsActivityRecyclerAdapter.Holder> {

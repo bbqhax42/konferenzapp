@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import java.util.List;
 
 public class ChatActivityRecyclerAdapter extends RecyclerView.Adapter<ChatActivityRecyclerAdapter.Holder> {
@@ -28,10 +27,7 @@ public class ChatActivityRecyclerAdapter extends RecyclerView.Adapter<ChatActivi
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         //inflate the xml/ view shell and return it
-
         View item_list_view = LayoutInflater.from(context).inflate(R.layout.chatactivity_chat_list, parent, false);
-
-
         return new Holder(item_list_view);
     }
 
@@ -43,7 +39,6 @@ public class ChatActivityRecyclerAdapter extends RecyclerView.Adapter<ChatActivi
         holder.cw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(context, ChatChannelActivity.class);
                 intent.putExtra("ChannelName", name); //goes to the selected channel!!
                 context.startActivity(intent);
@@ -63,10 +58,7 @@ public class ChatActivityRecyclerAdapter extends RecyclerView.Adapter<ChatActivi
         public Holder(View itemView) {
             super(itemView);
             channelname = (TextView) itemView.findViewById(R.id.channelname);
-
             cw = (CardView) itemView.findViewById(R.id.card_view);
-
-
         }
     }
 }
