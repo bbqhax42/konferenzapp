@@ -43,16 +43,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(table7);
         db.execSQL("INSERT INTO userinformation (name, phonenumber, email, company, loginemail, loginkey, stayloggedin, lastlogin, sessionkey, sessioncid, firstlogin) VALUES (" + null + ", " + null + ", " + null + ", " + null + ", " + null + ", " + null + ", \"false\", '1970-01-01',  " + null + ",  " + null + ", \"true\");");
 
-        db.execSQL("Insert into users (cid, profile_name, profile_phone, profile_email, profile_company) values ('cid1234', 'Lorenz Vöhringer', '+49 123456789', 'lorenz@mail.de', 'Vöhringer GmbH & Co. KG');");
-        db.execSQL("Insert into users (cid, profile_name, profile_phone, profile_email, profile_company) values ('cid1235', 'Alfredo Gross', '+49 987654321', 'alfredo.gross@sehrlange-emailadresse.de', 'Research and Development (R&D) / Product Development bei Alfredos Firma');");
-        db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('Hund', '08:39', 'cid1234', 'Testnachricht von Lorenz', \"false\");");
+        db.execSQL("Insert into users (cid, profile_name, profile_phone, profile_email, profile_company) values ('cid1234', 'Max Mustermann', '+49 123456789', 'max@mustermann.de', 'Mustermann GmbH & Co. KG');");
+        db.execSQL("Insert into users (cid, profile_name, profile_phone, profile_email, profile_company) values ('cid1235', 'Herr von Gross', '+49 987654321', 'alfredo.gross@sehrlange-emailadresse.de', 'Research and Development (R&D) / Product Development bei Alfredos Firma');");
+        db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('Hund', '08:39', 'cid1234', 'Dies ist eine Beispielsnachricht.', \"false\");");
         db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('Hund', '18:59', 'cid1235', 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. \n" +
                 "\n" +
                 "Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. ', \"FALSE\");");
-        db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('Hund', '08:39', 'cid1234', 'tl;dr?', \"false\");");
+        db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('Hund', '08:39', 'cid1234', 'Ist das Latein?', \"false\");");
         db.execSQL("INSERT INTO privatechatlist (cid, blocked) VALUES ('cid1234', \"false\");");
-        db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('cid1234', '18:39', 'cid1234', 'Hey Chris, wie gehts dir heute so?', \"false\");");
-        db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('cid1234', '18:40', 'cid1234', 'Gehen wir nachher ins McFit?', \"false\");");
+        db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('cid1234', '18:39', 'cid1234', 'Hallo wie geht es Ihnen?', \"false\");");
+        db.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('cid1234', '18:40', 'cid1234', 'Dieses Seminar ist echt interessant. Sie sollten Ihrer HR Abteilung empfehlen mehr davon zu buchen.', \"false\");");
 
     }
 

@@ -20,11 +20,14 @@ public class HelpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_help);
 
         TextView tv = (TextView) findViewById(R.id.title);
+        TextView impressum = (TextView) findViewById(R.id.textfield);
         tv.setText("Zusätzliche Informationen");
 
         settingsButton = (Button) findViewById(R.id.settingsbutton);
         chatButton = (Button) findViewById(R.id.chatbutton);
         homeButton = (Button) findViewById(R.id.homebutton);
+
+        impressum.setText(Config.impressum);
 
 
         chatButton.setOnClickListener(new View.OnClickListener() {

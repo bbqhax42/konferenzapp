@@ -16,6 +16,7 @@ import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -141,6 +142,9 @@ public class ChatChannelPrivateActivity extends AppCompatActivity {
             }
         });
 
+        //resizes window if keyboard pops up
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
     }
 
