@@ -13,29 +13,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import java.util.List;
 
 public class ChatActivityRecyclerAdapter extends RecyclerView.Adapter<ChatActivityRecyclerAdapter.Holder> {
     Context context;
-    List<String> wordList;
+    List<String> channelList;
 
-    public ChatActivityRecyclerAdapter(Context context, List<String> wordList) {
-        this.wordList = wordList;
+    public ChatActivityRecyclerAdapter(Context context, List<String> channelList) {
+        this.channelList = channelList;
         this.context = context;
     }
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         //inflate the xml/ view shell and return it
-        View item_list_view = LayoutInflater.from(context).inflate(R.layout.chatactivity_chat_list, parent, false);
-        return new Holder(item_list_view);
+        View chatvactivity_chat_list = LayoutInflater.from(context).inflate(R.layout.chatactivity_chat_list, parent, false);
+        return new Holder(chatvactivity_chat_list);
+
     }
 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
         //populates the shell
-        final String name =wordList.get(position);
-        holder.channelname.setText(name);
+        final String name = channelList.get(position);
+        holder.channelName.setText(name);
+
         holder.cw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,16 +51,16 @@ public class ChatActivityRecyclerAdapter extends RecyclerView.Adapter<ChatActivi
 
     @Override
     public int getItemCount() {
-        return wordList.size();
+        return channelList.size();
     }
 
     public static class Holder extends RecyclerView.ViewHolder {
-        TextView channelname;
+        TextView channelName;
         CardView cw;
 
         public Holder(View itemView) {
             super(itemView);
-            channelname = (TextView) itemView.findViewById(R.id.channelname);
+            channelName = (TextView) itemView.findViewById(R.id.channelname);
             cw = (CardView) itemView.findViewById(R.id.card_view);
         }
     }

@@ -45,7 +45,6 @@ public class ChatChannelActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatchannel);
         final SQLiteDatabase connection = myDb.getWritableDatabase();
-        channelNameString = getIntent().getStringExtra("ChannelName");
 
         final TextView channelName;
         final EditText messageToSend;
@@ -55,9 +54,14 @@ public class ChatChannelActivity extends AppCompatActivity {
         messageToSend = (EditText) findViewById(R.id.messagetosend);
         sendButton = (Button) findViewById(R.id.sendbutton);
         channelName = (TextView) findViewById(R.id.title);
-        channelName.setText("Thema: " + getIntent().getStringExtra("ChannelName"));
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
+        //changes the button background to show which part of the program the user is accessing
         chatButton.setBackgroundResource(R.drawable.toolbar_button_selected);
+
+        channelNameString = getIntent().getStringExtra("ChannelName");
+        channelName.setText("Thema: " + channelNameString);
+
 
         final String token = myDb.getToken(connection);
         final String cid = myDb.getCid(connection);
@@ -160,12 +164,11 @@ public class ChatChannelActivity extends AppCompatActivity {
 
         ChatChannelRecyclerAdapter adapter = new ChatChannelRecyclerAdapter(ChatChannelActivity.this, messages, channelNameString);
         recyclerView.setAdapter(adapter);
-
         LinearLayoutManager llm = new LinearLayoutManager(ChatChannelActivity.this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
-
         recyclerView.setLayoutManager(llm);
 
+        //focus on last message
         recyclerView.scrollToPosition(messages.size() - 1);
     }
 

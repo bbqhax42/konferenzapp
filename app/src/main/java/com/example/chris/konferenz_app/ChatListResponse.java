@@ -20,11 +20,11 @@ public class ChatListResponse {
     }
 
     public String getTimestamp() {
-        return timestamp;
+        return timestamp == null ? "" : timestamp;
     }
 
     public String getSuccess() {
-        return success;
+        return success == null ? "false" : success;
     }
 
     public int channelAmount() {
@@ -34,7 +34,7 @@ public class ChatListResponse {
     }
 
     public ChatChannel getChatChannel(int i) {
-        return channels.get(i);
+        return channels == null ? null : channels.get(i);
     }
 }
 

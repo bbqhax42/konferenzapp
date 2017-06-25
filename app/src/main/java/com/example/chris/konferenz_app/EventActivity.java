@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -19,7 +20,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,15 +68,15 @@ public class EventActivity extends AppCompatActivity {
         textfield.setText(event.getDescription());
 
 
-        List<Document> idList = queryDocuments(connection);
-        final EventActivityRecyclerAdapter adapter = new EventActivityRecyclerAdapter(EventActivity.this, idList);
+        List<Document> documentList = queryDocuments(connection);
+        final EventActivityRecyclerAdapter adapter = new EventActivityRecyclerAdapter(EventActivity.this, documentList);
         recyclerView.setAdapter(adapter);
         final LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);
 
         //hides the downloadbutton if there are no files to show
-        if(adapter.getItemCount()==0){
+        if (adapter.getItemCount() == 0) {
             downloadButton.setVisibility(View.GONE);
         }
 
@@ -114,7 +117,7 @@ public class EventActivity extends AppCompatActivity {
                         + "Zusatzangaben: " + event.getLocation() + "\n"
                         + "Website: " + event.getUrl();
 
-               Config.popupMessage("Mehr Informationen zu " + event.getTitle(), str, EventActivity.this);
+                Config.popupMessage("Mehr Informationen zu " + event.getTitle(), str, EventActivity.this);
             }
         });
 
@@ -137,6 +140,9 @@ public class EventActivity extends AppCompatActivity {
                         //Log.e("Not Checked", holder.doc.getTitle());
                     }
                 }
+
+
+                //generates a string containing a list of file ids for the download in the format 1,2,3,4,5
                 for (int i = 0; i < selectedFiles.size(); i++) {
                     downloadString.append(selectedFiles.get(i));
                     if (i + 1 < selectedFiles.size()) downloadString.append(",");
@@ -171,6 +177,8 @@ public class EventActivity extends AppCompatActivity {
                                 if (documentRequest.getDocumentAmount() == 0) {
                                     documentRequestString.append("keine");
                                 }
+
+                                //generates a string containing a list of the downloaded documents by the user in the format title1, title2, title3
                                 for (int i = 0; i < documentRequest.getDocumentAmount(); i++) {
                                     documentRequestString.append(documentRequest.getDocument(i).getTitle());
                                     if (i + 1 < documentRequest.getDocumentAmount())

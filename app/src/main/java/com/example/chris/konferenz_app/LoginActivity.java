@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -17,7 +18,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+
 import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
@@ -134,11 +137,12 @@ public class LoginActivity extends AppCompatActivity {
                                     boolean loggedInToday = date.equalsIgnoreCase(lastLogin);
                                     loggedInToday = false;
 
+
+                                    //if you havent been signed in today we parse new eventdata
                                     if (!loggedInToday) {
-                                        myDb.deleteAllUselessTablesLUL();
 
                                         String token = myDb.getToken(connection);
-                                        date = "2017-06-14"; //wow time flew by fast
+                                        date = "2017-06-14"; //wow time flew by fast -> sample date because no other data available
 
 
                                         RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
@@ -165,7 +169,8 @@ public class LoginActivity extends AppCompatActivity {
                                         queue.add(seminarRequest);
                                     }
 
-
+                                    //if you sign in for the first time we send you to the settings so you can perform a first time setup
+                                    //user stays logged in
                                     if (firstlogin && eingeloggt_bleiben) {
 
                                         waitReply();
@@ -178,6 +183,7 @@ public class LoginActivity extends AppCompatActivity {
                                         startActivity(intent);
                                         //Log.e("Login SQL UPDATE 2/2", "UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "'");
 
+                                        //if you sign in for the first time we send you to the settings so you can perform a first time setup
                                     } else if (firstlogin && !eingeloggt_bleiben) {
                                         waitReply();
                                         startChatService();
@@ -185,6 +191,7 @@ public class LoginActivity extends AppCompatActivity {
                                         Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
                                         startActivity(intent);
 
+                                        //user stays logged in
                                     } else if (eingeloggt_bleiben) {
                                         waitReply();
                                         startChatService();
@@ -229,7 +236,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void waitReply() {
         try {
-            TimeUnit.MILLISECONDS.sleep(222);
+            TimeUnit.MILLISECONDS.sleep(Config.expectedServerLagInMillis);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -245,19 +252,20 @@ public class LoginActivity extends AppCompatActivity {
     private void saveEventToDatabase(Seminar seminar, SQLiteDatabase connection) {
         for (int i = 0; i < seminar.getEventAmount(); i++) {
             Event event = seminar.getEvent(i);
-            connection.execSQL("Insert into events (event_id, id, title, description, author, start, end, street, zip, city, location, url) VALUES ('"
-                    + event.getEventId() + "' , '"
-                    + event.getId() + "' , '"
-                    + event.getTitle() + "' , '"
-                    + event.getDescription() + "' , '"
-                    + event.getAuthor() + "' , '"
-                    + event.getStart() + "' , '"
-                    + event.getEnd() + "' , '"
-                    + event.getStreet() + "' , '"
-                    + event.getZip() + "' , '"
-                    + event.getCity() + "' , '"
-                    + event.getLocation() + "' , '"
-                    + event.getUrl() + "');");
+            try {
+                connection.execSQL("Insert into events (event_id, id, title, description, author, start, end, street, zip, city, location, url) VALUES ('"
+                        + event.getEventId() + "' , '"
+                        + event.getId() + "' , '"
+                        + event.getTitle() + "' , '"
+                        + event.getDescription() + "' , '"
+                        + event.getAuthor() + "' , '"
+                        + event.getStart() + "' , '"
+                        + event.getEnd() + "' , '"
+                        + event.getStreet() + "' , '"
+                        + event.getZip() + "' , '"
+                        + event.getCity() + "' , '"
+                        + event.getLocation() + "' , '"
+                        + event.getUrl() + "');");
 /*            Log.e("SQL EVENT", ("Insert into events (event_id, id, title, description, author, start, end, street, zip, city, location, url) VALUES ('"
                     + event.getEventId() + "' , '"
                     + event.getId() + "' , '"
@@ -272,14 +280,16 @@ public class LoginActivity extends AppCompatActivity {
                     + event.getLocation() + "' , '"
                     + event.getUrl() + "');"));
 */
-            for (int j = 0; j < event.getDocumentAmount(); j++) {
-                Document doc = event.getDocument(j);
-                connection.execSQL("Insert into documents (id, title, event_id) VALUES ('"
-                        + doc.getId() + "' , '"
-                        + doc.getTitle() + "' , '"
-                        + event.getEventId() + "');");
+                for (int j = 0; j < event.getDocumentAmount(); j++) {
+                    Document doc = event.getDocument(j);
+                    connection.execSQL("Insert into documents (id, title, event_id) VALUES ('"
+                            + doc.getId() + "' , '"
+                            + doc.getTitle() + "' , '"
+                            + event.getEventId() + "');");
+                }
+            } catch (SQLiteConstraintException e) {
+                //this should never happen, but happens due to test configurations
             }
-
 
             // Log.e("SaveDB DocumentAmnt", seminar.getEvent(i).getDocumentAmount() + "");
         }

@@ -25,7 +25,7 @@ public class ChatChannel {
     }
 
     public String getChannel() {
-        return channel;
+        return channel == null ? "empty" : channel;
     }
 
     public String getCid() {

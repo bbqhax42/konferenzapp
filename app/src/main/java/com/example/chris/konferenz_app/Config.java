@@ -2,6 +2,7 @@ package com.example.chris.konferenz_app;
 
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,12 +16,13 @@ public class Config {
 
     public static final int chatPullWaitTime = 5;
     public static final int chatListWaitTime = 300;
+    public static final int expectedServerLagInMillis = 250;
 
-    public static final String impressum = "FORUM MEDIA GROUP GMBH\n" +
+    public static final String adress = "FORUM MEDIA GROUP GMBH\n" +
             "Mandichostraße 18\n" +
-            "86504 Merching\n" +
-            "\n" +
-            "Kontakt:\n" +
+            "86504 Merching\n";
+
+    public static final String contactdata = "Kontakt:\n" +
             "\n" +
             "Telefon: +49 8233 / 381-0\n" +
             "Telefax: +49 8233 / 381-222\n" +
@@ -46,8 +48,13 @@ public class Config {
 
     //cuts off the date and only leaves the time without seconds "2017-05-23 11:23:03.000" -> "11:23"
     public static final String formatDates(String date) {
-        //Log.e("formatDates", date);
-        return date.substring(11, 16);
+        Log.e("formatDates", date.length() + "");
+        if (date == null) {
+            return "Error";
+        } else if (!(date.length() == 23 || date.length() == 19)) {
+            return date;
+        } else
+            return date.substring(11, 16);
     }
 
 }

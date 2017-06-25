@@ -12,13 +12,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+
 import org.json.JSONObject;
+
 import java.util.List;
 
 public class ChatChannelPrivateRecyclerAdapter extends RecyclerView.Adapter<ChatChannelPrivateRecyclerAdapter.Holder> {
@@ -35,10 +38,8 @@ public class ChatChannelPrivateRecyclerAdapter extends RecyclerView.Adapter<Chat
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         //inflate the xml/ view shell and return it
-
-        View item_list_view = LayoutInflater.from(context).inflate(R.layout.chatchannelactivity_chatmessage_list, parent, false);
-
-        return new Holder(item_list_view);
+        View chatChannelActivity_ChatMessage_List = LayoutInflater.from(context).inflate(R.layout.chatchannelactivity_chatmessage_list, parent, false);
+        return new Holder(chatChannelActivity_ChatMessage_List);
     }
 
     @Override
@@ -47,14 +48,19 @@ public class ChatChannelPrivateRecyclerAdapter extends RecyclerView.Adapter<Chat
         final ChatMessage chatMessage = chatMessages.get(position);
         final DatabaseHelper myDb = new DatabaseHelper(context);
         final SQLiteDatabase connection = myDb.getWritableDatabase();
+
+
         Cursor res = connection.rawQuery("Select * from users where cid='" + chatMessage.getCid() + "';", null);
         //Log.e("chatchannelrecycler", "Select * from users where cid='" + chatMessage.getCid() + "';");
+
+
         holder.time.setText(chatMessage.getTimestamp());
         holder.message.setText(chatMessage.getContent());
         if (res.moveToNext())
             holder.user.setText(res.getString(1));
         else
             holder.user.setText("Unbekannt");
+
         holder.sendenstate.setVisibility(View.INVISIBLE);
         if (chatMessage.getCid().equals(myDb.getCid(connection))) {
             if (chatMessage.isSendState() == true) {
@@ -63,12 +69,11 @@ public class ChatChannelPrivateRecyclerAdapter extends RecyclerView.Adapter<Chat
                 holder.sendenstate.setVisibility(View.VISIBLE);
                 holder.sendenstate.setText("Senden fehlgeschlagen");
 
+
                 holder.sendenstate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Log.e("SQL ON CLICK", "Update chatmessages SET issent=\"true\" WHERE cid='" + chatMessage.getCid() + "' AND timestamp='" + chatMessage.getTimestamp() + "' AND content='" + chatMessage.getContent() + "';");
-
-
                         connection.execSQL("Update chatmessages SET issent=\"true\" WHERE cid='" + chatMessage.getCid() + "' AND timestamp='" + chatMessage.getTimestamp() + "' AND content='" + chatMessage.getContent() + "';");
                         holder.sendenstate.setVisibility(View.INVISIBLE);
                         onClickSendMessageButton(myDb.getToken(connection), chatMessage.getContent(), connection, myDb.getCid(connection), chatMessage.getTimestamp());

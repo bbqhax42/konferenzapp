@@ -71,6 +71,8 @@ public class ChatChannelPrivateActivity extends AppCompatActivity {
         channelName = (TextView) findViewById(R.id.title);
         channelName.setText(Html.fromHtml(channelNameString));
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
+        //changes the button background to show which part of the program the user is accessing
         chatButton.setBackgroundResource(R.drawable.toolbar_button_selected);
 
         final String token = myDb.getToken(connection);
@@ -79,25 +81,6 @@ public class ChatChannelPrivateActivity extends AppCompatActivity {
 
         populateView(connection);
 
-
-        messageToSend.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    //Toast.makeText(getApplicationContext(), "got the focus", Toast.LENGTH_LONG).show();
-                    ViewGroup.LayoutParams params = recyclerView.getLayoutParams();
-                    params.height = 900;
-                    recyclerView.setLayoutParams(params);
-                    recyclerView.scrollToPosition(messages.size() - 1);
-                } else {
-                    //Toast.makeText(getApplicationContext(), "lost the focus", Toast.LENGTH_LONG).show();
-                    ViewGroup.LayoutParams params = recyclerView.getLayoutParams();
-                    params.height = 1680;
-                    recyclerView.setLayoutParams(params);
-                    recyclerView.scrollToPosition(messages.size() - 1);
-                }
-            }
-        });
 
         channelName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,14 +176,13 @@ public class ChatChannelPrivateActivity extends AppCompatActivity {
     public void populateView(SQLiteDatabase connection) {
 
         messages = queryChatMessages(connection);
-
         ChatChannelPrivateRecyclerAdapter adapter = new ChatChannelPrivateRecyclerAdapter(ChatChannelPrivateActivity.this, messages, partnerCid);
         recyclerView.setAdapter(adapter);
-
         LinearLayoutManager llm = new LinearLayoutManager(ChatChannelPrivateActivity.this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
-
         recyclerView.setLayoutManager(llm);
+
+        //focus on last message
         recyclerView.scrollToPosition(messages.size() - 1);
     }
 

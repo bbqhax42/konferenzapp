@@ -8,8 +8,6 @@ public class Document {
     int id;
     private String title;
 
-    public Document() {
-    }
 
     public Document(int id, String title) {
         this.id = id;
@@ -29,6 +27,6 @@ public class Document {
     }
 
     public String getTitle() {
-        return title;
+        return title == null ? "" : title;
     }
 }

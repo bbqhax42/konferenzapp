@@ -50,8 +50,8 @@ public class ChatService extends Service {
 
     @Override
     public void onDestroy() {
-        chatListRun=false;
-        chatPullRun=false;
+        chatListRun = false;
+        chatPullRun = false;
         super.onDestroy();
         //Toast.makeText(this, "Service stopped", Toast.LENGTH_SHORT).show();
     }
@@ -158,8 +158,8 @@ public class ChatService extends Service {
 
 
                 RequestQueue queue = Volley.newRequestQueue(ChatService.this);
-                String url = Config.webserviceUrl + "CHAT.PULL?token=" + token;
-                Log.e("Chat.Pull URL", url);
+                final String url = Config.webserviceUrl + "CHAT.PULL?token=" + token;
+
 
                 while (chatPullRun) {
                     //pull help_channeloverview data
@@ -172,6 +172,7 @@ public class ChatService extends Service {
 
                                     ChatPullResponse chatPullResponse = gson.fromJson(jsonObject.toString(), ChatPullResponse.class);
                                     if (chatPullResponse.getSuccess().equalsIgnoreCase("true")) {
+                                        Log.e("Chat.Pull URL", url);
                                         saveChatPullResponseToDatabase(chatPullResponse, connection);
                                     } else {
                                         Config.error_message(null, "Fehler, Programm startet neu. Bitte melden sie sich beim Kundenservice.");
@@ -203,6 +204,8 @@ public class ChatService extends Service {
 
     private void saveChatPullResponseToDatabase(ChatPullResponse chatPullResponse, SQLiteDatabase connection) {
         for (int i = 0; i < chatPullResponse.channelAmount(); i++) {
+            Log.e("timestamp", chatPullResponse.getTimestamp());
+            Log.e("Channelname: ", chatPullResponse.getChatChannel(i).getChannel());
             Log.e("Message Amount: ", chatPullResponse.getChatChannel(i).getChatMessageAmount() + "");
             for (int j = 0; j < chatPullResponse.getChatChannel(i).getChatMessageAmount(); j++) {
                 connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('"
@@ -218,6 +221,7 @@ public class ChatService extends Service {
                         + chatPullResponse.getChatChannel(i).getChatMessage(j).getContent() + "' , \"" +
                         "TRUE\");");
 
+                //if the message received is a private message we insert the userinformation here
                 if (chatPullResponse.getChatChannel(i).getCid() != null && chatPullResponse.getChatChannel(i).getCid().length() != 0) {
                     try {
                         connection.execSQL("INSERT INTO privatechatlist (cid, blocked) VALUES ('" + chatPullResponse.getChatChannel(i).getCid() + "', \"FALSE\");");

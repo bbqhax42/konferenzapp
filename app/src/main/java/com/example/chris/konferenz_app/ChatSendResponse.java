@@ -13,6 +13,6 @@ public class ChatSendResponse {
     }
 
     public String getSuccess() {
-        return success;
+        return success == null ? "false" : success;
     }
 }

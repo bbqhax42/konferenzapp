@@ -62,6 +62,7 @@ public class SettingsActivity extends AppCompatActivity {
         logout = (ImageView) findViewById(R.id.logouticon);
         help = (ImageView) findViewById(R.id.helpicon);
 
+        //changes the button background to show which part of the program the user is accessing
         settingsButton.setBackgroundResource(R.drawable.toolbar_button_selected);
         TextView tv = (TextView) findViewById(R.id.title);
         tv.setText("Einstellungen");
@@ -124,9 +125,6 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        //resizes window if keyboard pops up
-        getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         updateSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,38 +133,39 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //too long names bug the chatview
 
-                ArrayList<Interestgroup> selectedFiles = new ArrayList<Interestgroup>();
+                ArrayList<Interestgroup> selectedInterests = new ArrayList<Interestgroup>();
                 for (int i = 0; i < adapter.getItemCount(); ++i) {
                     SettingsActivityRecyclerAdapter.Holder holder = (SettingsActivityRecyclerAdapter.Holder) recyclerView.findViewHolderForAdapterPosition(i);
                     if (holder.checkBox.isChecked()) {
                         holder.interestgroup.setVisible(true);
-                        selectedFiles.add(holder.interestgroup);
+                        selectedInterests.add(holder.interestgroup);
                         Log.e("Checked", holder.interestgroup.getName());
                     } else {
                         holder.interestgroup.setVisible(false);
-                        selectedFiles.add(holder.interestgroup);
+                        selectedInterests.add(holder.interestgroup);
                         Log.e("Not Checked", holder.interestgroup.getName());
                     }
                 }
 
-                updateInterests(connection, selectedFiles);
+                updateInterests(connection, selectedInterests);
 
+                if (!email.getText().toString().trim().matches(".+@.+\\..+")) {
+                    email.setText("");
+                    Config.error_message(SettingsActivity.this, "Ihre gewünschte E-Mailadresse hat ein invalides Format. Siehe Beispiel für ein gültiges Formatbeispiel.");
+                }
 
                 final String nameString = name.getText().toString().length() > 20 ? name.getText().toString().substring(0, 19).trim().replace("\\n", "") : name.getText().toString().trim().replace("\\n", "");
-                connection.execSQL("UPDATE userinformation SET name='" + nameString + "', phonenumber='" + phone.getText().toString().replace("\\n", "").trim() + "', email='" + email.getText().toString().replace("\\n", "").trim() + "', company='" + company.getText().toString().replace("\\n", "").trim() + "';");
-                //Log.e("Setting SQL UPDATE", "UPDATE userinformation SET name='" + nameString + "', phonenumber='" + phone.getText().toString().replace("\\n", "").trim() + "', email='" + email.getText().toString().replace("\\n", "").trim() + "', company='" + company.getText().toString().replace("\\n", "").trim() + "';");
 
 
                 RequestQueue queue = Volley.newRequestQueue(SettingsActivity.this);
 
-                String url = Config.webserviceUrl + "USER.SETTINGS?token=" + token + "&visible=" + generateInterestsJsonString(selectedFiles) + "&profile=" + name.getText().toString().replace("\\n", "").trim() + "&phone=" + phone.getText().toString().replace("\\n", "").trim() + "&email=" + email.getText().toString().replace("\\n", "").trim() + "&company=" + company.getText().toString().replace("\\n", "").trim();
+                String url = Config.webserviceUrl + "USER.SETTINGS?token=" + token + "&visible=" + generateInterestsJsonString(selectedInterests) + "&profile=" + nameString + "&phone=" + phone.getText().toString().replace("\\n", "").trim() + "&email=" + email.getText().toString().replace("\\n", "").trim() + "&company=" + company.getText().toString().replace("\\n", "").trim();
                 Log.e("Event Daily URL", url);
                 final JsonObjectRequest settingRequest =
                         new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
                             @Override
                             public void onResponse(JSONObject jsonObject) {
-                                String s = jsonObject.toString();
                                 Gson gson = new Gson();
 
                                 SettingResponse settingResponse = gson.fromJson(jsonObject.toString(), SettingResponse.class);
@@ -174,7 +173,7 @@ public class SettingsActivity extends AppCompatActivity {
                                 StringBuffer settingResponseString = new StringBuffer("Status: " + settingResponse.getStatus() + "\n"
                                         + "Name: " + settingResponse.getProfile_name() + "\n"
                                         + "Tel.Nr.: " + settingResponse.getProfile_phone() + "\n"
-                                        + "e-Mail: " + settingResponse.getProfile_email() + "\n"
+                                        + "E-Mail: " + settingResponse.getProfile_email() + "\n"
                                         + "Firma: " + settingResponse.getProfile_company() + "\n"
                                         + "Sichtbare Interessen: ");
 
@@ -186,6 +185,10 @@ public class SettingsActivity extends AppCompatActivity {
                                     if (i + 1 < settingResponse.getInterestgroupAmount())
                                         settingResponseString.append(", ");
                                 }
+
+                                connection.execSQL("UPDATE userinformation SET name='" + nameString + "', phonenumber='" + phone.getText().toString().replace("\\n", "").trim() + "', email='" + email.getText().toString().replace("\\n", "").trim() + "', company='" + company.getText().toString().replace("\\n", "").trim() + "';");
+                                //Log.e("Setting SQL UPDATE", "UPDATE userinformation SET name='" + nameString + "', phonenumber='" + phone.getText().toString().replace("\\n", "").trim() + "', email='" + email.getText().toString().replace("\\n", "").trim() + "', company='" + company.getText().toString().replace("\\n", "").trim() + "';");
+
 
                                 Config.popupMessage("Ihre Einstellungen wurden aktualisiert", settingResponseString.toString(), SettingsActivity.this);
 

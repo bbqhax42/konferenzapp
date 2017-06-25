@@ -69,28 +69,12 @@ public class Event {
         if (document != null) documents.add(document);
     }
 
-    public Event(int event_id, String id, String title, String description, String author, String start, String end, String street, String zip, String city, String location, String url, List<Document> documents) {
-        this.event_id = event_id;
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.author = author;
-        this.start = start;
-        this.end = end;
-        this.street = street;
-        this.zip = zip;
-        this.city = city;
-        this.location = location;
-        this.url = url;
-        this.documents = documents;
-    }
-
     public int getEventId() {
         return event_id;
     }
 
     public String getId() {
-        return id;
+        return id == null ? "" : id;
     }
 
     public String getTitle() {

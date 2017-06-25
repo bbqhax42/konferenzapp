@@ -9,16 +9,18 @@ public class LoginResponse {
     private String success, errorMessage, cid, token;
 
     public String getCid() {
-        return cid;
+        return cid == null ? "" : cid;
     }
 
     public String getErrorMessage() {
-        return errorMessage;
+        return errorMessage == null ? "" : errorMessage;
     }
 
-    public String getSuccess() {return success;}
+    public String getSuccess() {
+        return success == null ? "false" : success;
+    }
 
     public String getToken() {
-        return token;
+        return token == null ? "" : token;
     }
 }

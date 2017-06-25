@@ -75,12 +75,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void deleteAllUselessTablesLUL() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DELETE FROM events");
-        db.execSQL("DELETE FROM documents");
-        //db.execSQL("DELETE FROM users");
-    }
 
     public void insertInterest(SQLiteDatabase connection, String interest) throws SQLiteConstraintException {
         try {

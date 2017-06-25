@@ -24,27 +24,27 @@ public class SettingResponse {
     }
 
     public String getStatus() {
-        return status;
+        return status == null ? "" : status;
     }
 
     public String getStatus_info() {
-        return status_info;
+        return status_info == null ? "" : status_info;
     }
 
     public String getProfile_name() {
-        return profile_name;
+        return profile_name == null ? "" : profile_name;
     }
 
     public String getProfile_phone() {
-        return profile_phone;
+        return profile_phone == null ? "" : profile_phone;
     }
 
     public String getProfile_email() {
-        return profile_email;
+        return profile_email == null ? "" : profile_email;
     }
 
     public String getProfile_company() {
-        return profile_company;
+        return profile_company == null ? "" : profile_company;
     }
 
     public int getInterestgroupAmount() {

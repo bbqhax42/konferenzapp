@@ -34,16 +34,19 @@ public class ChatActivity extends AppCompatActivity {
         homeButton = (Button) findViewById(R.id.homebutton);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerViewPrivate = (RecyclerView) findViewById(R.id.recycler_view2);
+
+        //changes the button background to show which part of the program the user is accessing
         chatButton.setBackgroundResource(R.drawable.toolbar_button_selected);
-        TextView tv = (TextView) findViewById(R.id.title);
-        tv.setText("Chat");
+
+        TextView headerTitle = (TextView) findViewById(R.id.title);
+        headerTitle.setText("Chat");
 
 
         Cursor res = connection.rawQuery("Select * from userinformation;", null);
         res.moveToFirst();
-        String tmp = res.getString(0);
+        String userName = res.getString(0);
 
-        if (tmp == null || tmp.length() == 0) {
+        if (userName == null || userName.length() == 0) {
             Config.error_message(ChatActivity.this, "Sichtbarer Name erforderlich für Chats");
             Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
             startActivity(intent);

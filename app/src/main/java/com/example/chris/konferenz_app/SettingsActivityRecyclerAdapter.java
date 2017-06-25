@@ -7,39 +7,38 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+
 import java.util.List;
 
 public class SettingsActivityRecyclerAdapter extends RecyclerView.Adapter<SettingsActivityRecyclerAdapter.Holder> {
     Context context;
-    List<Interestgroup> wordList;
+    List<Interestgroup> interestGroupsList;
 
-    public SettingsActivityRecyclerAdapter(Context context, List<Interestgroup> wordList) {
-        this.wordList = wordList;
+    public SettingsActivityRecyclerAdapter(Context context, List<Interestgroup> interestGroupsList) {
+        this.interestGroupsList = interestGroupsList;
         this.context = context;
     }
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         //inflate the xml/ view shell and return it
-
-        View item_list_view = LayoutInflater.from(context).inflate(R.layout.eventactivity_checkbox_list, parent, false);
-
-        return new Holder(item_list_view);
+        View eventActivity_CheckBox_List = LayoutInflater.from(context).inflate(R.layout.eventactivity_checkbox_list, parent, false);
+        return new Holder(eventActivity_CheckBox_List);
     }
 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
         //populates the shell
-        Interestgroup s = wordList.get(position);
+        Interestgroup s = interestGroupsList.get(position);
         holder.checkBox.setText(s.getName());
-        if(s.isVisible()) holder.checkBox.setChecked(true);
-        holder.interestgroup=s;
+        if (s.isVisible()) holder.checkBox.setChecked(true);
+        holder.interestgroup = s;
 
     }
 
     @Override
     public int getItemCount() {
-        return wordList.size();
+        return interestGroupsList.size();
     }
 
     public static class Holder extends RecyclerView.ViewHolder {
@@ -49,7 +48,6 @@ public class SettingsActivityRecyclerAdapter extends RecyclerView.Adapter<Settin
 
         public Holder(View itemView) {
             super(itemView);
-
             checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
         }
     }

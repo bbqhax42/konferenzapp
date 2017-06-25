@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,9 +30,10 @@ public class MainActivity extends AppCompatActivity {
         homeButton = (Button) findViewById(R.id.homebutton);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
+        //changes the button background to show which part of the program the user is accessing
         homeButton.setBackgroundResource(R.drawable.toolbar_button_selected);
 
-        TextView tv= (TextView) findViewById(R.id.title);
+        TextView tv = (TextView) findViewById(R.id.title);
         tv.setText("Start");
 
         final SQLiteDatabase connection = myDb.getWritableDatabase();
@@ -62,14 +64,10 @@ public class MainActivity extends AppCompatActivity {
     private void populateView(SQLiteDatabase connection) {
         List<Event> eventsList = queryEvents(connection);
 
-        //setupRecyclerview adapter
-
         MainActivityRecyclerAdapter adapter = new MainActivityRecyclerAdapter(MainActivity.this, eventsList);
         recyclerView.setAdapter(adapter);
-
         LinearLayoutManager llm = new LinearLayoutManager(MainActivity.this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
-
         recyclerView.setLayoutManager(llm);
     }
 

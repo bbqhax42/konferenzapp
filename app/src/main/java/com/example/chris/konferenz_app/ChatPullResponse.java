@@ -14,13 +14,9 @@ public class ChatPullResponse {
     public ChatPullResponse() {
     }
 
-    public ChatPullResponse(String timestamp, ArrayList<ChatChannel> channels) {
-        this.timestamp = timestamp;
-        this.channels = channels;
-    }
 
     public String getTimestamp() {
-        return timestamp;
+        return success == null ? "" : timestamp;
     }
 
 
@@ -31,10 +27,10 @@ public class ChatPullResponse {
     }
 
     public String getSuccess() {
-        return success;
+        return success == null ? "false" : success;
     }
 
     public ChatChannel getChatChannel(int i) {
-        return channels.get(i);
+        return channels == null ? null : channels.get(i);
     }
 }

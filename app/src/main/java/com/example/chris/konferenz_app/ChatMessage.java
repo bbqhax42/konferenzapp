@@ -26,15 +26,15 @@ public class ChatMessage {
     }
 
     public String getTimestamp() {
-        return timestamp;
+        return timestamp == null ? "" : timestamp;
     }
 
     public String getCid() {
-        return cid;
+        return cid == null ? "" : cid;
     }
 
     public String getContent() {
-        return content;
+        return content == null ? "" : content;
     }
 
     public void setTimestamp(String timestamp) {

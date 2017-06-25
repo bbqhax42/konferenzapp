@@ -12,13 +12,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+
 import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -37,10 +40,8 @@ public class ChatChannelRecyclerAdapter extends RecyclerView.Adapter<ChatChannel
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         //inflate the xml/ view shell and return it
-
-        View item_list_view = LayoutInflater.from(context).inflate(R.layout.chatchannelactivity_chatmessage_list, parent, false);
-
-        return new Holder(item_list_view);
+        View chatChannelActivity_chatMessage_List = LayoutInflater.from(context).inflate(R.layout.chatchannelactivity_chatmessage_list, parent, false);
+        return new Holder(chatChannelActivity_chatMessage_List);
     }
 
     @Override
@@ -57,6 +58,7 @@ public class ChatChannelRecyclerAdapter extends RecyclerView.Adapter<ChatChannel
             holder.user.setText(res.getString(1));
         else
             holder.user.setText("Unbekannt");
+
         holder.sendenstate.setVisibility(View.INVISIBLE);
         if (chatMessage.getCid().equals(myDb.getCid(connection))) {
             if (chatMessage.isSendState() == true) {
@@ -69,8 +71,6 @@ public class ChatChannelRecyclerAdapter extends RecyclerView.Adapter<ChatChannel
                     @Override
                     public void onClick(View v) {
                         Log.e("SQL ON CLICK", "Update chatmessages SET issent=\"true\" WHERE cid='" + chatMessage.getCid() + "' AND timestamp='" + chatMessage.getTimestamp() + "' AND content='" + chatMessage.getContent() + "';");
-
-
                         connection.execSQL("Update chatmessages SET issent=\"true\" WHERE cid='" + chatMessage.getCid() + "' AND timestamp='" + chatMessage.getTimestamp() + "' AND content='" + chatMessage.getContent() + "';");
                         holder.sendenstate.setVisibility(View.INVISIBLE);
                         onClickSendMessageButton(myDb.getToken(connection), chatMessage.getContent(), connection, myDb.getCid(connection), chatMessage.getTimestamp());

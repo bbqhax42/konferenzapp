@@ -20,19 +20,19 @@ import java.util.List;
 
 public class ChatActivityPrivateRecyclerAdapter extends RecyclerView.Adapter<ChatActivityPrivateRecyclerAdapter.Holder> {
     Context context;
-    List<String> wordList;
+    List<String> cidList;
 
 
-    public ChatActivityPrivateRecyclerAdapter(Context context, List<String> wordList) {
-        this.wordList = wordList;
+    public ChatActivityPrivateRecyclerAdapter(Context context, List<String> cidList) {
+        this.cidList = cidList;
         this.context = context;
     }
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         //inflate the xml/ view shell and return it
-        View item_list_view = LayoutInflater.from(context).inflate(R.layout.chatactivity_chat_list, parent, false);
-        return new Holder(item_list_view);
+        View chatactivity_chat_list = LayoutInflater.from(context).inflate(R.layout.chatactivity_chat_list, parent, false);
+        return new Holder(chatactivity_chat_list);
     }
 
     @Override
@@ -40,17 +40,18 @@ public class ChatActivityPrivateRecyclerAdapter extends RecyclerView.Adapter<Cha
         //populates the shell
         final DatabaseHelper myDb = new DatabaseHelper(context);
         final SQLiteDatabase connection = myDb.getWritableDatabase();
-        final String cid =wordList.get(position);
-        Cursor res = connection.rawQuery("Select * from users where cid='" + cid + "';", null);
-        String tmpName;
-        if (res.moveToNext()) {
-            tmpName = res.getString(1);
-        }
-        else
-            tmpName="Unbekannt";
+        final String cid = cidList.get(position);
 
-        final String name =tmpName;
-        holder.channelname.setText(name);
+
+        Cursor res = connection.rawQuery("Select * from users where cid='" + cid + "';", null);
+        String userName;
+        if (res.moveToNext()) {
+            userName = res.getString(1);
+        } else
+            userName = "Unbekannt";
+
+
+        holder.channelName.setText(userName);
         holder.cw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,16 +64,16 @@ public class ChatActivityPrivateRecyclerAdapter extends RecyclerView.Adapter<Cha
 
     @Override
     public int getItemCount() {
-        return wordList.size();
+        return cidList.size();
     }
 
     public static class Holder extends RecyclerView.ViewHolder {
-        TextView channelname;
+        TextView channelName;
         CardView cw;
 
         public Holder(View itemView) {
             super(itemView);
-            channelname = (TextView) itemView.findViewById(R.id.channelname);
+            channelName = (TextView) itemView.findViewById(R.id.channelname);
             cw = (CardView) itemView.findViewById(R.id.card_view);
         }
     }

@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
 import java.util.ArrayList;
 
 /**
@@ -21,21 +22,20 @@ import java.util.ArrayList;
 public class UserActivity extends AppCompatActivity {
 
     TextView name, email, phone, companyTV, title;
-    Button privatechat, savecontact, chatButton, settingsButton, homeButton;
-    CheckBox blockcheckbox;
+    Button privateChat, saveContact, chatButton, settingsButton, homeButton;
+    CheckBox blockUserCheckBox;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
         final String cid = getIntent().getStringExtra("Cid");
 
-
         settingsButton = (Button) findViewById(R.id.settingsbutton);
         chatButton = (Button) findViewById(R.id.chatbutton);
         homeButton = (Button) findViewById(R.id.homebutton);
-        privatechat = (Button) findViewById(R.id.privatechatbutton);
-        savecontact = (Button) findViewById(R.id.contactbutton);
-        blockcheckbox = (CheckBox) findViewById(R.id.blockcheckBox);
+        privateChat = (Button) findViewById(R.id.privatechatbutton);
+        saveContact = (Button) findViewById(R.id.contactbutton);
+        blockUserCheckBox = (CheckBox) findViewById(R.id.blockcheckBox);
         name = (TextView) findViewById(R.id.name);
         email = (TextView) findViewById(R.id.email);
         phone = (TextView) findViewById(R.id.phone);
@@ -56,11 +56,12 @@ public class UserActivity extends AppCompatActivity {
         } else
             displayName = "Unbekannt";
 
+
         res = connection.rawQuery("Select privatechatlist.blocked from privatechatlist where cid='" + cid + "';", null);
         if (res.moveToNext()) {
-            blockcheckbox.setChecked(res.getString(0).equalsIgnoreCase("true"));
+            blockUserCheckBox.setChecked(res.getString(0).equalsIgnoreCase("true"));
         } else
-            blockcheckbox.setChecked(false);
+            blockUserCheckBox.setChecked(false);
 
         name.setText(displayName);
         email.setText(emailID);
@@ -74,7 +75,7 @@ public class UserActivity extends AppCompatActivity {
         final String emailIDStr = emailID;
         final String companyStr = company;
 
-        privatechat.setOnClickListener(new View.OnClickListener() {
+        privateChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(UserActivity.this, ChatChannelPrivateActivity.class);
@@ -109,11 +110,11 @@ public class UserActivity extends AppCompatActivity {
         });
 
 
-        blockcheckbox.setOnClickListener(new View.OnClickListener() {
+        blockUserCheckBox.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                if (blockcheckbox.isChecked()) {
+                if (blockUserCheckBox.isChecked()) {
                     Log.e("checkbox user", "checked");
                     connection.execSQL("Update privatechatlist SET blocked=\"true\" where cid='" + cid + "';");
                 } else {
@@ -124,7 +125,7 @@ public class UserActivity extends AppCompatActivity {
         });
 
 
-        savecontact.setOnClickListener(new View.OnClickListener() {
+        saveContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();

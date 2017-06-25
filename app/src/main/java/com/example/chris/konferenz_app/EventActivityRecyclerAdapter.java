@@ -7,30 +7,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+
 import java.util.List;
 
 public class EventActivityRecyclerAdapter extends RecyclerView.Adapter<EventActivityRecyclerAdapter.Holder> {
     Context context;
-    List<Document> wordList;
+    List<Document> documentList;
 
-    public EventActivityRecyclerAdapter(Context context, List<Document> wordList) {
-        this.wordList = wordList;
+    public EventActivityRecyclerAdapter(Context context, List<Document> documentList) {
+        this.documentList = documentList;
         this.context = context;
     }
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         //inflate the xml/ view shell and return it
-
-        View item_list_view = LayoutInflater.from(context).inflate(R.layout.eventactivity_checkbox_list, parent, false);
-
-        return new Holder(item_list_view);
+        View eventActivity_CheckBox_List = LayoutInflater.from(context).inflate(R.layout.eventactivity_checkbox_list, parent, false);
+        return new Holder(eventActivity_CheckBox_List);
     }
 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
         //populates the shell
-        Document s = wordList.get(position);
+        Document s = documentList.get(position);
         holder.checkBox.setText(s.getTitle());
         holder.doc = s;
 
@@ -38,7 +37,7 @@ public class EventActivityRecyclerAdapter extends RecyclerView.Adapter<EventActi
 
     @Override
     public int getItemCount() {
-        return wordList.size();
+        return documentList.size();
     }
 
     public static class Holder extends RecyclerView.ViewHolder {

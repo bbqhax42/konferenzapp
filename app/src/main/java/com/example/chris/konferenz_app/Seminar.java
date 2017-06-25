@@ -11,16 +11,16 @@ public class Seminar {
 
 
     public String getSeminar_id() {
-        return seminar_id;
+        return seminar_id == null ? "" : seminar_id;
     }
 
 
     public String getSeminar_title() {
-        return seminar_title;
+        return seminar_title == null ? "" : seminar_title;
     }
 
     public Event getEvent(int i) {
-        return events.get(i);
+        return events == null ? null : events.get(i);
     }
 
     public int getEventAmount() {
@@ -32,7 +32,7 @@ public class Seminar {
     }
 
     public String getDate() {
-        return date;
+        return date == null ? "" : date;
     }
 
     public int getInterestgroupAmount() {

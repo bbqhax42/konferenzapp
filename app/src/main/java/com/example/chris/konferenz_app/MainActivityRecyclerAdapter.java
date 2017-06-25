@@ -9,14 +9,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import java.util.List;
 
 public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivityRecyclerAdapter.Holder> {
     Context context;
-    List<Event> wordList;
+    List<Event> eventList;
 
-    public MainActivityRecyclerAdapter(Context context, List<Event> wordList) {
-        this.wordList = wordList;
+    public MainActivityRecyclerAdapter(Context context, List<Event> eventList) {
+        this.eventList = eventList;
         this.context = context;
     }
 
@@ -24,25 +25,23 @@ public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivi
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         //inflate the xml/ view shell and return it
 
-        View item_list_view = LayoutInflater.from(context).inflate(R.layout.mainactivity_event_list, parent, false);
-
-
-        return new Holder(item_list_view);
+        View mainActivity_Event_List = LayoutInflater.from(context).inflate(R.layout.mainactivity_event_list, parent, false);
+        return new Holder(mainActivity_Event_List);
     }
 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
         //populates the shell
-        final Event event = wordList.get(position);
+        final Event event = eventList.get(position);
         holder.eventTitle.setText(event.getTitle());
         holder.start.setText(Config.formatDates(event.getStart()));
-        holder.end.setText(Config.formatDates(event.getEnd()) +" Uhr");
+        holder.end.setText(Config.formatDates(event.getEnd()) + " Uhr");
         holder.location.setText(event.getStreet());
         holder.ort.setText(event.getCity());
+
         holder.cw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(context, EventActivity.class);
                 intent.putExtra("EventID", event.getEventId()); //goes to the selected event!!
                 context.startActivity(intent);
@@ -52,7 +51,7 @@ public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivi
 
     @Override
     public int getItemCount() {
-        return wordList.size();
+        return eventList.size();
     }
 
     public static class Holder extends RecyclerView.ViewHolder {
@@ -66,10 +65,7 @@ public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivi
             end = (TextView) itemView.findViewById(R.id.endtime);
             location = (TextView) itemView.findViewById(R.id.location);
             ort = (TextView) itemView.findViewById(R.id.ort);
-
             cw = (CardView) itemView.findViewById(R.id.card_view);
-
-
         }
     }
 }

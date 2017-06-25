@@ -23,19 +23,19 @@ public class DocumentRequest {
     }
 
     public String getStatus() {
-        return status;
+        return status == null ? "" : status;
     }
 
     public String getStatus_info() {
-        return status_info;
+        return status_info == null ? "" : status_info;
     }
 
     public String getRecipient() {
-        return recipient;
+        return recipient == null ? "" : recipient;
     }
 
     public String getSubject() {
-        return subject;
+        return subject == null ? "" : subject;
     }
 
     public int getDocumentAmount() {
@@ -45,6 +45,6 @@ public class DocumentRequest {
     }
 
     public Document getDocument(int i) {
-        return documents.get(i);
+        return documents == null ? null : documents.get(i);
     }
 }

@@ -15,26 +15,24 @@ public class User {
         this.profile_company = profile_company;
     }
 
-    public User() {
-    }
 
     public String getCid() {
         return cid;
     }
 
     public String getProfile_name() {
-        return profile_name;
+        return profile_name == null ? "" : profile_name;
     }
 
     public String getProfile_phone() {
-        return profile_phone;
+        return profile_phone == null ? "" : profile_phone;
     }
 
     public String getProfile_email() {
-        return profile_email;
+        return profile_email == null ? "" : profile_email;
     }
 
     public String getProfile_company() {
-        return profile_company;
+        return profile_company == null ? "" : profile_company;
     }
 }
