@@ -1,4 +1,4 @@
-package com.example.chris.konferenz_app;
+package com.example.chris.konferenz_app.adapters;
 
 
 import android.content.Context;
@@ -8,14 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 
+import com.example.chris.konferenz_app.data.Document;
+import com.example.chris.konferenz_app.R;
+
 import java.util.List;
 
-public class SettingsActivityRecyclerAdapter extends RecyclerView.Adapter<SettingsActivityRecyclerAdapter.Holder> {
+public class EventActivityRecyclerAdapter extends RecyclerView.Adapter<EventActivityRecyclerAdapter.Holder> {
     Context context;
-    List<Interestgroup> interestGroupsList;
+    List<Document> documentList;
 
-    public SettingsActivityRecyclerAdapter(Context context, List<Interestgroup> interestGroupsList) {
-        this.interestGroupsList = interestGroupsList;
+    public EventActivityRecyclerAdapter(Context context, List<Document> documentList) {
+        this.documentList = documentList;
         this.context = context;
     }
 
@@ -29,25 +32,25 @@ public class SettingsActivityRecyclerAdapter extends RecyclerView.Adapter<Settin
     @Override
     public void onBindViewHolder(Holder holder, int position) {
         //populates the shell
-        Interestgroup s = interestGroupsList.get(position);
-        holder.checkBox.setText(s.getName());
-        if (s.isVisible()) holder.checkBox.setChecked(true);
-        holder.interestgroup = s;
+        Document s = documentList.get(position);
+        holder.checkBox.setText(s.getTitle());
+        holder.doc = s;
 
     }
 
     @Override
     public int getItemCount() {
-        return interestGroupsList.size();
+        return documentList.size();
     }
 
     public static class Holder extends RecyclerView.ViewHolder {
 
-        CheckBox checkBox;
-        Interestgroup interestgroup;
+        public CheckBox checkBox;
+        public Document doc;
 
         public Holder(View itemView) {
             super(itemView);
+
             checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
         }
     }

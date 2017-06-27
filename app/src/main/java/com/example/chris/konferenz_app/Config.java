@@ -48,7 +48,7 @@ public class Config {
 
     //cuts off the date and only leaves the time without seconds "2017-05-23 11:23:03.000" -> "11:23"
     public static final String formatDates(String date) {
-        Log.e("formatDates", date.length() + "");
+        //Log.e("formatDates", date.length() + "");
         if (date == null) {
             return "Error";
         } else if (!(date.length() == 23 || date.length() == 19)) {

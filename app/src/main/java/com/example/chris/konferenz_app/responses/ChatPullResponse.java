@@ -1,4 +1,6 @@
-package com.example.chris.konferenz_app;
+package com.example.chris.konferenz_app.responses;
+
+import com.example.chris.konferenz_app.data.ChatChannel;
 
 import java.util.ArrayList;
 

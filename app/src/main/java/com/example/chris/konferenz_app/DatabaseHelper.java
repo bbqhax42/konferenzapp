@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.chris.konferenz_app.data.Event;
+
 /**
  * Created by Chris on 01.06.2017.
  */

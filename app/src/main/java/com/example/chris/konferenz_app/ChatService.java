@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -15,6 +14,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.chris.konferenz_app.responses.ChatListResponse;
+import com.example.chris.konferenz_app.responses.ChatPullResponse;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -233,6 +234,7 @@ public class ChatService extends Service {
 
 
                 Log.e("Chat.Pull Save DB", stringBuilder.toString());
+
 
                 connection.execSQL(stringBuilder.toString());
 

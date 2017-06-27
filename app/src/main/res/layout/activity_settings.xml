@@ -12,7 +12,7 @@
         android:descendantFocusability="beforeDescendants"
         android:focusableInTouchMode="true"
         android:orientation="vertical"
-        tools:context="com.example.chris.konferenz_app.SettingsActivity">
+        tools:context="com.example.chris.konferenz_app.activities.SettingsActivity">
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package com.example.chris.konferenz_app;
+package com.example.chris.konferenz_app.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.chris.konferenz_app.Config;
+import com.example.chris.konferenz_app.R;
 
 /**
  * Created by Chris on 20.06.2017.

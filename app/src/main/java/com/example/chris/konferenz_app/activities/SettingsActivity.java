@@ -1,6 +1,5 @@
-package com.example.chris.konferenz_app;
+package com.example.chris.konferenz_app.activities;
 
-import android.app.Service;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
@@ -11,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,8 +21,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.chris.konferenz_app.ChatService;
+import com.example.chris.konferenz_app.Config;
+import com.example.chris.konferenz_app.DatabaseHelper;
+import com.example.chris.konferenz_app.data.Interestgroup;
+import com.example.chris.konferenz_app.R;
+import com.example.chris.konferenz_app.responses.SettingResponse;
+import com.example.chris.konferenz_app.adapters.SettingsActivityRecyclerAdapter;
 import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONObject;
 

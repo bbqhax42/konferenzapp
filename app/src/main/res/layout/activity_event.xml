@@ -9,7 +9,7 @@
     android:background="@color/bgcolor"
     android:showDividers="middle"
     android:weightSum="1"
-    tools:context="com.example.chris.konferenz_app.EventActivity">
+    tools:context="com.example.chris.konferenz_app.activities.EventActivity">
 
 
     <include layout="@layout/titlebar" />

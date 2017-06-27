@@ -14,24 +14,24 @@
         android:theme="@style/AppTheme2">
 
 
-        <activity android:name=".LoginActivity">
+        <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".ChatActivity"></activity>
-        <activity android:name=".ChatChannelActivity"
+        <activity android:name=".activities.MainActivity"></activity>
+        <activity android:name=".activities.ChatActivity"></activity>
+        <activity android:name=".activities.ChatChannelActivity"
 
             android:windowSoftInputMode="adjustPan"></activity>
-        <activity android:name=".ChatChannelPrivateActivity"></activity>
-        <activity android:name=".EventActivity"
+        <activity android:name=".activities.ChatChannelPrivateActivity"></activity>
+        <activity android:name=".activities.EventActivity"
             ></activity>
-        <activity android:name=".SettingsActivity"></activity>
-        <activity android:name=".UserActivity"></activity>
-        <activity android:name=".HelpActivity"></activity>
+        <activity android:name=".activities.SettingsActivity"></activity>
+        <activity android:name=".activities.UserActivity"></activity>
+        <activity android:name=".activities.HelpActivity"></activity>
 
         <service android:name=".ChatService"></service>
 

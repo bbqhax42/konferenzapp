@@ -1,4 +1,4 @@
-package com.example.chris.konferenz_app;
+package com.example.chris.konferenz_app.activities;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -19,6 +19,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.chris.konferenz_app.Config;
+import com.example.chris.konferenz_app.DatabaseHelper;
+import com.example.chris.konferenz_app.data.Document;
+import com.example.chris.konferenz_app.data.DocumentRequest;
+import com.example.chris.konferenz_app.data.Event;
+import com.example.chris.konferenz_app.adapters.EventActivityRecyclerAdapter;
+import com.example.chris.konferenz_app.R;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;

@@ -1,4 +1,4 @@
-package com.example.chris.konferenz_app;
+package com.example.chris.konferenz_app.adapters;
 
 
 import android.content.Context;
@@ -9,6 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.chris.konferenz_app.Config;
+import com.example.chris.konferenz_app.data.Event;
+import com.example.chris.konferenz_app.R;
+import com.example.chris.konferenz_app.activities.EventActivity;
 
 import java.util.List;
 

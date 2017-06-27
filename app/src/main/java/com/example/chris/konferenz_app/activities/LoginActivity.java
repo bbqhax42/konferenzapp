@@ -1,4 +1,4 @@
-package com.example.chris.konferenz_app;
+package com.example.chris.konferenz_app.activities;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -18,6 +17,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.chris.konferenz_app.ChatService;
+import com.example.chris.konferenz_app.Config;
+import com.example.chris.konferenz_app.DatabaseHelper;
+import com.example.chris.konferenz_app.data.Document;
+import com.example.chris.konferenz_app.data.Event;
+import com.example.chris.konferenz_app.responses.LoginResponse;
+import com.example.chris.konferenz_app.R;
+import com.example.chris.konferenz_app.data.Seminar;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -86,10 +93,12 @@ public class LoginActivity extends AppCompatActivity {
                 //Test auf Fehler der Usereingabe email format a@b.c und freischaltcode nicht leer
                 if (!email.matches(".+@.+\\..+")) {
                     Config.error_message(LoginActivity.this, "Invalide e-Mailadresse");
+                    return;
                 }
-                if (freischaltcode.length() == 0)
+                if (freischaltcode.length() == 0) {
                     Config.error_message(LoginActivity.this, "Bitte Freischaltcode eingeben");
-
+                    return;
+                }
 
                 //Erstellt eine Volley Request Queue
                 RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
@@ -102,7 +111,6 @@ public class LoginActivity extends AppCompatActivity {
 
                             @Override
                             public void onResponse(JSONObject jsonObject) {
-                                String s = jsonObject.toString();
                                 Gson gson = new Gson();
 
                                 //session token
@@ -199,6 +207,7 @@ public class LoginActivity extends AppCompatActivity {
                                         //email and password saving in case user wants to
                                         connection.execSQL("UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "';");
 
+                                        //data.storeEmailAndKey()
                                         Intent intent = new Intent(getBaseContext(), MainActivity.class);
                                         startActivity(intent);
                                         //Log.e("Login SQL UPDATE 2/2", "UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "'");

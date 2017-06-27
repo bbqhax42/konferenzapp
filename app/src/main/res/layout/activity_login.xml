@@ -7,7 +7,7 @@
     android:focusableInTouchMode="true"
     android:orientation="vertical"
     android:background="#FFFFFF"
-    tools:context="com.example.chris.konferenz_app.LoginActivity">
+    tools:context="com.example.chris.konferenz_app.activities.LoginActivity">
 
 
     <ImageView

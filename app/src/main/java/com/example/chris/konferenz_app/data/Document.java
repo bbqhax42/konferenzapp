@@ -1,4 +1,4 @@
-package com.example.chris.konferenz_app;
+package com.example.chris.konferenz_app.data;
 
 /**
  * Created by Chris on 01.06.2017.

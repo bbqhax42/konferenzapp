@@ -1,4 +1,4 @@
-package com.example.chris.konferenz_app;
+package com.example.chris.konferenz_app.adapters;
 
 
 import android.content.Context;
@@ -19,17 +19,24 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.chris.konferenz_app.data.ChatMessage;
+import com.example.chris.konferenz_app.Config;
+import com.example.chris.konferenz_app.DatabaseHelper;
+import com.example.chris.konferenz_app.R;
+import com.example.chris.konferenz_app.activities.UserActivity;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
-public class ChatChannelPrivateRecyclerAdapter extends RecyclerView.Adapter<ChatChannelPrivateRecyclerAdapter.Holder> {
+public class ChatChannelRecyclerAdapter extends RecyclerView.Adapter<ChatChannelRecyclerAdapter.Holder> {
     Context context;
     List<ChatMessage> chatMessages;
     String channelNameString;
 
-    public ChatChannelPrivateRecyclerAdapter(Context context, List<ChatMessage> chatMessages, String channelNameString) {
+    public ChatChannelRecyclerAdapter(Context context, List<ChatMessage> chatMessages, String channelNameString) {
         this.chatMessages = chatMessages;
         this.context = context;
         this.channelNameString = channelNameString;
@@ -38,8 +45,8 @@ public class ChatChannelPrivateRecyclerAdapter extends RecyclerView.Adapter<Chat
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         //inflate the xml/ view shell and return it
-        View chatChannelActivity_ChatMessage_List = LayoutInflater.from(context).inflate(R.layout.chatchannelactivity_chatmessage_list, parent, false);
-        return new Holder(chatChannelActivity_ChatMessage_List);
+        View chatChannelActivity_chatMessage_List = LayoutInflater.from(context).inflate(R.layout.chatchannelactivity_chatmessage_list, parent, false);
+        return new Holder(chatChannelActivity_chatMessage_List);
     }
 
     @Override
@@ -48,16 +55,13 @@ public class ChatChannelPrivateRecyclerAdapter extends RecyclerView.Adapter<Chat
         final ChatMessage chatMessage = chatMessages.get(position);
         final DatabaseHelper myDb = new DatabaseHelper(context);
         final SQLiteDatabase connection = myDb.getWritableDatabase();
-
-
         Cursor res = connection.rawQuery("Select * from users where cid='" + chatMessage.getCid() + "';", null);
-        //Log.e("chatchannelrecycler", "Select * from users where cid='" + chatMessage.getCid() + "';");
-
-
+        Log.e("chatchannelrecycler", "Select * from users where cid='" + chatMessage.getCid() + "';");
         holder.time.setText(chatMessage.getTimestamp());
         holder.message.setText(chatMessage.getContent());
-        if (res.moveToNext())
+        if (res.moveToNext()){
             holder.user.setText(res.getString(1));
+        Log.e("user cid", res.getString(1));}
         else
             holder.user.setText("Unbekannt");
 
@@ -69,12 +73,19 @@ public class ChatChannelPrivateRecyclerAdapter extends RecyclerView.Adapter<Chat
                 holder.sendenstate.setVisibility(View.VISIBLE);
                 holder.sendenstate.setText("Senden fehlgeschlagen");
 
-
                 holder.sendenstate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.e("SQL ON CLICK", "Update chatmessages SET issent=\"true\" WHERE cid='" + chatMessage.getCid() + "' AND timestamp='" + chatMessage.getTimestamp() + "' AND content='" + chatMessage.getContent() + "';");
-                        connection.execSQL("Update chatmessages SET issent=\"true\" WHERE cid='" + chatMessage.getCid() + "' AND timestamp='" + chatMessage.getTimestamp() + "' AND content='" + chatMessage.getContent() + "';");
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append("Update chatmessages SET issent=\"true\" WHERE cid='");
+                        stringBuilder.append(chatMessage.getCid());
+                        stringBuilder.append("' AND timestamp='");
+                        stringBuilder.append(chatMessage.getTimestamp());
+                        stringBuilder.append("' AND content='");
+                        stringBuilder.append(chatMessage.getContent());
+                        stringBuilder.append("';");
+                        Log.e("SQL ON CLICK", stringBuilder.toString());
+                        connection.execSQL(stringBuilder.toString());
                         holder.sendenstate.setVisibility(View.INVISIBLE);
                         onClickSendMessageButton(myDb.getToken(connection), chatMessage.getContent(), connection, myDb.getCid(connection), chatMessage.getTimestamp());
                     }
@@ -87,6 +98,8 @@ public class ChatChannelPrivateRecyclerAdapter extends RecyclerView.Adapter<Chat
         holder.user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Log.e("das habe ich", "nicht geklickt");
                 if (!(chatMessage.getCid().equals(myDb.getCid(connection)))) {
                     Intent intent = new Intent(context, UserActivity.class);
                     intent.putExtra("Cid", chatMessage.getCid());
@@ -123,7 +136,7 @@ public class ChatChannelPrivateRecyclerAdapter extends RecyclerView.Adapter<Chat
         RequestQueue queue = Volley.newRequestQueue(context);
 
 
-        String url = Config.webserviceUrl + "CHAT.SEND?token=" + token + "&cid=" + channelNameString + "&content=" + messageToSend.trim();
+        String url = Config.webserviceUrl + "CHAT.SEND?token=" + token + "&channel=" + channelNameString + "&content=" + messageToSend.trim();
 
         Log.e("Chat Message URL", url);
 
@@ -144,8 +157,6 @@ public class ChatChannelPrivateRecyclerAdapter extends RecyclerView.Adapter<Chat
                             Config.error_message(context, "Senden fehlgeschlagen");
                             connection.execSQL("Update chatmessages SET issent=\"false\" WHERE cid='" + cid + "' AND  timestamp='" + timestamp + "'  AND content='" + messageToSend + "';");
                             Log.e("ChatActivity SQL", "Update chatmessages SET issent=\"false\" WHERE cid='" + cid + "' AND  timestamp='" + timestamp + "'  AND content='" + messageToSend + "';");
-
-                            ChatChannelPrivateRecyclerAdapter.this.notifyDataSetChanged();
                         }
                     });
 
@@ -153,4 +164,9 @@ public class ChatChannelPrivateRecyclerAdapter extends RecyclerView.Adapter<Chat
         } else Config.error_message(context, "Leere Nachrichten sind verboten");
     }
 
+    private String getCurrentDate() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        return sdf.format(c.getTime());
+    }
 }

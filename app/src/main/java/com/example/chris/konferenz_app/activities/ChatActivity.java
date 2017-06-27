@@ -1,4 +1,4 @@
-package com.example.chris.konferenz_app;
+package com.example.chris.konferenz_app.activities;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -10,6 +10,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.chris.konferenz_app.adapters.ChatActivityPrivateRecyclerAdapter;
+import com.example.chris.konferenz_app.adapters.ChatActivityRecyclerAdapter;
+import com.example.chris.konferenz_app.Config;
+import com.example.chris.konferenz_app.DatabaseHelper;
+import com.example.chris.konferenz_app.R;
+
 import java.util.ArrayList;
 import java.util.List;
 

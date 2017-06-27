@@ -1,4 +1,4 @@
-package com.example.chris.konferenz_app;
+package com.example.chris.konferenz_app.adapters;
 
 /**
  * Created by Chris on 06.06.2017.
@@ -15,6 +15,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.chris.konferenz_app.DatabaseHelper;
+import com.example.chris.konferenz_app.R;
+import com.example.chris.konferenz_app.activities.ChatChannelPrivateActivity;
 
 import java.util.List;
 
