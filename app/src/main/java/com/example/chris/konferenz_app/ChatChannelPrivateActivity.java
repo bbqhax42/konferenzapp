@@ -147,12 +147,30 @@ public class ChatChannelPrivateActivity extends AppCompatActivity {
                         public void onResponse(JSONObject jsonObject) {
                             Gson gson = new Gson();
                             ChatSendResponse chatSendResponse = gson.fromJson(jsonObject.toString(), ChatSendResponse.class);
+                            StringBuilder stringBuilder = new StringBuilder();
                             if (chatSendResponse.getSuccess().equalsIgnoreCase("true")) {
-                                connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + partnerCid + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"true\");");
+                                stringBuilder.append("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('");
+                                stringBuilder.append(partnerCid);
+                                stringBuilder.append("', '");
+                                stringBuilder.append(getCurrentDate());
+                                stringBuilder.append("', '");
+                                stringBuilder.append(cid);
+                                stringBuilder.append("', '");
+                                stringBuilder.append(messageToSend.getText().toString().trim());
+                                stringBuilder.append("', \"true\");");
+                                connection.execSQL(stringBuilder.toString());
                                 Config.error_message(ChatChannelPrivateActivity.this, "Nachricht erfolgreich gesendet");
                             } else {
-                                connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + partnerCid + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"false\");");
-                                Log.e("ChatActivity SQL", "INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + partnerCid + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"false\");");
+                                stringBuilder.append("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('");
+                                stringBuilder.append(partnerCid);
+                                stringBuilder.append("', '");
+                                stringBuilder.append(getCurrentDate());
+                                stringBuilder.append("', '");
+                                stringBuilder.append(cid);
+                                stringBuilder.append("', '");
+                                stringBuilder.append(messageToSend.getText().toString().trim());
+                                stringBuilder.append("', \"false\");");
+                                connection.execSQL(stringBuilder.toString());
                                 Config.error_message(ChatChannelPrivateActivity.this, "Senden fehlgeschlagen");
                             }
 

@@ -50,6 +50,7 @@
                         android:layout_gravity="center"
                         android:ems="10"
                         android:hint="Max Mustermann"
+                        android:inputType="textPersonName"
                         android:textColor="@color/Gray"
                         tools:layout_editor_absoluteX="70dp"
                         tools:layout_editor_absoluteY="246dp" />
@@ -95,6 +96,7 @@
                         android:layout_width="122dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:inputType="textEmailAddress"
                         android:text="E-Mail-Adresse: "
                         android:textColor="@color/Gray"
                         android:textSize="18dp" />
@@ -123,6 +125,7 @@
                         android:layout_width="122dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:inputType="textNoSuggestions"
                         android:text="Firma: "
                         android:textColor="@color/Gray"
                         android:textSize="18dp" />

@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ChatService extends Service {
     Thread chatList, chatPull;
-    boolean chatListRun = false, chatPullRun = false;
+    volatile boolean chatListRun = false, chatPullRun = false;
 
     @Nullable
     @Override
@@ -70,11 +70,9 @@ public class ChatService extends Service {
 
                 RequestQueue queue = Volley.newRequestQueue(ChatService.this);
                 String url = Config.webserviceUrl + "CHAT.LIST?token=" + token;
-                //Log.e("Chat.Pull URL", url);
-
+                Log.e("Chat.List URL", url);
 
                 while (chatListRun) {
-                    //pull help_channeloverview data
                     final JsonObjectRequest chatListRequest =
                             new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
@@ -83,19 +81,22 @@ public class ChatService extends Service {
                                     Gson gson = new Gson();
 
                                     ChatListResponse chatListResponse = gson.fromJson(jsonObject.toString(), ChatListResponse.class);
-
+                                    Log.e("Chat.List", chatListResponse.getSuccess());
                                     if (chatListResponse.getSuccess().equalsIgnoreCase("true")) {
+
                                         saveChatListResponseToDatabase(chatListResponse, connection);
                                     } else {
-                                        Config.error_message(null, "Fehler, Programm startet neu. Bitte melden sie sich beim Kundenservice.");
+                                        Config.error_message(null, "Fehler, starten Sie bitte das Programm neu und melden sich beim Kundenservice.");
                                     }
 
 
                                 }
                             }, new Response.ErrorListener() {
 
+
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
+                                    Log.e("Chat.List", "Serversided error");
                                 }
                             });
                     queue.add(chatListRequest);
@@ -202,24 +203,39 @@ public class ChatService extends Service {
     }
 
 
+    private String getChannelName(ChatPullResponse chatPullResponse, int index) {
+        if( chatPullResponse.getChatChannel(index).getChannel() == null || chatPullResponse.getChatChannel(index).getChannel().length() == 0 ) {
+            return chatPullResponse.getChatChannel(index).getCid();
+        }
+        else {
+            return chatPullResponse.getChatChannel(index).getChannel();
+        }
+    }
+
     private void saveChatPullResponseToDatabase(ChatPullResponse chatPullResponse, SQLiteDatabase connection) {
+        String delimiter = "' , '";
+
         for (int i = 0; i < chatPullResponse.channelAmount(); i++) {
             Log.e("timestamp", chatPullResponse.getTimestamp());
             Log.e("Channelname: ", chatPullResponse.getChatChannel(i).getChannel());
             Log.e("Message Amount: ", chatPullResponse.getChatChannel(i).getChatMessageAmount() + "");
             for (int j = 0; j < chatPullResponse.getChatChannel(i).getChatMessageAmount(); j++) {
-                connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('"
-                        + chatPullResponse.getChatChannel(i).getChannel() == null || chatPullResponse.getChatChannel(i).getChannel().length() == 0 ? chatPullResponse.getChatChannel(i).getCid() : chatPullResponse.getChatChannel(i).getChannel() + "' , '"
-                        + Config.formatDates(chatPullResponse.getChatChannel(i).getChatMessage(j).getTimestamp()) + "' , '"
-                        + chatPullResponse.getChatChannel(i).getChatMessage(j).getCid() + "' , '"
-                        + chatPullResponse.getChatChannel(i).getChatMessage(j).getContent() + "' , \"" +
-                        "TRUE\");");
-                Log.e("Chat.Pull Save DB", "INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('"
-                        + chatPullResponse.getChatChannel(i).getChannel() == null || chatPullResponse.getChatChannel(i).getChannel().length() == 0 ? chatPullResponse.getChatChannel(i).getCid() : chatPullResponse.getChatChannel(i).getChannel() + "' , '"
-                        + Config.formatDates(chatPullResponse.getChatChannel(i).getChatMessage(j).getTimestamp()) + "' , '"
-                        + chatPullResponse.getChatChannel(i).getChatMessage(j).getCid() + "' , '"
-                        + chatPullResponse.getChatChannel(i).getChatMessage(j).getContent() + "' , \"" +
-                        "TRUE\");");
+
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('");
+                stringBuilder.append(getChannelName(chatPullResponse, i) );
+                stringBuilder.append(delimiter);
+                stringBuilder.append( Config.formatDates(chatPullResponse.getChatChannel(i).getChatMessage(j).getTimestamp()) );
+                stringBuilder.append(delimiter);
+                stringBuilder.append(chatPullResponse.getChatChannel(i).getChatMessage(j).getCid());
+                stringBuilder.append( delimiter);
+                stringBuilder.append( chatPullResponse.getChatChannel(i).getChatMessage(j).getContent());
+                stringBuilder.append( "' , \"");
+                stringBuilder.append("TRUE\");");
+
+                Log.e("Chat.Pull Save DB", stringBuilder.toString());
+
+                connection.execSQL(stringBuilder.toString());
 
                 //if the message received is a private message we insert the userinformation here
                 if (chatPullResponse.getChatChannel(i).getCid() != null && chatPullResponse.getChatChannel(i).getCid().length() != 0) {
@@ -229,7 +245,6 @@ public class ChatService extends Service {
                     }
                 }
             }
-
 
         }
 

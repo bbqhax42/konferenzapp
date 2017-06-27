@@ -133,14 +133,34 @@ public class ChatChannelActivity extends AppCompatActivity {
                             Gson gson = new Gson();
 
                             ChatSendResponse chatSendResponse = gson.fromJson(jsonObject.toString(), ChatSendResponse.class);
+                            StringBuilder stringBuilder = new StringBuilder();
                             if (chatSendResponse.getSuccess().equalsIgnoreCase("true")) {
                                 Config.error_message(ChatChannelActivity.this, "Nachricht erfolgreich gesendet");
-                                connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + channelNameString + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"true\");");
-                                Log.e("Msg SQL", "INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + channelNameString + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"true\");");
+                                stringBuilder.append("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('");
+                                stringBuilder.append(channelNameString);
+                                stringBuilder.append("', '");
+                                stringBuilder.append(getCurrentDate());
+                                stringBuilder.append("', '");
+                                stringBuilder.append(cid);
+                                stringBuilder.append("', '");
+                                stringBuilder.append(messageToSend.getText().toString().trim());
+                                stringBuilder.append("', \"true\");");
+                                connection.execSQL(stringBuilder.toString());
+
+                                Log.e("Msg SQL", stringBuilder.toString());
                             } else {
                                 Config.error_message(ChatChannelActivity.this, "Senden fehlgeschlagen");
-                                connection.execSQL("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + channelNameString + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"false\");");
-                                Log.e("ChatActivity SQL", "INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('" + channelNameString + "', '" + getCurrentDate() + "', '" + cid + "', '" + messageToSend.getText().toString().trim() + "', \"false\");");
+                                stringBuilder.append("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('");
+                                stringBuilder.append(channelNameString);
+                                stringBuilder.append("', '");
+                                stringBuilder.append(getCurrentDate());
+                                stringBuilder.append("', '");
+                                stringBuilder.append(cid);
+                                stringBuilder.append("', '");
+                                stringBuilder.append(messageToSend.getText().toString().trim());
+                                stringBuilder.append("', \"false\");");
+                                connection.execSQL(stringBuilder.toString());
+                                Log.e("ChatActivity SQL", stringBuilder.toString());
                             }
                             messageToSend.setText("");
                             populateView(connection);
