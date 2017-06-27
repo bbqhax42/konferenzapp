@@ -4,7 +4,9 @@ package com.example.chris.konferenz_app;
  * Created by Chris on 06.06.2017.
  */
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.content.BroadcastReceiver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -39,12 +42,25 @@ public class ChatChannelActivity extends AppCompatActivity {
     ArrayList<ChatMessage> messages;
     String channelNameString;
 
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            SQLiteDatabase connection = myDb.getWritableDatabase();
+            populateView(connection);
+            Log.e("onReceive", "View Populated");
+        }
+
+    };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Button chatButton, settingsButton, homeButton, sendButton;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatchannel);
-        final SQLiteDatabase connection = myDb.getWritableDatabase();
+        this.registerReceiver(receiver, new IntentFilter("MsgSent"));
 
         final TextView channelName;
         final EditText messageToSend;
@@ -61,6 +77,8 @@ public class ChatChannelActivity extends AppCompatActivity {
 
         channelNameString = getIntent().getStringExtra("ChannelName");
         channelName.setText("Thema: " + channelNameString);
+
+        final SQLiteDatabase connection = myDb.getWritableDatabase();
 
 
         final String token = myDb.getToken(connection);
@@ -114,6 +132,7 @@ public class ChatChannelActivity extends AppCompatActivity {
        /* getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);*/
     }
+
 
     private void onClickSendMessageButton(String token, final EditText messageToSend, final SQLiteDatabase connection, final String cid) {
         RequestQueue queue = Volley.newRequestQueue(ChatChannelActivity.this);
@@ -194,7 +213,7 @@ public class ChatChannelActivity extends AppCompatActivity {
 
     private ArrayList<ChatMessage> queryChatMessages(SQLiteDatabase connection) {
         Cursor res = connection.rawQuery("Select * from chatmessages where channel='" + channelNameString + "';", null);
-        //Log.e("queryChatMessages", "Select * from chatmessages where channel='" + channelNameString + "';");
+        Log.e("queryChatMessages", "Select * from chatmessages where channel='" + channelNameString + "';");
         ArrayList<ChatMessage> listOfChatMessages = new ArrayList<>();
         while (res.moveToNext()) {
             ChatMessage chatMessage = new ChatMessage();

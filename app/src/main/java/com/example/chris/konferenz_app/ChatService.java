@@ -214,11 +214,9 @@ public class ChatService extends Service {
 
     private void saveChatPullResponseToDatabase(ChatPullResponse chatPullResponse, SQLiteDatabase connection) {
         String delimiter = "' , '";
-
+        int msgCount = 0;
         for (int i = 0; i < chatPullResponse.channelAmount(); i++) {
-            Log.e("timestamp", chatPullResponse.getTimestamp());
-            Log.e("Channelname: ", chatPullResponse.getChatChannel(i).getChannel());
-            Log.e("Message Amount: ", chatPullResponse.getChatChannel(i).getChatMessageAmount() + "");
+            Log.e("timestamp", chatPullResponse.getTimestamp() + " Channelname: " + chatPullResponse.getChatChannel(i).getChannel() + " Message Amount: " + chatPullResponse.getChatChannel(i).getChatMessageAmount());
             for (int j = 0; j < chatPullResponse.getChatChannel(i).getChatMessageAmount(); j++) {
 
                 StringBuilder stringBuilder = new StringBuilder();
@@ -233,6 +231,7 @@ public class ChatService extends Service {
                 stringBuilder.append("' , \"");
                 stringBuilder.append("TRUE\");");
 
+
                 Log.e("Chat.Pull Save DB", stringBuilder.toString());
 
                 connection.execSQL(stringBuilder.toString());
@@ -244,11 +243,14 @@ public class ChatService extends Service {
                     } catch (SQLiteConstraintException e) {
                     }
                 }
+                msgCount++;
             }
 
         }
-
-
+        if (msgCount >= 1) {
+            sendBroadcast(new Intent("MsgSent"));
+            Log.e("Intent sent! Messages: ", msgCount + "");
+        }
     }
 
 }

@@ -51,11 +51,12 @@ public class ChatChannelRecyclerAdapter extends RecyclerView.Adapter<ChatChannel
         final DatabaseHelper myDb = new DatabaseHelper(context);
         final SQLiteDatabase connection = myDb.getWritableDatabase();
         Cursor res = connection.rawQuery("Select * from users where cid='" + chatMessage.getCid() + "';", null);
-        //Log.e("chatchannelrecycler", "Select * from users where cid='" + chatMessage.getCid() + "';");
+        Log.e("chatchannelrecycler", "Select * from users where cid='" + chatMessage.getCid() + "';");
         holder.time.setText(chatMessage.getTimestamp());
         holder.message.setText(chatMessage.getContent());
-        if (res.moveToNext())
+        if (res.moveToNext()){
             holder.user.setText(res.getString(1));
+        Log.e("user cid", res.getString(1));}
         else
             holder.user.setText("Unbekannt");
 
