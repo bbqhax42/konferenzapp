@@ -70,8 +70,16 @@ public class ChatChannelRecyclerAdapter extends RecyclerView.Adapter<ChatChannel
                 holder.sendenstate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.e("SQL ON CLICK", "Update chatmessages SET issent=\"true\" WHERE cid='" + chatMessage.getCid() + "' AND timestamp='" + chatMessage.getTimestamp() + "' AND content='" + chatMessage.getContent() + "';");
-                        connection.execSQL("Update chatmessages SET issent=\"true\" WHERE cid='" + chatMessage.getCid() + "' AND timestamp='" + chatMessage.getTimestamp() + "' AND content='" + chatMessage.getContent() + "';");
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append("Update chatmessages SET issent=\"true\" WHERE cid='");
+                        stringBuilder.append(chatMessage.getCid());
+                        stringBuilder.append("' AND timestamp='");
+                        stringBuilder.append(chatMessage.getTimestamp());
+                        stringBuilder.append("' AND content='");
+                        stringBuilder.append(chatMessage.getContent());
+                        stringBuilder.append("';");
+                        Log.e("SQL ON CLICK", stringBuilder.toString());
+                        connection.execSQL(stringBuilder.toString());
                         holder.sendenstate.setVisibility(View.INVISIBLE);
                         onClickSendMessageButton(myDb.getToken(connection), chatMessage.getContent(), connection, myDb.getCid(connection), chatMessage.getTimestamp());
                     }

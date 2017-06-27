@@ -149,7 +149,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                 updateInterests(connection, selectedInterests);
 
-                if (!email.getText().toString().trim().matches(".+@.+\\..+")) {
+                if (email.getText().toString().trim().length()>=1  && !email.getText().toString().trim().matches(".+@.+\\..+")) {
                     email.setText("");
                     Config.error_message(SettingsActivity.this, "Ihre gewünschte E-Mailadresse hat ein invalides Format. Siehe Beispiel für ein gültiges Formatbeispiel.");
                 }

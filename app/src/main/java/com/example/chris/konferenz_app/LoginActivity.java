@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -253,33 +254,35 @@ public class LoginActivity extends AppCompatActivity {
         for (int i = 0; i < seminar.getEventAmount(); i++) {
             Event event = seminar.getEvent(i);
             try {
-                connection.execSQL("Insert into events (event_id, id, title, description, author, start, end, street, zip, city, location, url) VALUES ('"
-                        + event.getEventId() + "' , '"
-                        + event.getId() + "' , '"
-                        + event.getTitle() + "' , '"
-                        + event.getDescription() + "' , '"
-                        + event.getAuthor() + "' , '"
-                        + event.getStart() + "' , '"
-                        + event.getEnd() + "' , '"
-                        + event.getStreet() + "' , '"
-                        + event.getZip() + "' , '"
-                        + event.getCity() + "' , '"
-                        + event.getLocation() + "' , '"
-                        + event.getUrl() + "');");
-/*            Log.e("SQL EVENT", ("Insert into events (event_id, id, title, description, author, start, end, street, zip, city, location, url) VALUES ('"
-                    + event.getEventId() + "' , '"
-                    + event.getId() + "' , '"
-                    + event.getTitle() + "' , '"
-                    + event.getDescription() + "' , '"
-                    + event.getAuthor() + "' , '"
-                    + event.getStart() + "' , '"
-                    + event.getEnd() + "' , '"
-                    + event.getStreet() + "' , '"
-                    + event.getZip() + "' , '"
-                    + event.getCity() + "' , '"
-                    + event.getLocation() + "' , '"
-                    + event.getUrl() + "');"));
-*/
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("Insert into events (event_id, id, title, description, author, start, end, street, zip, city, location, url) VALUES ('");
+                stringBuilder.append(event.getEventId());
+                stringBuilder.append("' , '");
+                stringBuilder.append(event.getId());
+                stringBuilder.append("' , '");
+                stringBuilder.append(event.getTitle());
+                stringBuilder.append("' , '");
+                stringBuilder.append(event.getDescription());
+                stringBuilder.append("' , '");
+                stringBuilder.append(event.getAuthor());
+                stringBuilder.append("' , '");
+                stringBuilder.append(event.getStart());
+                stringBuilder.append("' , '");
+                stringBuilder.append(event.getEnd());
+                stringBuilder.append("' , '");
+                stringBuilder.append(event.getStreet());
+                stringBuilder.append("' , '");
+                stringBuilder.append(event.getZip());
+                stringBuilder.append("' , '");
+                stringBuilder.append(event.getCity());
+                stringBuilder.append("' , '");
+                stringBuilder.append(event.getLocation());
+                stringBuilder.append("' , '");
+                stringBuilder.append(event.getUrl());
+                stringBuilder.append("');");
+                connection.execSQL(stringBuilder.toString());
+                //Log.e("SQL EVENT", stringBuilder.toString());
+
                 for (int j = 0; j < event.getDocumentAmount(); j++) {
                     Document doc = event.getDocument(j);
                     connection.execSQL("Insert into documents (id, title, event_id) VALUES ('"

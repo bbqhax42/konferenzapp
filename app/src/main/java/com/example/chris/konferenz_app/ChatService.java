@@ -120,20 +120,21 @@ public class ChatService extends Service {
     private void saveChatListResponseToDatabase(ChatListResponse chatListResponse, SQLiteDatabase connection) {
         for (int i = 0; i < chatListResponse.channelAmount(); i++) {
             for (int j = 0; j < chatListResponse.getChatChannel(i).getUserAmount(); j++) {
-                Log.e("Chat.List Save DB", "Insert into users (cid, profile_name, profile_phone, profile_email, profile_company) VALUES ('"
-                        + chatListResponse.getChatChannel(i).getUser(j).getCid() + "' , '"
-                        + chatListResponse.getChatChannel(i).getUser(j).getProfile_name() + "' , '"
-                        + chatListResponse.getChatChannel(i).getUser(j).getProfile_phone() + "' , '"
-                        + chatListResponse.getChatChannel(i).getUser(j).getProfile_email() + "' , '"
-                        + chatListResponse.getChatChannel(i).getUser(j).getProfile_company() + "');");
-
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("Insert into users (cid, profile_name, profile_phone, profile_email, profile_company) VALUES ('");
+                stringBuilder.append(chatListResponse.getChatChannel(i).getUser(j).getCid());
+                stringBuilder.append("' , '");
+                stringBuilder.append(chatListResponse.getChatChannel(i).getUser(j).getProfile_name());
+                stringBuilder.append("' , '");
+                stringBuilder.append(chatListResponse.getChatChannel(i).getUser(j).getProfile_phone());
+                stringBuilder.append("' , '");
+                stringBuilder.append(chatListResponse.getChatChannel(i).getUser(j).getProfile_email());
+                stringBuilder.append("' , '");
+                stringBuilder.append(chatListResponse.getChatChannel(i).getUser(j).getProfile_company());
+                stringBuilder.append("');");
+                Log.e("Chat.List Save DB", stringBuilder.toString());
                 try {
-                    connection.execSQL("Insert into users (cid, profile_name, profile_phone, profile_email, profile_company) VALUES ('"
-                            + chatListResponse.getChatChannel(i).getUser(j).getCid() + "' , '"
-                            + chatListResponse.getChatChannel(i).getUser(j).getProfile_name() + "' , '"
-                            + chatListResponse.getChatChannel(i).getUser(j).getProfile_phone() + "' , '"
-                            + chatListResponse.getChatChannel(i).getUser(j).getProfile_email() + "' , '"
-                            + chatListResponse.getChatChannel(i).getUser(j).getProfile_company() + "');");
+                    connection.execSQL(stringBuilder.toString());
                 } catch (SQLiteConstraintException e) {
                     Log.e("Chat.Pull", "User " + chatListResponse.getChatChannel(i).getUser(j).getCid() + " schon vorhanden.");
                 }
@@ -204,10 +205,9 @@ public class ChatService extends Service {
 
 
     private String getChannelName(ChatPullResponse chatPullResponse, int index) {
-        if( chatPullResponse.getChatChannel(index).getChannel() == null || chatPullResponse.getChatChannel(index).getChannel().length() == 0 ) {
+        if (chatPullResponse.getChatChannel(index).getChannel() == null || chatPullResponse.getChatChannel(index).getChannel().length() == 0) {
             return chatPullResponse.getChatChannel(index).getCid();
-        }
-        else {
+        } else {
             return chatPullResponse.getChatChannel(index).getChannel();
         }
     }
@@ -223,14 +223,14 @@ public class ChatService extends Service {
 
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('");
-                stringBuilder.append(getChannelName(chatPullResponse, i) );
+                stringBuilder.append(getChannelName(chatPullResponse, i));
                 stringBuilder.append(delimiter);
-                stringBuilder.append( Config.formatDates(chatPullResponse.getChatChannel(i).getChatMessage(j).getTimestamp()) );
+                stringBuilder.append(Config.formatDates(chatPullResponse.getChatChannel(i).getChatMessage(j).getTimestamp()));
                 stringBuilder.append(delimiter);
                 stringBuilder.append(chatPullResponse.getChatChannel(i).getChatMessage(j).getCid());
-                stringBuilder.append( delimiter);
-                stringBuilder.append( chatPullResponse.getChatChannel(i).getChatMessage(j).getContent());
-                stringBuilder.append( "' , \"");
+                stringBuilder.append(delimiter);
+                stringBuilder.append(chatPullResponse.getChatChannel(i).getChatMessage(j).getContent());
+                stringBuilder.append("' , \"");
                 stringBuilder.append("TRUE\");");
 
                 Log.e("Chat.Pull Save DB", stringBuilder.toString());
