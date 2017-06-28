@@ -142,7 +142,22 @@ public class ChatService extends Service {
                 try {
                     connection.execSQL(stringBuilder.toString());
                 } catch (SQLiteConstraintException e) {
+                    stringBuilder=new StringBuilder();
+                    stringBuilder.append("Update users set profile_name='");
+                    stringBuilder.append(chatListResponse.getChatChannel(i).getUser(j).getProfile_name());
+                    stringBuilder.append("' , profile_phone='");
+                    stringBuilder.append(chatListResponse.getChatChannel(i).getUser(j).getProfile_phone());
+                    stringBuilder.append("' , profile_email='");
+                    stringBuilder.append(chatListResponse.getChatChannel(i).getUser(j).getProfile_email());
+                    stringBuilder.append("' , profile_company='");
+                    stringBuilder.append(chatListResponse.getChatChannel(i).getUser(j).getProfile_company());
+                    stringBuilder.append("' where cid='");
+                    stringBuilder.append(chatListResponse.getChatChannel(i).getUser(j).getCid());
+                    stringBuilder.append("';");
+
                     Log.e("Chat.Pull", "User " + chatListResponse.getChatChannel(i).getUser(j).getCid() + " schon vorhanden.");
+                    Log.e("Chat.Pull", stringBuilder.toString());
+                    connection.execSQL(stringBuilder.toString());
                 }
 
             }

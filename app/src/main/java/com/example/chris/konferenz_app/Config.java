@@ -15,7 +15,7 @@ public class Config {
     public static final int appversion = 12;
 
     public static final int chatPullWaitTime = 5;
-    public static final int chatListWaitTime = 300;
+    public static final int chatListWaitTime = 30;
     public static final int expectedServerLagInMillis = 250;
 
     public static final String adress = "FORUM MEDIA GROUP GMBH\n" +
