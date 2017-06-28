@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 public class Config {
 
-    public static final int appversion = 11;
+    public static final int appversion = 12;
 
     public static final int chatPullWaitTime = 5;
     public static final int chatListWaitTime = 300;
@@ -29,7 +29,7 @@ public class Config {
             "E-Mail: kontakt@forum-media.com";
 
 
-    public static final String webserviceUrl = "https://new.myconf.akademie-herkert.de/";
+    public static final String webserviceUrl = "https://myconf.akademie-herkert.de/";
     public static final String sendMessageShortError = "Das Senden leerer Nachrichten ist nicht möglich.";
 
 

@@ -1,11 +1,16 @@
 package com.example.chris.konferenz_app;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -220,28 +225,43 @@ public class ChatService extends Service {
             Log.e("timestamp", chatPullResponse.getTimestamp() + " Channelname: " + chatPullResponse.getChatChannel(i).getChannel() + " Message Amount: " + chatPullResponse.getChatChannel(i).getChatMessageAmount());
             for (int j = 0; j < chatPullResponse.getChatChannel(i).getChatMessageAmount(); j++) {
 
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('");
-                stringBuilder.append(getChannelName(chatPullResponse, i));
-                stringBuilder.append(delimiter);
-                stringBuilder.append(Config.formatDates(chatPullResponse.getChatChannel(i).getChatMessage(j).getTimestamp()));
-                stringBuilder.append(delimiter);
-                stringBuilder.append(chatPullResponse.getChatChannel(i).getChatMessage(j).getCid());
-                stringBuilder.append(delimiter);
-                stringBuilder.append(chatPullResponse.getChatChannel(i).getChatMessage(j).getContent());
-                stringBuilder.append("' , \"");
-                stringBuilder.append("TRUE\");");
+                if (chatPullResponse.getChatChannel(i).getChannel() != null && !chatPullResponse.getChatChannel(i).getChannel().equals("empty")) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('");
+                    stringBuilder.append(getChannelName(chatPullResponse, i));
+                    stringBuilder.append(delimiter);
+                    stringBuilder.append(Config.formatDates(chatPullResponse.getChatChannel(i).getChatMessage(j).getTimestamp()));
+                    stringBuilder.append(delimiter);
+                    stringBuilder.append(chatPullResponse.getChatChannel(i).getChatMessage(j).getCid());
+                    stringBuilder.append(delimiter);
+                    stringBuilder.append(chatPullResponse.getChatChannel(i).getChatMessage(j).getContent());
+                    stringBuilder.append("' , \"");
+                    stringBuilder.append("true\");");
 
-
-                Log.e("Chat.Pull Save DB", stringBuilder.toString());
-
-
-                connection.execSQL(stringBuilder.toString());
-
+                    Log.e("Chat.Pull Save DB PUB", stringBuilder.toString());
+                    connection.execSQL(stringBuilder.toString());
+                }
                 //if the message received is a private message we insert the userinformation here
-                if (chatPullResponse.getChatChannel(i).getCid() != null && chatPullResponse.getChatChannel(i).getCid().length() != 0) {
+                else if (chatPullResponse.getChatChannel(i).getCid() != null && chatPullResponse.getChatChannel(i).getCid().length() != 0) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("INSERT INTO chatmessages (channel, timestamp, cid, content, issent) VALUES ('");
+                    stringBuilder.append(chatPullResponse.getChatChannel(i).getChatMessage(j).getCid());
+                    stringBuilder.append(delimiter);
+                    stringBuilder.append(Config.formatDates(chatPullResponse.getChatChannel(i).getChatMessage(j).getTimestamp()));
+                    stringBuilder.append(delimiter);
+                    stringBuilder.append(chatPullResponse.getChatChannel(i).getChatMessage(j).getCid());
+                    stringBuilder.append(delimiter);
+                    stringBuilder.append(chatPullResponse.getChatChannel(i).getChatMessage(j).getContent());
+                    stringBuilder.append("' , \"");
+                    stringBuilder.append("false\");");
+
+                    Log.e("Chat.Pull Save DB PRIV", stringBuilder.toString());
+                    connection.execSQL(stringBuilder.toString());
+
+
                     try {
-                        connection.execSQL("INSERT INTO privatechatlist (cid, blocked) VALUES ('" + chatPullResponse.getChatChannel(i).getCid() + "', \"FALSE\");");
+                        Log.e("Chat.Pull Save DB PRIV", "INSERT INTO privatechatlist (cid, blocked) VALUES ('" + chatPullResponse.getChatChannel(i).getChatMessage(j).getCid() + "', \"false\");");
+                        connection.execSQL("INSERT INTO privatechatlist (cid, blocked) VALUES ('" + chatPullResponse.getChatChannel(i).getChatMessage(j).getCid() + "', \"false\");");
                     } catch (SQLiteConstraintException e) {
                     }
                 }
@@ -252,6 +272,11 @@ public class ChatService extends Service {
         if (msgCount >= 1) {
             sendBroadcast(new Intent("MsgSent"));
             Log.e("Intent sent! Messages: ", msgCount + "");
+
+            NotificationManager notif=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+            Notification notify=new Notification.Builder
+                    (getApplicationContext()).setContentTitle("Neue Nachricht").setContentText("Sie haben " +msgCount +" neue Nachrichten.").setSmallIcon(R.drawable.applogosmall).build();
+            notif.notify(0, notify);
         }
     }
 

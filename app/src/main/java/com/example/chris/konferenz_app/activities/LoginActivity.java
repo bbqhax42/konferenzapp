@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -31,6 +32,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 
@@ -151,21 +153,20 @@ public class LoginActivity extends AppCompatActivity {
                                     if (!loggedInToday) {
 
                                         String token = myDb.getToken(connection);
-                                        date = "2017-06-14"; //wow time flew by fast -> sample date because no other data available
+                                        date = "2017-06-30"; //wow time flew by fast -> sample date because no other data available
 
 
                                         RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
 
                                         //load event data
                                         String url = Config.webserviceUrl + "EVENT.DAILY?token=" + token + "&date=" + date;
-                                        //Log.e("Event Daily URL", url);
+                                        Log.e("Event Daily URL", url);
                                         final JsonObjectRequest seminarRequest =
                                                 new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
                                                     @Override
                                                     public void onResponse(JSONObject jsonObject) {
                                                         Gson gson = new Gson();
-
                                                         Seminar seminar = gson.fromJson(jsonObject.toString(), Seminar.class);
                                                         saveEventToDatabase(seminar, connection);
                                                     }
@@ -181,7 +182,6 @@ public class LoginActivity extends AppCompatActivity {
                                     //if you sign in for the first time we send you to the settings so you can perform a first time setup
                                     //user stays logged in
                                     if (firstlogin && eingeloggt_bleiben) {
-
                                         waitReply();
                                         startChatService();
 
@@ -244,13 +244,6 @@ public class LoginActivity extends AppCompatActivity {
         startService(chatservice);
     }
 
-    private void waitReply() {
-        try {
-            TimeUnit.MILLISECONDS.sleep(Config.expectedServerLagInMillis);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
     private String getCurrentDate() {
         Calendar c = Calendar.getInstance();
@@ -313,6 +306,14 @@ public class LoginActivity extends AppCompatActivity {
             } catch (SQLiteConstraintException e) {
             }
             //  Log.e("Seminar Interest", seminar.getInterestgroup(i).getName());
+        }
+    }
+
+    private void waitReply() {
+        try {
+            TimeUnit.MILLISECONDS.sleep(Config.expectedServerLagInMillis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

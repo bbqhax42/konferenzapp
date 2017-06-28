@@ -4,7 +4,10 @@ package com.example.chris.konferenz_app.activities;
  * Created by Chris on 06.06.2017.
  */
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
@@ -48,6 +51,18 @@ public class ChatChannelPrivateActivity extends AppCompatActivity {
     String channelNameString = "Unbekannt";
     String partnerCid;
 
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            SQLiteDatabase connection = myDb.getWritableDatabase();
+            populateView(connection);
+            Log.e("onReceive", "View Populated");
+        }
+
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Button chatButton, settingsButton, homeButton, sendButton;
@@ -55,6 +70,7 @@ public class ChatChannelPrivateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chatchannel);
         final SQLiteDatabase connection = myDb.getWritableDatabase();
         partnerCid = getIntent().getStringExtra("ChannelName");
+        this.registerReceiver(receiver, new IntentFilter("MsgSent"));
 
         Cursor res = connection.rawQuery("Select * from users where cid='" + partnerCid + "';", null);
 
