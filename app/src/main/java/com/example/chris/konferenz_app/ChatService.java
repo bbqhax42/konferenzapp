@@ -287,11 +287,6 @@ public class ChatService extends Service {
         if (msgCount >= 1) {
             sendBroadcast(new Intent("MsgSent"));
             Log.e("Intent sent! Messages: ", msgCount + "");
-
-            NotificationManager notif=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-            Notification notify=new Notification.Builder
-                    (getApplicationContext()).setContentTitle("Neue Nachricht").setContentText("Sie haben " +msgCount +" neue Nachrichten.").setSmallIcon(R.drawable.applogosmall).build();
-            notif.notify(0, notify);
         }
     }
 
