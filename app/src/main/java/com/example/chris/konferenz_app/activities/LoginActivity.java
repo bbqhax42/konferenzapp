@@ -49,9 +49,10 @@ public class LoginActivity extends AppCompatActivity {
     CheckBox rememberme_checkbox;
     EditText email_textfield, password_textfield;
     boolean eingeloggt_bleiben;
-    String freischaltcode;
+    String freischaltcode, email;
     boolean firstlogin;
     final DatabaseHelper myDb = new DatabaseHelper(this);
+    int flag = -1;
 
 
     @Override
@@ -89,23 +90,17 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 //Daten von den Textfields und Checkboxes laden
-                String email = email_textfield.getText().toString();
+                email = email_textfield.getText().toString();
                 freischaltcode = password_textfield.getText().toString();
                 eingeloggt_bleiben = rememberme_checkbox.isChecked();
 
 
                 //Test auf Fehler der Usereingabe email format a@b.c und freischaltcode nicht leer
-                if (!email.matches(".+@.+\\..+")) {
-                    Config.error_message(LoginActivity.this, "Invalide e-Mailadresse");
-                    return;
-                }
-                if (freischaltcode.length() == 0) {
-                    Config.error_message(LoginActivity.this, "Bitte Freischaltcode eingeben");
-                    return;
-                }
+                if (checkEmail(email)) return;
+                if (checkFreischaltcode(freischaltcode)) return;
 
                 //Erstellt eine Volley Request Queue
-                RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
+                final RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
 
 
                 String url = Config.webserviceUrl + "ACC.UNLOCK?email=" + email + "&code=" + freischaltcode;
@@ -128,6 +123,9 @@ public class LoginActivity extends AppCompatActivity {
                                             break;
                                         case "user not found":
                                             Config.error_message(LoginActivity.this, "Nutzer nicht gefunden");
+                                            break;
+                                        case "updating session failed":
+                                            Config.error_message(LoginActivity.this, "Bitte nicht so schnell hintereinander auf Einloggen drücken.");
                                             break;
                                         default:
                                             Config.error_message(LoginActivity.this, "Fehler");
@@ -157,11 +155,10 @@ public class LoginActivity extends AppCompatActivity {
                                         String token = myDb.getToken(connection);
 
 
-                                        RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
-
                                         //load event data
                                         String url = Config.webserviceUrl + "EVENT.DAILY?token=" + token + "&date=" + date;
                                         Log.e("Event Daily URL", url);
+
 
                                         final JsonObjectRequest seminarRequest =
                                                 new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -172,12 +169,49 @@ public class LoginActivity extends AppCompatActivity {
                                                         Seminar seminar;
                                                         try {
                                                             seminar = gson.fromJson(jsonObject.toString(), Seminar.class);
-                                                        } catch (IllegalStateException|JsonSyntaxException e) {
-                                                            Toast.makeText(LoginActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                                                        } catch (IllegalStateException | JsonSyntaxException e) {
+                                                            Toast.makeText(LoginActivity.this, "Serverseitiger Fehler. Bitte melden Sie sich beim Kundenservice.", Toast.LENGTH_LONG).show();
                                                             connection.execSQL("UPDATE userinformation SET lastlogin='" + "1970-01-01" + "';");
+                                                            if (eingeloggt_bleiben)
+                                                                connection.execSQL("UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "';");
+
+                                                            //back to idle and waiting for user actions if there was a server sided error
                                                             return;
                                                         }
                                                         saveEventToDatabase(seminar, connection);
+                                                        //if you sign in for the first time we send you to the settings so you can perform a first time setup
+                                                        //user stays logged in
+                                                        if (firstlogin && eingeloggt_bleiben) {
+
+                                                            startChatService();
+                                                            //email and password saving in case user wants to
+                                                            connection.execSQL("UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', firstlogin=\"false\", loginkey='" + freischaltcode + "';");
+                                                            Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
+                                                            startActivity(intent);
+                                                            //Log.e("Login SQL UPDATE 2/2", "UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "'");
+
+                                                            //if you sign in for the first time we send you to the settings so you can perform a first time setup
+                                                        } else if (firstlogin && !eingeloggt_bleiben) {
+                                                            startChatService();
+                                                            connection.execSQL("UPDATE userinformation SET firstlogin=\"false\";");
+                                                            Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
+                                                            startActivity(intent);
+
+                                                            //user stays logged in
+                                                        } else if (eingeloggt_bleiben) {
+
+                                                            startChatService();
+                                                            //email and password saving in case user wants to
+                                                            connection.execSQL("UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "';");
+                                                            Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                                                            startActivity(intent);
+                                                            //Log.e("Login SQL UPDATE 2/2", "UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "'");
+
+                                                        } else {
+                                                            startChatService();
+                                                            Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                                                            startActivity(intent);
+                                                        }
                                                     }
                                                 }, new Response.ErrorListener() {
 
@@ -188,45 +222,7 @@ public class LoginActivity extends AppCompatActivity {
                                         queue.add(seminarRequest);
                                     }
 
-                                    //if you sign in for the first time we send you to the settings so you can perform a first time setup
-                                    //user stays logged in
-                                    if (firstlogin && eingeloggt_bleiben) {
-                                        waitReply();
-                                        startChatService();
 
-                                        //email and password saving in case user wants to
-                                        connection.execSQL("UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', firstlogin=\"false\", loginkey='" + freischaltcode + "';");
-
-                                        Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
-                                        startActivity(intent);
-                                        //Log.e("Login SQL UPDATE 2/2", "UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "'");
-
-                                        //if you sign in for the first time we send you to the settings so you can perform a first time setup
-                                    } else if (firstlogin && !eingeloggt_bleiben) {
-                                        waitReply();
-                                        startChatService();
-                                        connection.execSQL("UPDATE userinformation SET firstlogin=\"false\";");
-                                        Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
-                                        startActivity(intent);
-
-                                        //user stays logged in
-                                    } else if (eingeloggt_bleiben) {
-                                        waitReply();
-                                        startChatService();
-                                        //email and password saving in case user wants to
-                                        connection.execSQL("UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "';");
-
-                                        //data.storeEmailAndKey()
-                                        Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                                        startActivity(intent);
-                                        //Log.e("Login SQL UPDATE 2/2", "UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "'");
-
-                                    } else {
-                                        waitReply();
-                                        startChatService();
-                                        Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                                        startActivity(intent);
-                                    }
                                 }
                             }
                         }, new Response.ErrorListener()
@@ -246,6 +242,22 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private boolean checkFreischaltcode(String freischaltcode) {
+        if (freischaltcode.length() == 0) {
+            Config.error_message(LoginActivity.this, "Bitte Freischaltcode eingeben");
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkEmail(String email) {
+        if (!email.matches(".+@.+\\..+")) {
+            Config.error_message(LoginActivity.this, "Invalide e-Mailadresse");
+            return true;
+        }
+        return false;
     }
 
     private void startChatService() {
@@ -315,14 +327,6 @@ public class LoginActivity extends AppCompatActivity {
             } catch (SQLiteConstraintException e) {
             }
             //  Log.e("Seminar Interest", seminar.getInterestgroup(i).getName());
-        }
-    }
-
-    private void waitReply() {
-        try {
-            TimeUnit.MILLISECONDS.sleep(Config.expectedServerLagInMillis);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 
