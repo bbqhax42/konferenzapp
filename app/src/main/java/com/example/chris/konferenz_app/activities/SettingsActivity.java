@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,6 +30,7 @@ import com.example.chris.konferenz_app.R;
 import com.example.chris.konferenz_app.responses.SettingResponse;
 import com.example.chris.konferenz_app.adapters.SettingsActivityRecyclerAdapter;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import org.json.JSONObject;
 
@@ -153,7 +155,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                 updateInterests(connection, selectedInterests);
 
-                if (email.getText().toString().trim().length()>=1  && !email.getText().toString().trim().matches(".+@.+\\..+")) {
+                if (email.getText().toString().trim().length() >= 1 && !email.getText().toString().trim().matches(".+@.+\\..+")) {
                     email.setText("");
                     Config.error_message(SettingsActivity.this, "Ihre gewünschte E-Mailadresse hat ein invalides Format. Siehe Beispiel für ein gültiges Formatbeispiel.");
                 }
@@ -171,46 +173,52 @@ public class SettingsActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(JSONObject jsonObject) {
                                 Gson gson = new Gson();
-
-                                SettingResponse settingResponse = gson.fromJson(jsonObject.toString(), SettingResponse.class);
-
-                                StringBuffer settingResponseString = new StringBuffer("Status: " + settingResponse.getStatus() + "\n"
-                                        + "Name: " + settingResponse.getProfile_name() + "\n"
-                                        + "Tel.Nr.: " + settingResponse.getProfile_phone() + "\n"
-                                        + "E-Mail: " + settingResponse.getProfile_email() + "\n"
-                                        + "Firma: " + settingResponse.getProfile_company() + "\n"
-                                        + "Sichtbare Interessen: ");
-
-                                if (settingResponse.getInterestgroupAmount() == 0) {
-                                    settingResponseString.append("keine");
-                                }
-                                for (int i = 0; i < settingResponse.getInterestgroupAmount(); i++) {
-                                    settingResponseString.append(settingResponse.getInterestgroup(i).getName());
-                                    if (i + 1 < settingResponse.getInterestgroupAmount())
-                                        settingResponseString.append(", ");
-                                }
-
-                                connection.execSQL("UPDATE userinformation SET name='" + nameString + "', phonenumber='" + phone.getText().toString().replace("\\n", "").trim() + "', email='" + email.getText().toString().replace("\\n", "").trim() + "', company='" + company.getText().toString().replace("\\n", "").trim() + "';");
-                                //Log.e("Setting SQL UPDATE", "UPDATE userinformation SET name='" + nameString + "', phonenumber='" + phone.getText().toString().replace("\\n", "").trim() + "', email='" + email.getText().toString().replace("\\n", "").trim() + "', company='" + company.getText().toString().replace("\\n", "").trim() + "';");
-
-
-                                Config.popupMessage("Ihre Einstellungen wurden aktualisiert", settingResponseString.toString(), SettingsActivity.this);
-
-
+                                SettingResponse settingResponse = null;
                                 try {
-                                    connection.execSQL("Insert into users (cid, profile_name, profile_phone, profile_email, profile_company) VALUES ('"
-                                            + myDb.getCid(connection) + "', '"
-                                            + nameString + "', '"
-                                            + phone.getText().toString().replace("\\n", "").trim() + "', '"
-                                            + email.getText().toString().replace("\\n", "").trim() + "', '"
-                                            + company.getText().toString().replace("\\n", "").trim() + "');");
-                                } catch (SQLiteConstraintException e) {
-                                    connection.execSQL("Update users SET " +
-                                            "profile_name='" + nameString + "', " +
-                                            "profile_phone='" + phone.getText().toString().replace("\\n", "").trim() + "', " +
-                                            "profile_email='" + email.getText().toString().replace("\\n", "").trim() + "', " +
-                                            "profile_company='" + company.getText().toString().replace("\\n", "").trim() + "' " +
-                                            "Where cid='" + myDb.getCid(connection).toString().replace("\\n", "").trim() + "';");
+                                    settingResponse = gson.fromJson(jsonObject.toString(), SettingResponse.class);
+
+                                    StringBuffer settingResponseString = new StringBuffer("Status: " + settingResponse.getStatus() + "\n"
+                                            + "Name: " + settingResponse.getProfile_name() + "\n"
+                                            + "Tel.Nr.: " + settingResponse.getProfile_phone() + "\n"
+                                            + "E-Mail: " + settingResponse.getProfile_email() + "\n"
+                                            + "Firma: " + settingResponse.getProfile_company() + "\n"
+                                            + "Sichtbare Interessen: ");
+
+                                    if (settingResponse.getInterestgroupAmount() == 0) {
+                                        settingResponseString.append("keine");
+                                    }
+                                    for (int i = 0; i < settingResponse.getInterestgroupAmount(); i++) {
+                                        settingResponseString.append(settingResponse.getInterestgroup(i).getName());
+                                        if (i + 1 < settingResponse.getInterestgroupAmount())
+                                            settingResponseString.append(", ");
+                                    }
+
+                                    connection.execSQL("UPDATE userinformation SET name='" + nameString + "', phonenumber='" + phone.getText().toString().replace("\\n", "").trim() + "', email='" + email.getText().toString().replace("\\n", "").trim() + "', company='" + company.getText().toString().replace("\\n", "").trim() + "';");
+                                    //Log.e("Setting SQL UPDATE", "UPDATE userinformation SET name='" + nameString + "', phonenumber='" + phone.getText().toString().replace("\\n", "").trim() + "', email='" + email.getText().toString().replace("\\n", "").trim() + "', company='" + company.getText().toString().replace("\\n", "").trim() + "';");
+
+
+                                    Config.popupMessage("Ihre Einstellungen wurden aktualisiert", settingResponseString.toString(), SettingsActivity.this);
+
+
+                                    try {
+                                        connection.execSQL("Insert into users (cid, profile_name, profile_phone, profile_email, profile_company) VALUES ('"
+                                                + myDb.getCid(connection) + "', '"
+                                                + nameString + "', '"
+                                                + phone.getText().toString().replace("\\n", "").trim() + "', '"
+                                                + email.getText().toString().replace("\\n", "").trim() + "', '"
+                                                + company.getText().toString().replace("\\n", "").trim() + "');");
+                                    } catch (SQLiteConstraintException e) {
+                                        connection.execSQL("Update users SET " +
+                                                "profile_name='" + nameString + "', " +
+                                                "profile_phone='" + phone.getText().toString().replace("\\n", "").trim() + "', " +
+                                                "profile_email='" + email.getText().toString().replace("\\n", "").trim() + "', " +
+                                                "profile_company='" + company.getText().toString().replace("\\n", "").trim() + "' " +
+                                                "Where cid='" + myDb.getCid(connection).toString().replace("\\n", "").trim() + "';");
+                                    }
+
+                                } catch (IllegalStateException | JsonSyntaxException e) {
+                                    Toast.makeText(SettingsActivity.this.getApplicationContext(), "Serverseitiger Fehler beim aktualisieren der Einstellungen. Bitte melden Sie sich beim Kundenservice", Toast.LENGTH_LONG).show();
+
                                 }
 
 

@@ -12,6 +12,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,9 +20,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.chris.konferenz_app.activities.LoginActivity;
 import com.example.chris.konferenz_app.responses.ChatListResponse;
 import com.example.chris.konferenz_app.responses.ChatPullResponse;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import org.json.JSONObject;
 
@@ -85,14 +88,19 @@ public class ChatService extends Service {
                                 @Override
                                 public void onResponse(JSONObject jsonObject) {
                                     Gson gson = new Gson();
+                                    ChatListResponse chatListResponse = null;
+                                    try {
+                                        chatListResponse = gson.fromJson(jsonObject.toString(), ChatListResponse.class);
+                                        Log.e("Chat.List", chatListResponse.getSuccess());
+                                        if (chatListResponse.getSuccess().equalsIgnoreCase("true")) {
 
-                                    ChatListResponse chatListResponse = gson.fromJson(jsonObject.toString(), ChatListResponse.class);
-                                    Log.e("Chat.List", chatListResponse.getSuccess());
-                                    if (chatListResponse.getSuccess().equalsIgnoreCase("true")) {
+                                            saveChatListResponseToDatabase(chatListResponse, connection);
+                                        } else {
+                                            Config.error_message(ChatService.this.getApplicationContext(), "Fehler, starten Sie bitte das Programm neu und melden sich beim Kundenservice.");
+                                        }
+                                    } catch (IllegalStateException | JsonSyntaxException e) {
+                                        Toast.makeText(ChatService.this.getApplicationContext(), "Serverseitiger Fehler beim Empfangen der Chatliste. Bitte melden Sie sich beim Kundenservice", Toast.LENGTH_LONG).show();
 
-                                        saveChatListResponseToDatabase(chatListResponse, connection);
-                                    } else {
-                                        Config.error_message(null, "Fehler, starten Sie bitte das Programm neu und melden sich beim Kundenservice.");
                                     }
 
 
@@ -142,7 +150,7 @@ public class ChatService extends Service {
                 try {
                     connection.execSQL(stringBuilder.toString());
                 } catch (SQLiteConstraintException e) {
-                    stringBuilder=new StringBuilder();
+                    stringBuilder = new StringBuilder();
                     stringBuilder.append("Update users set profile_name='");
                     stringBuilder.append(chatListResponse.getChatChannel(i).getUser(j).getProfile_name());
                     stringBuilder.append("' , profile_phone='");
@@ -192,13 +200,19 @@ public class ChatService extends Service {
                                 @Override
                                 public void onResponse(JSONObject jsonObject) {
                                     Gson gson = new Gson();
+                                    ChatPullResponse chatPullResponse = null;
+                                    try {
+                                        chatPullResponse = gson.fromJson(jsonObject.toString(), ChatPullResponse.class);
 
-                                    ChatPullResponse chatPullResponse = gson.fromJson(jsonObject.toString(), ChatPullResponse.class);
-                                    if (chatPullResponse.getSuccess().equalsIgnoreCase("true")) {
-                                        Log.e("Chat.Pull URL", url);
-                                        saveChatPullResponseToDatabase(chatPullResponse, connection);
-                                    } else {
-                                        Config.error_message(null, "Fehler, Programm startet neu. Bitte melden sie sich beim Kundenservice.");
+                                        if (chatPullResponse.getSuccess().equalsIgnoreCase("true")) {
+                                            Log.e("Chat.Pull URL", url);
+                                            saveChatPullResponseToDatabase(chatPullResponse, connection);
+                                        } else {
+                                            Config.error_message(ChatService.this.getApplicationContext(), "Fehler, Programm startet neu. Bitte melden sie sich beim Kundenservice.");
+
+                                        }
+                                    } catch (IllegalStateException | JsonSyntaxException e) {
+                                        Toast.makeText(ChatService.this.getApplicationContext(), "Serverseitiger Fehler beim Chatnachrichten empfangen. Bitte melden Sie sich beim Kundenservice", Toast.LENGTH_LONG).show();
 
                                     }
 

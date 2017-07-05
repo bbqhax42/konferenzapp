@@ -145,12 +145,6 @@ public class LoginActivity extends AppCompatActivity {
                                     //Log.e("Login SQL UPDATE 1/2", "UPDATE userinformation SET stayloggedin=" + eingeloggt_bleiben + ", lastlogin='" + strDate + "';");
 
 
-                                    boolean loggedInToday = date.equalsIgnoreCase(lastLogin);
-
-                                    Log.e("Logged in today?", loggedInToday + " " + lastLogin + " " + getCurrentDate());
-
-                                    //if you havent been signed in today we parse new eventdata
-                                    if (!loggedInToday) {
 
                                         String token = myDb.getToken(connection);
 
@@ -170,7 +164,7 @@ public class LoginActivity extends AppCompatActivity {
                                                         try {
                                                             seminar = gson.fromJson(jsonObject.toString(), Seminar.class);
                                                         } catch (IllegalStateException | JsonSyntaxException e) {
-                                                            Toast.makeText(LoginActivity.this, "Serverseitiger Fehler. Bitte melden Sie sich beim Kundenservice.", Toast.LENGTH_LONG).show();
+                                                            Toast.makeText(LoginActivity.this, "Serverseitiger Fehler beim Eventdaten empfangen. Bitte melden Sie sich beim Kundenservice", Toast.LENGTH_LONG).show();
                                                             connection.execSQL("UPDATE userinformation SET lastlogin='" + "1970-01-01" + "';");
                                                             if (eingeloggt_bleiben)
                                                                 connection.execSQL("UPDATE userinformation SET loginemail='" + email_textfield.getText() + "', loginkey='" + freischaltcode + "';");
@@ -220,7 +214,7 @@ public class LoginActivity extends AppCompatActivity {
                                                     }
                                                 });
                                         queue.add(seminarRequest);
-                                    }
+
 
 
                                 }
