@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -27,6 +28,7 @@ import com.example.chris.konferenz_app.responses.LoginResponse;
 import com.example.chris.konferenz_app.R;
 import com.example.chris.konferenz_app.data.Seminar;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import org.json.JSONObject;
 
@@ -146,14 +148,13 @@ public class LoginActivity extends AppCompatActivity {
 
 
                                     boolean loggedInToday = date.equalsIgnoreCase(lastLogin);
-                                    loggedInToday = false;
 
+                                    Log.e("Logged in today?", loggedInToday + " " + lastLogin + " " + getCurrentDate());
 
                                     //if you havent been signed in today we parse new eventdata
                                     if (!loggedInToday) {
 
                                         String token = myDb.getToken(connection);
-                                        date = "2017-06-30"; //wow time flew by fast -> sample date because no other data available
 
 
                                         RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
@@ -161,13 +162,21 @@ public class LoginActivity extends AppCompatActivity {
                                         //load event data
                                         String url = Config.webserviceUrl + "EVENT.DAILY?token=" + token + "&date=" + date;
                                         Log.e("Event Daily URL", url);
+
                                         final JsonObjectRequest seminarRequest =
                                                 new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
                                                     @Override
                                                     public void onResponse(JSONObject jsonObject) {
                                                         Gson gson = new Gson();
-                                                        Seminar seminar = gson.fromJson(jsonObject.toString(), Seminar.class);
+                                                        Seminar seminar;
+                                                        try {
+                                                            seminar = gson.fromJson(jsonObject.toString(), Seminar.class);
+                                                        } catch (IllegalStateException|JsonSyntaxException e) {
+                                                            Toast.makeText(LoginActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                                                            connection.execSQL("UPDATE userinformation SET lastlogin='" + "1970-01-01" + "';");
+                                                            return;
+                                                        }
                                                         saveEventToDatabase(seminar, connection);
                                                     }
                                                 }, new Response.ErrorListener() {
